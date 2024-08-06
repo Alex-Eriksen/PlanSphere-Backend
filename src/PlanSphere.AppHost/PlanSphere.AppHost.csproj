@@ -7,6 +7,8 @@
         <Nullable>enable</Nullable>
         <IsAspireHost>true</IsAspireHost>
         <UserSecretsId>3D591FA8-3139-41ED-BDED-8EFFF56D9867</UserSecretsId>
+        <AssemblyName>PlanSphere.AppHost</AssemblyName>
+        <RootNamespace>PlanSphere.AppHost</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
