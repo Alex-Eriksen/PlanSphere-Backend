@@ -141,3 +141,4 @@ ScaffoldingReadMe.txt
 
 # Logs
 **/serilog/
+.azure

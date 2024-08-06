@@ -1,5 +1,3 @@
-using Aspire.Hosting;
-using Aspire.Hosting.ApplicationModel;
 using PlanSphere.AppHost.Extensions;
 using PlanSphere.Core.Constants;
 
@@ -22,8 +20,8 @@ if (isEnvLocal)
 if (!isEnvLocal)
 {
     systemApi
-        .WithHttpsEndpoint(targetPort: 5001)
-        .WithHttpEndpoint(targetPort: 5000);
+        .WithHttpsEndpoint(port: 5001, name: AspireEndpoints.SystemApiHttps)
+        .WithHttpEndpoint(port: 5000, name: AspireEndpoints.SystemApiHttp);
 }
 
 builder.Build().Run();

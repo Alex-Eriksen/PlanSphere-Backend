@@ -7,6 +7,12 @@ public static class AspireComponents
 
 public static class AspireEnvironmentVariables
 {
-    public static string AspNetCoreEnvironmentVariableName => "ASPNETCORE_ENVIRONMENT";
-    public static string DotNetEnvironmentVariableName => "DOTNET_ENVIRONMENT";
+    public const string AspNetCoreEnvironmentVariableName = "ASPNETCORE_ENVIRONMENT";
+    public const string DotNetEnvironmentVariableName = "DOTNET_ENVIRONMENT";
+}
+
+public static class AspireEndpoints
+{
+    public const string SystemApiHttp = "ps-system-api-http";
+    public const string SystemApiHttps = "ps-system-api-https";
 }
