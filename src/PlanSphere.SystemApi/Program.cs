@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Extensions.APIExtensions;
 using PlanSphere.ServiceDefaults;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,20 +36,42 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var app = builder.Build();
+
+    if (!app.Environment.IsProduction())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            c.RoutePrefix = string.Empty;
+        });
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapDefaultEndpoints();
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller}/{action=Index}/{id?}"
+    );
+    
+    app.UseCors(Configurations.PlanSphereCors);
+    
+    app.Map("/", async context => { await context.Response.WriteAsync("Welcome to PlanSphere System API."); });
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-
-app.MapControllers();
-
-app.Run();
+catch (Exception exception)
+{
+    Log.Fatal(exception, "Host terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
