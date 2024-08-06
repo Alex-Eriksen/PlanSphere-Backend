@@ -7,14 +7,12 @@
         <Nullable>enable</Nullable>
         <IsAspireHost>true</IsAspireHost>
         <UserSecretsId>3D591FA8-3139-41ED-BDED-8EFFF56D9867</UserSecretsId>
-        <AssemblyName>PlanSphere.AppHost</AssemblyName>
-        <RootNamespace>PlanSphere.AppHost</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting" Version="8.0.0-preview.3.24105.21" />
-        <PackageReference Include="Aspire.Hosting.Azure" Version="8.0.0-preview.3.24105.21" />
-        <PackageReference Include="Aspire.Hosting.AppHost" Version="8.0.0-preview.3.24105.21"/>
+        <PackageReference Include="Aspire.Hosting" Version="8.1.0" />
+        <PackageReference Include="Aspire.Hosting.Azure" Version="8.1.0" />
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="8.1.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

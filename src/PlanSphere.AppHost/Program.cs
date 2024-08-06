@@ -22,8 +22,8 @@ if (isEnvLocal)
 if (!isEnvLocal)
 {
     systemApi
-        .WithHttpsEndpoint(hostPort: 5001)
-        .WithHttpEndpoint(hostPort: 5000);
+        .WithHttpsEndpoint(targetPort: 5001)
+        .WithHttpEndpoint(targetPort: 5000);
 }
 
 builder.Build().Run();
