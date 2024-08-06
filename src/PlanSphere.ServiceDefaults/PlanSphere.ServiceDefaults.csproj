@@ -19,4 +19,8 @@
         <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.7.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\lib\PlanSphere.Core\PlanSphere.Core.csproj" />
+    </ItemGroup>
+
 </Project>

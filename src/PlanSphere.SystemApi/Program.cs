@@ -1,34 +1,54 @@
-namespace PlanSphere.SystemApi;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using PlanSphere.Core.Constants;
+using PlanSphere.Core.Extensions.APIExtensions;
+using PlanSphere.ServiceDefaults;
 
-public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults(withControllers: true);
+// builder.AddMySQLDBConnection();
+
+builder.Services.AddAuthorization(options =>
 {
-    public static void Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme,
+            JwtBearerDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme)
+        .Build();
+});
 
-        // Add services to the container.
+builder.Services.AddSystemApiApplicationCore();
 
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
 
-        var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: Configurations.PlanSphereCors,
+        policy =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
-        app.UseHttpsRedirection();
+var app = builder.Build();
 
-        app.UseAuthorization();
-
-
-        app.MapControllers();
-
-        app.Run();
-    }
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+
+app.MapControllers();
+
+app.Run();

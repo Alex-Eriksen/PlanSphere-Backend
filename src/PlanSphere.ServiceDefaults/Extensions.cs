@@ -3,20 +3,33 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using PlanSphere.Core.Extensions.APIExtensions;
+using PlanSphere.Core.Extensions.DIExtensions;
 
 namespace PlanSphere.ServiceDefaults;
 
 public static class Extensions
 {
-    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder, bool withControllers = false)
     {
         builder.ConfigureOpenTelemetry();
 
         builder.AddDefaultHealthChecks();
+        // builder.AddMySQLDBConnection();
+        builder.Services.AddDataProtection();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSingleton<ISystemClock, SystemClock>();
+        if (withControllers)
+        {
+            builder.SetupControllers();
+            builder.Services.AddAPIApplication();
+        }
+        builder.Services.SetupAutoMapper();
 
         builder.Services.AddServiceDiscovery();
 
@@ -29,16 +42,10 @@ public static class Extensions
             http.AddServiceDiscovery();
         });
 
-        // Uncomment the following to restrict the allowed schemes for service discovery.
-        // builder.Services.Configure<ServiceDiscoveryOptions>(options =>
-        // {
-        //     options.AllowedSchemes = ["https"];
-        // });
-
         return builder;
     }
 
-    public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
+    private static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
     {
         builder.Logging.AddOpenTelemetry(logging =>
         {
@@ -97,7 +104,7 @@ public static class Extensions
         return builder;
     }
 
-    public static IHostApplicationBuilder AddDefaultHealthChecks(this IHostApplicationBuilder builder)
+    private static IHostApplicationBuilder AddDefaultHealthChecks(this IHostApplicationBuilder builder)
     {
         builder.Services.AddHealthChecks()
             // Add a default liveness check to ensure app is responsive
