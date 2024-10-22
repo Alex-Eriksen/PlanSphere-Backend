@@ -1,0 +1,6 @@
+@PlanSphere.SystemApi_HostAddress = http://localhost:5148
+
+GET {{PlanSphere.SystemApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
