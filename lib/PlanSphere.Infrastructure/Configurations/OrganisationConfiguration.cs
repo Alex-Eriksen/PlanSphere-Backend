@@ -16,7 +16,7 @@ public class OrganisationConfiguration : IEntityTypeConfiguration<Organisation>
         builder.HasOne(e => e.Address)
             .WithOne()
             .HasForeignKey<Organisation>(e => e.AddressId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(e => e.CreatedByUser)
             .WithMany()
