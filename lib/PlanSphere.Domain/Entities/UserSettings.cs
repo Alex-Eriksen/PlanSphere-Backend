@@ -11,6 +11,7 @@ public class UserSettings
     public bool IsAddressPrivate { get; set; }
     
     public ulong WorkScheduleId { get; set; }
+    public virtual WorkSchedule WorkSchedule { get; set; }
     public bool InheritWorkSchedule { get; set; }
     
     public bool AutoCheckInOut { get; set; }

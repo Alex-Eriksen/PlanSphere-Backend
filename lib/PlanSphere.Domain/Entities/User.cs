@@ -11,7 +11,7 @@ public class User : BaseEntity, IAuditableEntity
     public string LastName { get; set; }
     public string FullName => string.Join(" ", FirstName, LastName);
     
-    public string AddressId { get; set; }
+    public ulong AddressId { get; set; }
     public virtual Address Address { get; set; }
     
     public string? Email { get; set; }

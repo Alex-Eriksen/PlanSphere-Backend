@@ -8,5 +8,8 @@ public class OrganisationSettings
     public virtual Organisation Organisation { get; set; }
     
     public ulong DefaultRoleId { get; set; }
+    public virtual Role DefaultRole { get; set; }
+    
     public ulong DefaultWorkScheduleId { get; set; }
+    public virtual WorkSchedule DefaultWorkSchedule { get; set; }
 }

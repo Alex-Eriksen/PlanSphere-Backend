@@ -1,10 +1,11 @@
-﻿using Domain.Entities;
+﻿using System.Reflection;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using PlanSphere.Core.Interfaces.Database;
 
 namespace PlanSphere.Infrastructure.Contexts;
 
-public class PlanSphereDatabaseContext(DbContextOptions options) : DbContext(options), IPlanSphereDatabaseContext
+public partial class PlanSphereDatabaseContext(DbContextOptions<PlanSphereDatabaseContext> options) : DbContext(options), IPlanSphereDatabaseContext
 {
     public DbSet<Organisation> Organisations { get; set; }
     public DbSet<OrganisationSettings> OrganisationSettings { get; set; }
@@ -41,4 +42,16 @@ public class PlanSphereDatabaseContext(DbContextOptions options) : DbContext(opt
     public DbSet<ZipCode> ZipCodes { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Right> Rights { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer();
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
+
+    partial void OnModelCreatingPartial(ModelBuilder builder);
 }

@@ -14,9 +14,6 @@ public class WorkTimeConfiguration : IEntityTypeConfiguration<WorkTime>
         builder.Property(e => e.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(e => e.WorkTimeType)
-            .HasDefaultValue(WorkTimeType.Regular);
-
         builder.HasOne(e => e.User)
             .WithMany(e => e.WorkTimes)
             .HasForeignKey(e => e.UserId)

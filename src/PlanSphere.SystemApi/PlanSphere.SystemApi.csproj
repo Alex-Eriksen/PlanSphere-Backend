@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\lib\PlanSphere.Infrastructure\PlanSphere.Infrastructure.csproj" />
       <ProjectReference Include="..\PlanSphere.ServiceDefaults\PlanSphere.ServiceDefaults.csproj" />
     </ItemGroup>
 
