@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using PlanSphere.Core.Features.Address.Requests;
+using PlanSphere.Core.Features.Addresses.Requests;
 
 namespace PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 
