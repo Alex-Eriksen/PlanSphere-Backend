@@ -31,7 +31,7 @@ public static class Extensions
                     optionsBuilder => optionsBuilder.EnableRetryOnFailure())
                 .EnableDetailedErrors();
         });
-        builder.Services.AddDataProtection();
+        builder.Services.AddDataProtection(opt => opt.ApplicationDiscriminator = "plansphere");
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<ISystemClock, SystemClock>();
         builder.Services.AddScoped<IPlanSphereDatabaseContext, PlanSphereDatabaseContext>();

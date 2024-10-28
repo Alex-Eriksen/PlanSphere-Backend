@@ -14,7 +14,8 @@ public class User : BaseEntity, IAuditableEntity
     public ulong AddressId { get; set; }
     public virtual Address Address { get; set; }
     
-    public string? Email { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
     public string? PhoneNumber { get; set; }
     public DateOnly? Birthday { get; set; }
     public string? ProfilePictureUrl { get; set; }
