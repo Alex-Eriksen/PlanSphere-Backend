@@ -1,3 +1,3 @@
 @echo off
 set /p updateMigrationName= "Enter migration name(empty for latest): "
-START cmd /C "call environmentvariables.bat & call dotnet ef database update %updateMigrationName% --project lib\Infrastructure\PlanSphere.Infrastructure.csproj --startup-project src\PlanSphere.SystemApi\PlanSphere.SystemApi.csproj --context PlanSphere.Infrastructure.Contexts.PlanSphereDatabaseContext --configuration Debug --connection "Server=localhost; Database=estatetool_local; Uid=root; Pwd=mypass;AllowUserVariables=True;UseAffectedRows=False" & PAUSE"
+START cmd /C "call dotnet ef database update %updateMigrationName% --project lib\PlanSphere.Infrastructure\PlanSphere.Infrastructure.csproj --startup-project src\PlanSphere.SystemApi\PlanSphere.SystemApi.csproj --context PlanSphere.Infrastructure.Contexts.PlanSphereDatabaseContext Debug --connection "Server=localhost; Database=estatetool_local; Uid=root; Pwd=mypass;AllowUserVariables=True;UseAffectedRows=False" & PAUSE"
