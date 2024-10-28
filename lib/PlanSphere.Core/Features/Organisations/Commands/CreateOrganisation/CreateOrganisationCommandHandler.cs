@@ -21,7 +21,7 @@ public class CreateOrganisationCommandHandler(
        logger.LogInformation("CreateOrganisationCommandHandler");
        _logger.LogInformation("Creating organisation with name: [{Name}]", request.Name);
         
-       var address = _mapper.Map<Domain.Entities.Address>(request.Address);
+       var address = _mapper.Map<Address>(request.Address);
         
        var organisation = new Organisation
        {
