@@ -14,6 +14,7 @@ using PlanSphere.Core.Extensions.APIExtensions;
 using PlanSphere.Core.Extensions.DIExtensions;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Infrastructure.Contexts;
+using PlanSphere.Infrastructure.Extensions;
 
 namespace PlanSphere.ServiceDefaults;
 
@@ -31,10 +32,11 @@ public static class Extensions
                     optionsBuilder => optionsBuilder.EnableRetryOnFailure())
                 .EnableDetailedErrors();
         });
-        builder.Services.AddDataProtection();
+        builder.Services.AddDataProtection(opt => opt.ApplicationDiscriminator = "plansphere");
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<ISystemClock, SystemClock>();
         builder.Services.AddScoped<IPlanSphereDatabaseContext, PlanSphereDatabaseContext>();
+        builder.Services.AddRepositories();
         if (withControllers)
         {
             builder.SetupControllers();
