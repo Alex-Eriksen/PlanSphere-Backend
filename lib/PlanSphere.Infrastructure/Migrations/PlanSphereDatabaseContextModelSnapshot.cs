@@ -1843,7 +1843,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasOne("Domain.Entities.WorkSchedule", "Parent")
                         .WithMany()
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Parent");
                 });

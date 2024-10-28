@@ -43,11 +43,6 @@ public partial class PlanSphereDatabaseContext(DbContextOptions<PlanSphereDataba
     public DbSet<Country> Countries { get; set; }
     public DbSet<Right> Rights { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer();
-    }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

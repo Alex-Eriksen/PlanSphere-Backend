@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +14,6 @@ using PlanSphere.Core.Extensions.APIExtensions;
 using PlanSphere.Core.Extensions.DIExtensions;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Infrastructure.Contexts;
-using PlanSphere.Infrastructure.DBExtensions;
 
 namespace PlanSphere.ServiceDefaults;
 
@@ -23,7 +24,13 @@ public static class Extensions
         builder.ConfigureOpenTelemetry();
 
         builder.AddDefaultHealthChecks();
-        builder.Services.AddDatabase();
+        builder.Services.AddDbContext<PlanSphereDatabaseContext>(options =>
+        {
+            options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
+                    optionsBuilder => optionsBuilder.EnableRetryOnFailure())
+                .EnableDetailedErrors();
+        });
         builder.Services.AddDataProtection();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<ISystemClock, SystemClock>();
