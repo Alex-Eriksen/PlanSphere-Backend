@@ -40,4 +40,6 @@ public interface IPlanSphereDatabaseContext
     public DbSet<ZipCode> ZipCodes { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Right> Rights { get; set; }
+
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
