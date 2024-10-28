@@ -25,6 +25,7 @@ public class User : BaseEntity, IAuditableEntity
     public virtual UserSettings Settings { get; set; }
 
     public List<UserRole> Roles { get; set; } = new List<UserRole>();
+    public List<WorkTime> WorkTimes { get; set; } = new List<WorkTime>();
     
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }

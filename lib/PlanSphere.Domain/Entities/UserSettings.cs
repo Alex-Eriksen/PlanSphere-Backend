@@ -3,6 +3,7 @@
 public class UserSettings
 {
     public ulong UserId { get; set; }
+    public User User { get; set; }
     
     public bool IsBirthdayPrivate { get; set; }
     public bool IsEmailPrivate { get; set; }

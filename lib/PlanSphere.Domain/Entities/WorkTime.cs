@@ -5,6 +5,7 @@ namespace Domain.Entities;
 public class WorkTime : BaseEntity, IAuditableEntity
 {
     public ulong UserId { get; set; }
+    public virtual User User { get; set; }
     public DateTime StartDateTime { get; set; }
     public DateTime? EndDateTime { get; set; }
     public WorkTimeType WorkTimeType { get; set; }
