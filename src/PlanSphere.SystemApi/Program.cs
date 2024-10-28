@@ -10,7 +10,6 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults(withControllers: true);
-// builder.AddMySQLDBConnection();
 
 builder.Services.AddAuthorization(options =>
 {

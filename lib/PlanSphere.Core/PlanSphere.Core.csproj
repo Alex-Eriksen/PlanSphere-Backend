@@ -37,5 +37,9 @@
         <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\PlanSphere.Domain\PlanSphere.Domain.csproj" />
+    </ItemGroup>
 
 </Project>
