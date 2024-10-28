@@ -11,12 +11,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext) : IUserReposit
     
     public async Task<User> CreateAsync(User request, CancellationToken cancellationToken)
     {
-        request.Password = BC.HashPassword(request.Password);
-        
-        _dbContext.Users.Add(request);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return request;
+        throw new NotImplementedException();
     }
 
     public Task<User> GetByIdAsync(ulong id, CancellationToken cancellationToken)
