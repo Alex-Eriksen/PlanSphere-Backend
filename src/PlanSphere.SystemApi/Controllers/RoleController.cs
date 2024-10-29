@@ -7,7 +7,7 @@ using PlanSphere.SystemApi.Controllers.Base;
 namespace PlanSphere.SystemApi.Controllers;
 
 [Authorize]
-public class RoleRepository(IMediator mediator) : ApiControllerBase(mediator)
+public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
