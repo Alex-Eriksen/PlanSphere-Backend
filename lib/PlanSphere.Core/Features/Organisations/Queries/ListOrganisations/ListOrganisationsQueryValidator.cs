@@ -6,14 +6,11 @@ public class ListOrganisationsQueryValidator : AbstractValidator<ListOrganisatio
 {
     public ListOrganisationsQueryValidator()
     {
-        // RuleFor(x => x.Search)
-        //     .NotNull();
-        //
-        // RuleFor(x => x.SortBy)
-        //     .IsInEnum()
-        //     .NotNull();
-        //
-        // RuleFor(x => x.SortDescending)
-        //     .NotNull();
+        RuleFor(x => x.SortBy)
+            .IsInEnum()
+            .NotNull();
+
+        RuleFor(x => x.SortDescending)
+            .NotNull();
     }
 }
