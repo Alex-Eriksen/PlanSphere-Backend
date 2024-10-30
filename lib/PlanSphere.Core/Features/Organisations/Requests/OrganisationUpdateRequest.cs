@@ -1,4 +1,5 @@
-﻿using PlanSphere.Core.Features.Address.Requests;
+using Domain.Entities;
+using PlanSphere.Core.Features.Addresses.Requests;
 
 namespace PlanSphere.Core.Features.Organisations.Requests;
 
