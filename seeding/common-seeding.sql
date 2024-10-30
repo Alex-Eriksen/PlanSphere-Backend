@@ -22,6 +22,10 @@ VALUES
     ('ManuallySetOwnWorkTime', 'Giver administrator rettighed til alle med rollen.'),
     ('SetOwnJobTitle', 'Giver administrator rettighed til alle med rollen.'),
     ('SetAutomaticCheckInOut', 'Giver administrator rettighed til alle med rollen.');
+GO;
+
+INSERT INTO Roles (Name, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
+VALUES ('DefaultRole', CURRENT_TIMESTAMP, NULL, NULL, NULL);
 GO
 
 INSERT INTO WorkSchedules (IsDefaultWorkSchedule)
@@ -29,7 +33,7 @@ VALUES (1);
 GO
 
 INSERT INTO Addresses (ParentId, CountryId, StreetName, HouseNumber, PostalCode, Door, Floor)
-VALUES (NULL, 'dk', 'Telegrafvej', '9', '2750', null, null);
+VALUES (NULL, 'dk', 'Telegrafvej', '9', '2620', null, null);
 GO
 
 INSERT INTO Organisations (Name, LogoUrl, AddressId, SettingsId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)

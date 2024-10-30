@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanSphere.Infrastructure.Contexts;
 
@@ -11,9 +12,11 @@ using PlanSphere.Infrastructure.Contexts;
 namespace PlanSphere.Infrastructure.Migrations
 {
     [DbContext(typeof(PlanSphereDatabaseContext))]
-    partial class PlanSphereDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241030124312_add-identity-user")]
+    partial class addidentityuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,10 +49,13 @@ namespace PlanSphere.Infrastructure.Migrations
                         .HasColumnType("decimal(20,0)");
 
                     b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StreetName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCodePostalCode")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -57,7 +63,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.HasIndex("PostalCode");
+                    b.HasIndex("ZipCodePostalCode");
 
                     b.ToTable("Addresses");
                 });
@@ -831,10 +837,6 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IdentityUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1115,7 +1117,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.ZipCode", "ZipCode")
                         .WithMany()
-                        .HasForeignKey("PostalCode");
+                        .HasForeignKey("ZipCodePostalCode");
 
                     b.Navigation("Country");
 

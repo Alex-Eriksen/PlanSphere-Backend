@@ -4,23 +4,18 @@ namespace Domain.Entities;
 
 public class User : BaseEntity, IAuditableEntity
 {
+    public string IdentityUserId { get; set; }
     public ulong OrganisationId { get; set; }
     public virtual Organisation Organisation { get; set; }
-    
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string FullName => string.Join(" ", FirstName, LastName);
-    
     public ulong AddressId { get; set; }
     public virtual Address Address { get; set; }
-    
-    public string? Email { get; set; }
+    public string Email { get; set; }
     public string? PhoneNumber { get; set; }
     public DateOnly? Birthday { get; set; }
     public string? ProfilePictureUrl { get; set; }
-    
-    public string AuthId { get; set; }
-    
     public ulong SettingsId { get; set; }
     public virtual UserSettings Settings { get; set; }
 
