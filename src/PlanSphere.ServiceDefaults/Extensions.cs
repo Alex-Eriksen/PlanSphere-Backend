@@ -1,5 +1,7 @@
+using Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,11 +34,14 @@ public static class Extensions
                     optionsBuilder => optionsBuilder.EnableRetryOnFailure())
                 .EnableDetailedErrors();
         });
+
+        builder.AddIdentityUser();
+        
         builder.Services.AddDataProtection(opt => opt.ApplicationDiscriminator = "plansphere");
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<ISystemClock, SystemClock>();
-        builder.Services.AddScoped<IPlanSphereDatabaseContext, PlanSphereDatabaseContext>();
         builder.Services.AddRepositories();
+        builder.Services.AddScoped<IPlanSphereDatabaseContext, PlanSphereDatabaseContext>();
         if (withControllers)
         {
             builder.SetupControllers();
@@ -146,5 +151,25 @@ public static class Extensions
         }
 
         return app;
+    }
+    
+    private static IHostApplicationBuilder AddIdentityUser(this IHostApplicationBuilder builder)
+    {
+
+        builder.Services.AddDbContext<IdentityDatabaseContext>(options =>
+        {
+            options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("IdentityConnection"),
+                    optionsBuilder => optionsBuilder.EnableRetryOnFailure())
+                .EnableDetailedErrors();
+        });
+        
+        builder.Services.AddIdentityCore<ApplicationUser>()
+            .AddEntityFrameworkStores<IdentityDatabaseContext>()
+            .AddApiEndpoints()
+            .AddSignInManager()
+            .AddDefaultTokenProviders();
+
+        return builder;
     }
 }

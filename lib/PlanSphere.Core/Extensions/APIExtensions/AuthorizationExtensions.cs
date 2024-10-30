@@ -12,22 +12,14 @@ public static class AuthorizationExtensions
         {
             o.AddXMLComments();
             
-            o.AddSecurityDefinition("KeyCloak",
+            o.AddSecurityDefinition("BearerAuth",
                 new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.OAuth2,
+                    Type = SecuritySchemeType.Http,
                     Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(configuration["KeyCloakConfiguration:AuthorizationUrl"]!),
-                            TokenUrl = new Uri(configuration["KeyCloakConfiguration:TokenUrl"]!)
-                        }
-                    }
+                    BearerFormat = "JWT"
                 });
 
             o.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -37,14 +29,11 @@ public static class AuthorizationExtensions
                     {
                         Reference = new OpenApiReference
                         {
-                            Id = "KeyCloak",
+                            Id = "Bearer",
                             Type = ReferenceType.SecurityScheme
                         }
                     },
-                    new List<string>()
-                    {
-                        "openid"
-                    }
+                    Array.Empty<string>()
                 }
             });
 
