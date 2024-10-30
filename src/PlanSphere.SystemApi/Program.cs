@@ -3,6 +3,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Extensions.APIExtensions;
 using PlanSphere.Core.Interfaces;
@@ -29,6 +30,34 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter JWT with Bearer into field. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
+
 
 builder.Services.AddSystemApiApplicationCore();
 builder.Services.AddControllers();
@@ -60,8 +89,11 @@ try
     app.UseHttpsRedirection();
 
     app.UseAuthentication();
+    app.UseRouting();
     
     app.UseAuthorization();
+
+    app.MapControllers();
 
     app.MapDefaultEndpoints();
 
