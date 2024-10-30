@@ -13,7 +13,8 @@ public class UserProfile : Profile
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Request.Email))
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Request.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Request.LastName))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address));
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address))
+            .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.UserId));
 
     }
 }
