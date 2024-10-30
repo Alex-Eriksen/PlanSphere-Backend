@@ -3,7 +3,7 @@ VALUES ('dk', 'Danmark', '+45');
 GO
 
 INSERT INTO ZipCodes (PostalCode, Name, CountryId)
-VALUES ('2750', 'Ballerup', 'dk');
+VALUES ('2620', 'Ballerup', 'dk');
 GO
 
 INSERT INTO Roles (Name, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
