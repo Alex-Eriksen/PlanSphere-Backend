@@ -40,7 +40,7 @@ try
 
     app.UseRouting();
 
-    app.UseCors(Configurations.PlanSphereCors); // Apply CORS policy before Authentication/Authorization
+    app.UseCors(Configurations.PlanSphereCors);
 
     app.UseSwagger();
     app.UseSwaggerUI(c =>
