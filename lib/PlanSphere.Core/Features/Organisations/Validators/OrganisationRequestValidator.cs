@@ -7,7 +7,6 @@ namespace PlanSphere.Core.Features.Organisations.Validators;
 public class OrganisationRequestValidator : AbstractValidator<OrganisationRequest>
 {
     private readonly OrganisationRequestValidator _validator;
-
     public OrganisationRequestValidator(OrganisationRequestValidator validator)
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
