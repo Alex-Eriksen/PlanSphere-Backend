@@ -57,11 +57,6 @@ try
         });
     }
 
-    app.MapGet("users/me", (ClaimsPrincipal claimsPrincipal) =>
-    {
-        return claimsPrincipal.Claims.ToDictionary(c => c.Type, c => c.Value);
-    }).RequireAuthorization();
-
     app.UseHttpsRedirection();
 
     app.UseAuthentication();

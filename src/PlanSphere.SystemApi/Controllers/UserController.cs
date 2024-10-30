@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
@@ -27,5 +28,12 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     {
         var token = await _mediator.Send(userCommand);
         return Ok(token);
+    }
+
+    [Authorize]
+    [HttpGet(Name = nameof(Test))]
+    public async Task<IActionResult> Test()
+    {
+        return NoContent();
     }
 }

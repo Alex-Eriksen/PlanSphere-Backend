@@ -17,17 +17,9 @@ public static class AuthorizationExtensions
                 {
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.OAuth2,
+                    Type = SecuritySchemeType.Http,
                     Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(configuration["KeyCloakConfiguration:AuthorizationUrl"]!),
-                            TokenUrl = new Uri(configuration["KeyCloakConfiguration:TokenUrl"]!)
-                        }
-                    }
+                    BearerFormat = "JWT"
                 });
 
             o.AddSecurityRequirement(new OpenApiSecurityRequirement
