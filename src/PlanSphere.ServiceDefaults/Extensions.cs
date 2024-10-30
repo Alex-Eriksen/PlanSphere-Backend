@@ -167,6 +167,7 @@ public static class Extensions
         builder.Services.AddIdentityCore<ApplicationUser>()
             .AddEntityFrameworkStores<IdentityDatabaseContext>()
             .AddApiEndpoints()
+            .AddSignInManager()
             .AddDefaultTokenProviders();
 
         return builder;
