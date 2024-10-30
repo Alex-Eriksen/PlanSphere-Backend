@@ -53,7 +53,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] { }
+            Array.Empty<string>()
         }
     });
 });
@@ -76,36 +76,28 @@ try
 {
     var app = builder.Build();
 
-    if (!app.Environment.IsProduction())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            c.RoutePrefix = string.Empty;
-        });
-    }
-
     app.UseHttpsRedirection();
 
-    app.UseAuthentication();
     app.UseRouting();
-    
+
+    app.UseCors(Configurations.PlanSphereCors); // Apply CORS policy before Authentication/Authorization
+    app.UseAuthentication();
     app.UseAuthorization();
 
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty;
+    });
+
     app.MapControllers();
-
     app.MapDefaultEndpoints();
-
+    app.Map("/", async context => { await context.Response.WriteAsync("Welcome to PlanSphere System API."); });
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller}/{action=Index}/{id?}"
     );
-    
-    app.UseCors(Configurations.PlanSphereCors);
-    
-    app.Map("/", async context => { await context.Response.WriteAsync("Welcome to PlanSphere System API."); });
-
     app.Run();
 }
 catch (Exception exception)
