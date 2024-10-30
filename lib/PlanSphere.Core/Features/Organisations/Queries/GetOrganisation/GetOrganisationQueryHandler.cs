@@ -15,12 +15,8 @@ public class GetOrganisationQueryHandler(
     IMapper mapper
 ) : IRequestHandler<GetOrganisationQuery, OrganisationDTO>
 {
-    private readonly IOrganisationRepository _organisationRepository =
-        organisationRepository ?? throw new ArgumentNullException(nameof(organisationRepository));
-
-    private readonly ILogger<GetOrganisationQueryHandler> _logger =
-        logger ?? throw new ArgumentNullException(nameof(logger));
-
+    private readonly IOrganisationRepository _organisationRepository = organisationRepository ?? throw new ArgumentNullException(nameof(organisationRepository));
+    private readonly ILogger<GetOrganisationQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     
     public async Task<OrganisationDTO> Handle(GetOrganisationQuery request, CancellationToken cancellationToken)
