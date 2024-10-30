@@ -1,36 +1,35 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Extensions.APIExtensions;
+using PlanSphere.Core.Interfaces;
+using PlanSphere.Core.Utilities.Helpers.JWT;
+using PlanSphere.Core.Utilities.Options.JWT;
 using PlanSphere.ServiceDefaults;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults(withControllers: true);
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+
+builder.Services.AddSingleton<IJwtHelper, JwtHelper>();
 
 builder.Services.AddAuthorization(options =>
 {
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-        .Build();
+        .Build(); 
 });
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.Audience = builder.Configuration["Authentication:Audience"];
-        options.MetadataAddress = builder.Configuration["Authentication:MetadataAddress"]!;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuer = builder.Configuration["Authentication:ValidIssuer"]
-        };
-    });
+    .AddJwtBearer();
+
 builder.Services.AddSystemApiApplicationCore();
 builder.Services.AddControllers();
 

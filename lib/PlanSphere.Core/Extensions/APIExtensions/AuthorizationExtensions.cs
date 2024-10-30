@@ -12,7 +12,7 @@ public static class AuthorizationExtensions
         {
             o.AddXMLComments();
             
-            o.AddSecurityDefinition("KeyCloak",
+            o.AddSecurityDefinition("BearerAuth",
                 new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -37,14 +37,11 @@ public static class AuthorizationExtensions
                     {
                         Reference = new OpenApiReference
                         {
-                            Id = "KeyCloak",
+                            Id = "Bearer",
                             Type = ReferenceType.SecurityScheme
                         }
                     },
-                    new List<string>()
-                    {
-                        "openid"
-                    }
+                    Array.Empty<string>()
                 }
             });
 
