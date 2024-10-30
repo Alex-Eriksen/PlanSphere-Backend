@@ -12,10 +12,7 @@ public static class ControllerExtensions
 {
     public static IHostApplicationBuilder SetupControllers(this IHostApplicationBuilder builder)
     {
-        builder.Services.AddSwaggerGen(options =>
-        {
-            options.AddXMLComments();
-        });
+        builder.Services.AddSwaggerGenWithAuth(builder.Configuration);
         builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
         builder.Services.AddControllers(options =>
             {
