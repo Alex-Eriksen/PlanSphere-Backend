@@ -1,6 +1,6 @@
-using PlanSphere.Core.Features.Addresses.Requests;
+using PlanSphere.Core.Features.Address.Requests;
 
-namespace PlanSphere.Core.Features.Organisations.Requests;
+namespace PlanSphere.Core.Features.Companies.Requests;
 
 public class CompanyRequest
 {
