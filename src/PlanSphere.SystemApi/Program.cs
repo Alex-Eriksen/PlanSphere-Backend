@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using PlanSphere.Core.Constants;
@@ -25,9 +26,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: Configurations.PlanSphereCors,
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins(["http://localhost:4200"])
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
 
@@ -36,6 +38,12 @@ try
 {
     var app = builder.Build();
 
+    app.Use(async (context, next) =>
+    {
+        context.Request.EnableBuffering();
+        await next();
+    });
+    
     app.UseHttpsRedirection();
 
     app.UseRouting();

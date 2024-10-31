@@ -30,6 +30,22 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         var user = await _dbContext.Users
             .Include(x => x.Settings)
             .Include(x => x.Address)
+            .Include(x => x.Roles)
+                .ThenInclude(x => x.Role)
+                    .ThenInclude(x => x.OrganisationRoleRights)
+                        .ThenInclude(x => x.Right)
+            .Include(x => x.Roles)
+                .ThenInclude(x => x.Role)
+                    .ThenInclude(x => x.CompanyRoleRights)
+                        .ThenInclude(x => x.Right)
+            .Include(x => x.Roles)
+                .ThenInclude(x => x.Role)
+                    .ThenInclude(x => x.DepartmentRoleRights)
+                        .ThenInclude(x => x.Right)
+            .Include(x => x.Roles)
+                .ThenInclude(x => x.Role)
+                    .ThenInclude(x => x.TeamRoleRights)
+                        .ThenInclude(x => x.Right)
             .SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
         
         if (user == null)
