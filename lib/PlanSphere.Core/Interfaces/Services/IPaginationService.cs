@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using PlanSphere.Core.Abstract;
-using PlanSphere.Core.Interfaces;
 
-namespace PlanSphere.Core.Services.Interfaces;
+namespace PlanSphere.Core.Interfaces.Services;
 
 public interface IPaginationService
 {

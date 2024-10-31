@@ -1,7 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Domain.Entities;
+using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PlanSphere.Core.Constants;
@@ -34,6 +36,20 @@ public class JwtHelper(IOptions<JwtOptions> options) : IJwtHelper
             .WriteToken(token);
 
         return tokenValue;
+    }
+
+    public RefreshToken GenerateRefreshToken(string ipAddress)
+    {
+        using var rng = RandomNumberGenerator.Create();
+        var randomBytes = new byte[64];
+        rng.GetBytes(randomBytes);
+        return new RefreshToken
+        {
+            Token = Convert.ToBase64String(randomBytes),
+            Expires = DateTime.UtcNow.AddDays(7),
+            CreatedAt = DateTime.UtcNow,
+            CreatedByIp = ipAddress
+        };
     }
 
     public IEnumerable<Claim> GenerateClaims(User user)
