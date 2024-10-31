@@ -7,7 +7,7 @@ using PlanSphere.Core.Features.Organisations.DTOs;
 using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
-using PlanSphere.Core.Services.Interfaces;
+using PlanSphere.Core.Interfaces.Services;
 
 namespace PlanSphere.Core.Features.Organisations.Commands.ListOrganisations;
 

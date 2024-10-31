@@ -9,16 +9,16 @@ public class JobTitleDTOProfile : Profile
 {
     public JobTitleDTOProfile()
     {
-        CreateMap<JobTitle, JobTitleDTO>()
+        CreateMap<Domain.Entities.JobTitle, JobTitleDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.IsInheritanceActive, opt => opt.MapFrom<IsInheritanceActiveResolver>())
             .ForMember(dest => dest.SourceLevel, opt => opt.MapFrom<SourceLevelResolver>());
     }
     
-    private class IsInheritanceActiveResolver : IValueResolver<JobTitle, JobTitleDTO, bool>
+    private class IsInheritanceActiveResolver : IValueResolver<Domain.Entities.JobTitle, JobTitleDTO, bool>
     {
-        public bool Resolve(JobTitle source, JobTitleDTO destination, bool destMember, ResolutionContext context)
+        public bool Resolve(Domain.Entities.JobTitle source, JobTitleDTO destination, bool destMember, ResolutionContext context)
         {
             if (source.OrganisationJobTitle != null)
             {

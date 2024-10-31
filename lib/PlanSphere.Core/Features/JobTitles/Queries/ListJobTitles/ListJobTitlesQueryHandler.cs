@@ -34,12 +34,12 @@ public class ListJobTitlesQueryHandler(
         query = SearchQuery(request.Search, query);
         query = SortQuery(request, query);
 
-        var paginatedResponse = await _paginationService.PaginateAsync<JobTitle, JobTitleDTO>(query, request);
+        var paginatedResponse = await _paginationService.PaginateAsync<Domain.Entities.JobTitle, JobTitleDTO>(query, request);
 
         return paginatedResponse;
     }
 
-    private IQueryable<JobTitle> GetJobTitles(ListJobTitlesQuery request)
+    private IQueryable<Domain.Entities.JobTitle> GetJobTitles(ListJobTitlesQuery request)
     {
         var query = _jobTitleRepository.GetQueryable();
     
@@ -64,7 +64,7 @@ public class ListJobTitlesQueryHandler(
         return query;
     }
 
-    private IQueryable<JobTitle> SearchQuery(string? search, IQueryable<JobTitle> query)
+    private IQueryable<Domain.Entities.JobTitle> SearchQuery(string? search, IQueryable<Domain.Entities.JobTitle> query)
     {
         if (!string.IsNullOrWhiteSpace(search))
         {
@@ -73,8 +73,8 @@ public class ListJobTitlesQueryHandler(
 
         return query;
     }
+    private IQueryable<Domain.Entities.JobTitle> SortQuery(ListJobTitlesQuery request, IQueryable<Domain.Entities.JobTitle> query)
 
-    private IQueryable<JobTitle> SortQuery(ListJobTitlesQuery request, IQueryable<JobTitle> query)
     {
         
         return request.SortBy switch
