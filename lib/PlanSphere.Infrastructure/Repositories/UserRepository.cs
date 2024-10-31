@@ -61,7 +61,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         throw new NotImplementedException();
     }
 
-    public async Task<User> GetByIdentityId(string identityId, CancellationToken cancellationToken)
+    public async Task<User> GetByIdentityIdAsync(string identityId, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
             .Include(x => x.Settings)
@@ -76,6 +76,41 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         }
 
         return user;
+    }
+
+    public async Task<User> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken)
+    {
+        var refreshToken = await _dbContext.RefreshTokens
+            .Include(x => x.User)
+                .ThenInclude(x => x.Roles)
+                    .ThenInclude(x => x.Role)
+                        .ThenInclude(x => x.OrganisationRoleRights)
+                            .ThenInclude(x => x.Right)
+            .Include(x => x.User)
+                .ThenInclude(x => x.Roles)
+                    .ThenInclude(x => x.Role)
+                        .ThenInclude(x => x.CompanyRoleRights)
+                            .ThenInclude(x => x.Right)
+            .Include(x => x.User)
+                .ThenInclude(x => x.Roles)
+                    .ThenInclude(x => x.Role)
+                        .ThenInclude(x => x.DepartmentRoleRights)
+                            .ThenInclude(x => x.Right)
+            .Include(x => x.User)
+                .ThenInclude(x => x.Roles)
+                    .ThenInclude(x => x.Role)
+                        .ThenInclude(x => x.TeamRoleRights)
+                            .ThenInclude(x => x.Right)
+            .AsSplitQuery()
+            .SingleOrDefaultAsync(t => t.Token == token, cancellationToken);
+        
+        if (refreshToken is null or { IsActive: false })
+        {
+            _logger.LogInformation("Invalid refresh token!");
+            throw new KeyNotFoundException("Invalid refresh token!");
+        }
+
+        return refreshToken.User;
     }
 
     public async Task<bool> IsUserRegisteredAsync(string email, CancellationToken cancellationToken)

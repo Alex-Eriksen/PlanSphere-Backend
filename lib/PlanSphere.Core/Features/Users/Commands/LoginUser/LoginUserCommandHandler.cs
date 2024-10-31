@@ -33,7 +33,7 @@ public class LoginUserCommandHandler(
         _logger.LogInformation("User is logged in!");
         
         _logger.LogInformation("Fetching user with id: [{userId}]", applicationUser);
-        var user = await _userRepository.GetByIdentityId(applicationUser.Id, cancellationToken);
+        var user = await _userRepository.GetByIdentityIdAsync(applicationUser.Id, cancellationToken);
         _logger.LogInformation("Fetched user with id: [{userId}]", applicationUser);
         
         _logger.LogInformation("Retrieving tokens.");

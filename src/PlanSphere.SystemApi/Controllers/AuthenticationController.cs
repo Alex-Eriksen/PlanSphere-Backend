@@ -1,17 +1,21 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.RefreshToken;
 using PlanSphere.Core.Features.Users.Commands.RevokeRefreshToken;
+using PlanSphere.Core.Features.Users.Queries.GetLoggedInUser;
 using PlanSphere.SystemApi.Controllers.Base;
+using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
-public class AuthenticationController(IMediator mediator) : ApiControllerBase(mediator)
+public class AuthenticationController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+    private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext?.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
     
     [HttpPost(Name = nameof(LoginAsync))]
     public async Task<IActionResult> LoginAsync([FromBody] LoginUserCommand userCommand)
@@ -45,6 +49,18 @@ public class AuthenticationController(IMediator mediator) : ApiControllerBase(me
         Response.Cookies.Delete(HttpContextConstants.RefreshToken);
         
         return NoContent();
+    }
+
+    [Authorize]
+    [HttpGet(Name = nameof(GetLoggedInUserAsync))]
+    public async Task<IActionResult> GetLoggedInUserAsync()
+    {
+        var refreshToken = Request.Cookies[HttpContextConstants.RefreshToken];
+        var accessToken = Request.Headers.Authorization.ToString().Replace("bearer ", "");
+        var command = new GetLoggedInUserQuery(refreshToken, _claims.GetUserId());
+        var loggedInUserDto = await _mediator.Send(command);
+        
+        return Ok(loggedInUserDto);
     }
     
     private void SetTokenCookie(string token)
