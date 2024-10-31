@@ -9,4 +9,5 @@ public interface IUserRepository : IRepository<User>
     Task<bool> IsUserRegisteredAsync(string email, CancellationToken cancellationToken);
     Task RevokeRefreshTokenAsync(string token, string ipAddress, CancellationToken cancellationToken);
     Task<RefreshTokenDTO> RefreshTokenAsync(string token, string ipAddress, CancellationToken cancellationToken);
+    Task<RefreshTokenDTO> AuthenticateAsync(User user, string ipAddress, CancellationToken cancellationToken);
 }

@@ -16,8 +16,11 @@ public class AuthenticationController(IMediator mediator) : ApiControllerBase(me
     [HttpPost(Name = nameof(LoginAsync))]
     public async Task<IActionResult> LoginAsync([FromBody] LoginUserCommand userCommand)
     {
-        var token = await _mediator.Send(userCommand);
-        return Ok(token);
+        userCommand.IpAddress = IpAddress();
+        var refreshTokenDto = await _mediator.Send(userCommand);
+        SetTokenCookie(refreshTokenDto.RefreshToken);
+        
+        return Ok(refreshTokenDto.AccessToken);
     }
 
     [HttpPost(Name = nameof(RefreshTokenAsync))]

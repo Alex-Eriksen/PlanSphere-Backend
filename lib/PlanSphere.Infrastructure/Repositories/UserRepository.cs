@@ -66,6 +66,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         var user = await _dbContext.Users
             .Include(x => x.Settings)
             .Include(x => x.Address)
+            .Include(x => x.RefreshTokens)
             .SingleOrDefaultAsync(user => user.IdentityUserId == identityId, cancellationToken);
         
         if (user == null)
@@ -137,4 +138,36 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
 
         return new RefreshTokenDTO { RefreshToken = newRefreshToken.Token, AccessToken = accessToken };
     }
+
+    public async Task<RefreshTokenDTO> AuthenticateAsync(User user, string ipAddress, CancellationToken cancellationToken)
+    {
+        var refreshToken = user.RefreshTokens.SingleOrDefault(t => t.IsActive);
+        
+        var claims = new Claim[]
+        {
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new(ClaimsConstants.UserId, user.Id.ToString()),
+            new(ClaimsConstants.OrganizationId, user.OrganisationId.ToString()),
+            new(ClaimsConstants.Email, user.Email),
+            new(ClaimsConstants.FirstName, user.FirstName),
+            new(ClaimsConstants.LastName, user.LastName)
+        };
+
+        var accessToken = _jwtHelper.GenerateToken(claims, DateTime.UtcNow.AddMinutes(15));
+        
+        if (refreshToken is not null)
+        {
+            return new RefreshTokenDTO { RefreshToken = refreshToken.Token, AccessToken = accessToken };
+        }
+        
+        var newRefreshToken = _jwtHelper.GenerateRefreshToken(ipAddress);
+
+        user.RefreshTokens.Add(newRefreshToken);
+        
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return new RefreshTokenDTO { RefreshToken = newRefreshToken.Token, AccessToken = accessToken };
+    }
+
 }
