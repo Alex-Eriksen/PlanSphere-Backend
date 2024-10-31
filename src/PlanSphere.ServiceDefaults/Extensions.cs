@@ -15,6 +15,8 @@ using OpenTelemetry.Trace;
 using PlanSphere.Core.Extensions.APIExtensions;
 using PlanSphere.Core.Extensions.DIExtensions;
 using PlanSphere.Core.Interfaces.Database;
+using PlanSphere.Core.Services;
+using PlanSphere.Core.Services.Interfaces;
 using PlanSphere.Infrastructure.Contexts;
 using PlanSphere.Infrastructure.Extensions;
 
@@ -41,6 +43,7 @@ public static class Extensions
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<ISystemClock, SystemClock>();
         builder.Services.AddRepositories();
+        builder.Services.AddServices();
         builder.Services.AddScoped<IPlanSphereDatabaseContext, PlanSphereDatabaseContext>();
         if (withControllers)
         {
@@ -171,5 +174,12 @@ public static class Extensions
             .AddDefaultTokenProviders();
 
         return builder;
+    }
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IPaginationService, PaginationService>();
+
+        return services;
     }
 }
