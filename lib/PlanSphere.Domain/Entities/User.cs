@@ -21,6 +21,7 @@ public class User : BaseEntity, IAuditableEntity
 
     public List<UserRole> Roles { get; set; } = new List<UserRole>();
     public List<WorkTime> WorkTimes { get; set; } = new List<WorkTime>();
+    public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }

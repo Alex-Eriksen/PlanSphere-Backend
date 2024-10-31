@@ -23,12 +23,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         return Created();
     }
     
-    [HttpPost(Name = nameof(LoginAsync))]
-    public async Task<IActionResult> LoginAsync([FromBody] LoginUserCommand userCommand)
-    {
-        var token = await _mediator.Send(userCommand);
-        return Ok(token);
-    }
+
 
     [Authorize]
     [HttpGet(Name = nameof(Test))]

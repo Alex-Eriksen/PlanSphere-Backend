@@ -42,6 +42,7 @@ public partial class PlanSphereDatabaseContext(DbContextOptions<PlanSphereDataba
     public DbSet<ZipCode> ZipCodes { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Right> Rights { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

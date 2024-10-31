@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PlanSphere.Core.Abstract;
 using PlanSphere.Core.Interfaces;
-using PlanSphere.Core.Services.Interfaces;
+using PlanSphere.Core.Interfaces.Services;
 
 namespace PlanSphere.Core.Services;
 
