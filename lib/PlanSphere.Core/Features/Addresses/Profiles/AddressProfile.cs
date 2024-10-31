@@ -9,7 +9,7 @@ public class AddressProfile : Profile
 {
     public AddressProfile()
     {
-        CreateMap<AddressRequest, Address>()
+        CreateMap<AddressRequest, Domain.Entities.Address>()
             .ForMember(dest => dest.CountryId, opt => opt.MapFrom(src => src.CountryId))
             .ForMember(dest => dest.HouseNumber, opt => opt.MapFrom(src => src.HouseNumber))
             .ForMember(dest => dest.PostalCode, opt => opt.MapFrom(src => src.PostalCode))
