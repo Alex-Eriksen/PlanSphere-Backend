@@ -15,8 +15,8 @@ using OpenTelemetry.Trace;
 using PlanSphere.Core.Extensions.APIExtensions;
 using PlanSphere.Core.Extensions.DIExtensions;
 using PlanSphere.Core.Interfaces.Database;
+using PlanSphere.Core.Interfaces.Services;
 using PlanSphere.Core.Services;
-using PlanSphere.Core.Services.Interfaces;
 using PlanSphere.Infrastructure.Contexts;
 using PlanSphere.Infrastructure.Extensions;
 
