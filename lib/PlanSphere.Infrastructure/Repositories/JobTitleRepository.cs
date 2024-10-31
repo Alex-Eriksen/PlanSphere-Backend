@@ -47,6 +47,7 @@ private readonly ILogger<JobTitleRepository> _logger = logger ?? throw new Argum
         }
 
         _context.JobTitles.Remove(jobTitle);
+        await _context.SaveChangesAsync(cancellationToken);
         return jobTitle;
     }
 
