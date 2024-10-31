@@ -10,6 +10,7 @@ public static class DatabaseExtensions
     {
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IOrganisationRepository, OrganisationRepository>();
         services.AddScoped<IJobTitleRepository, JobTitleRepository>();
         return services;
     }

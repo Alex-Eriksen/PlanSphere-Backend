@@ -21,7 +21,7 @@ public class CreateJobTitleCommandHandler(
     
     public async Task Handle(CreateJobTitleCommand command, CancellationToken cancellationToken)
     {
-        var jobTitle = _mapper.Map<JobTitle>(command);
+        var jobTitle = _mapper.Map<Domain.Entities.JobTitle>(command);
         HandleJobTitleSourceLevel(command, jobTitle);
 
         _logger.BeginScope("Creating job title on {sourceLevel} with id: [{sourceLevelId}].", command.SourceLevel, command.SourceLevelId);
@@ -29,7 +29,7 @@ public class CreateJobTitleCommandHandler(
         _logger.LogInformation("Created job title on {sourceLevel} with id: [{sourceLevelId}].", command.SourceLevel, command.SourceLevelId);
     }
     
-    private static void HandleJobTitleSourceLevel(CreateJobTitleCommand request, JobTitle jobTitle)
+    private static void HandleJobTitleSourceLevel(CreateJobTitleCommand request, Domain.Entities.JobTitle jobTitle)
     {
         switch (request.SourceLevel)
         {
