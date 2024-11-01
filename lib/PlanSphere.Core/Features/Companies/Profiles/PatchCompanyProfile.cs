@@ -13,7 +13,9 @@ public class PatchCompanyProfile : Profile
         CreateMap<Company, CompanyUpdateRequest>()
             .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.CompanyLogo, opt => opt.MapFrom(src => src.LogoUrl))
-            .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contact))
+            .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.Contact.ContactName))
+            .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.Contact.ContactEmail))
+            .ForMember(dest => dest.ContactPhoneNumber, opt => opt.MapFrom(src => src.Contact.ContactPhoneNumber))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
     }
 }
