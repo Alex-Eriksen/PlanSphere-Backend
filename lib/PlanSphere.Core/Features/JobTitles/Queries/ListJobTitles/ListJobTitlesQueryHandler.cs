@@ -8,7 +8,7 @@ using PlanSphere.Core.Extensions;
 using PlanSphere.Core.Features.JobTitles.DTOs;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
-using PlanSphere.Core.Services.Interfaces;
+using PlanSphere.Core.Interfaces.Services;
 
 namespace PlanSphere.Core.Features.JobTitles.Queries.ListJobTitles;
 
