@@ -55,17 +55,17 @@ public class ListOrganisationsQueryHandler(
         return request.OrganisationSortBy switch
         {
             OrganisationSortBy.Name => query.OrderByExpression(o => o.Name, request.SortDescending),
-            // SortByOrganisation.Users => query.OrderByExpression(o => o.Users, request.SortDescending),
-            // SortByOrganisation.OrganisationMembers => query.OrderByExpression(o => o.Users.Count,
+            // OrganisationSortBy.Users => query.OrderByExpression(o => o.Users, request.SortDescending),
+            // OrganisationSortBy.OrganisationMembers => query.OrderByExpression(o => o.Users.Count,
             //     request.SortDescending),
-            // SortByOrganisation.CompanyMembers => query.OrderByExpression(
+            // OrganisationSortBy.CompanyMembers => query.OrderByExpression(
             //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.CompanyRole != null), request.SortDescending),
-            // SortByOrganisation.DepartmentMembers => query.OrderByExpression(
+            // OrganisationSortBy.DepartmentMembers => query.OrderByExpression(
             //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.DepartmentRole != null),
             //     request.SortDescending),
-            // SortByOrganisation.TeamMembers => query.OrderByExpression(
+            // OrganisationSortBy.TeamMembers => query.OrderByExpression(
             //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.TeamRole != null), request.SortDescending),
-            // SortByOrganisation.Roles => query.OrderByExpression(o => o.Roles.Count, request.SortDescending),
+            // OrganisationSortBy.Roles => query.OrderByExpression(o => o.Roles.Count, request.SortDescending),
         };
     }
 }
