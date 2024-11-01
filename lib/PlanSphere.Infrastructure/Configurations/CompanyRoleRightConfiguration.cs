@@ -8,7 +8,10 @@ public class CompanyRoleRightConfiguration : IEntityTypeConfiguration<CompanyRol
 {
     public void Configure(EntityTypeBuilder<CompanyRoleRight> builder)
     {
-        builder.HasKey(e => e.CompanyId);
+        builder.HasKey(e => e.Id);
+
+        builder.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
 
         builder.HasOne(e => e.Company)
             .WithMany()

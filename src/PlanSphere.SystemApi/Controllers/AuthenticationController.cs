@@ -22,6 +22,7 @@ public class AuthenticationController(IMediator mediator, IHttpContextAccessor h
     {
         userCommand.IpAddress = IpAddress();
         var refreshTokenDto = await _mediator.Send(userCommand);
+        Response.ContentType = "application/json";
         SetTokenCookie(refreshTokenDto.RefreshToken);
         
         return Ok(refreshTokenDto.AccessToken);
@@ -33,6 +34,7 @@ public class AuthenticationController(IMediator mediator, IHttpContextAccessor h
         var refreshToken = Request.Cookies[HttpContextConstants.RefreshToken];
         var command = new RefreshTokenCommand(refreshToken, IpAddress());
         var refreshTokenDto = await _mediator.Send(command);
+        Response.ContentType = "application/json";
         SetTokenCookie(refreshTokenDto.RefreshToken);
         
         return Ok(refreshTokenDto.AccessToken);
@@ -56,7 +58,6 @@ public class AuthenticationController(IMediator mediator, IHttpContextAccessor h
     public async Task<IActionResult> GetLoggedInUserAsync()
     {
         var refreshToken = Request.Cookies[HttpContextConstants.RefreshToken];
-        var accessToken = Request.Headers.Authorization.ToString().Replace("bearer ", "");
         var command = new GetLoggedInUserQuery(refreshToken, _claims.GetUserId());
         var loggedInUserDto = await _mediator.Send(command);
         

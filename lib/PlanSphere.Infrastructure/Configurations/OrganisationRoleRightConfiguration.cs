@@ -8,7 +8,10 @@ public class OrganisationRoleRightConfiguration : IEntityTypeConfiguration<Organ
 {
     public void Configure(EntityTypeBuilder<OrganisationRoleRight> builder)
     {
-        builder.HasKey(e => e.OrganisationId);
+        builder.HasKey(e => e.Id);
+
+        builder.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
 
         builder.HasOne(e => e.Organisation)
             .WithMany()
