@@ -11,13 +11,13 @@ public class JobTitleProfile : Profile
 {
     public JobTitleProfile()
     {
-        CreateMap<CreateJobTitleCommand, Domain.Entities.JobTitle>()
+        CreateMap<CreateJobTitleCommand, JobTitle>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Request.Name));
     }
     
-    private class InheritanceActiveResolver : IValueResolver<UpdateJobTitleCommand, Domain.Entities.JobTitle, bool>
+    private class InheritanceActiveResolver : IValueResolver<UpdateJobTitleCommand, JobTitle, bool>
     {
-        public bool Resolve(UpdateJobTitleCommand source, Domain.Entities.JobTitle destination, bool destMember, ResolutionContext context)
+        public bool Resolve(UpdateJobTitleCommand source, JobTitle destination, bool destMember, ResolutionContext context)
         {
             return source.SourceLevel switch
             {

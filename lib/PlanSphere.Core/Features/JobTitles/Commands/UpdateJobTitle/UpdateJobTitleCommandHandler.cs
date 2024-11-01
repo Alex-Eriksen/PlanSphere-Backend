@@ -32,7 +32,7 @@ public class UpdateJobTitleCommandHandler(
 
     }
     
-    private static Domain.Entities.JobTitle HandleJobTitleSourceLevel(UpdateJobTitleCommand command, Domain.Entities.JobTitle jobTitle)
+    private static JobTitle HandleJobTitleSourceLevel(UpdateJobTitleCommand command, JobTitle jobTitle)
     {
         switch (command.SourceLevel)
         {
