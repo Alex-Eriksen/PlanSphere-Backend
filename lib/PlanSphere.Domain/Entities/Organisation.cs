@@ -22,4 +22,6 @@ public class Organisation : BaseEntity, IAuditableEntity
     public DateTime? UpdatedAt { get; set; }
     public ulong? UpdatedBy { get; set; }
     public User? UpdatedByUser { get; set; }
+    public virtual List<User> Users { get; set; } = new List<User>();
+    public virtual List<Role> Roles { get; set; } = new List<Role>();
 }

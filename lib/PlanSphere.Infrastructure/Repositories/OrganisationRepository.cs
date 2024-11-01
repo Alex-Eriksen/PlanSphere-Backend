@@ -58,6 +58,6 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
 
     public IQueryable<Organisation> GetQueryable()
     {
-        return _context.Organisations.AsQueryable();
+        return _context.Organisations.Include(o => o.Users).AsQueryable();
     }
 }
