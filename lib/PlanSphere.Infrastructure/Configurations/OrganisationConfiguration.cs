@@ -13,6 +13,11 @@ public class OrganisationConfiguration : IEntityTypeConfiguration<Organisation>
         builder.Property(e => e.Id)
             .ValueGeneratedOnAdd();
 
+        builder.HasMany(o => o.Users)
+            .WithOne(u => u.Organisation)
+            .HasForeignKey(u => u.OrganisationId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         builder.HasOne(e => e.Address)
             .WithOne()
             .HasForeignKey<Organisation>(e => e.AddressId)
