@@ -1,6 +1,6 @@
 using Domain.Entities;
 using PlanSphere.Core.Abstract;
-using PlanSphere.Core.Features.JobTitle.DTOs;
+using PlanSphere.Core.Features.JobTitles.DTOs;
 
 namespace PlanSphere.Core.Features.Organisations.DTOs;
 
