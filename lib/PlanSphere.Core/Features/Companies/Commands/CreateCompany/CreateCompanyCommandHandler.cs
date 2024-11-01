@@ -21,7 +21,8 @@ public class CreateCompanyCommandHandler(
 
     public async Task Handle(CreateCompanyCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Creating company on organisation with id: [{organisationId}]", command.OrganisationId);
+        _logger.BeginScope("Creating company");
+        _logger.LogInformation("Creating company on organisation with id: [{organisationId}]", command.OrganisationId);
         var company = _mapper.Map<Company>(command);
 
         var createdCompany = await _companyRepository.CreateAsync(company, cancellationToken);

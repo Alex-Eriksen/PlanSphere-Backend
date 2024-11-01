@@ -23,9 +23,11 @@ public class ListCompaniesQueryHandler(
     private readonly ICompanyRepository _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
     private readonly ILogger<ListCompaniesQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
     private readonly IPaginationService _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
+    
     public async Task<IPaginatedResponse<CompanyDTO>> Handle(ListCompaniesQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching companies from Organisation with id: [{organisationId}]", request.OrganisationId);
+        _logger.BeginScope("Fetching companies");
+        _logger.LogInformation("Fetching companies from Organisation with id: [{organisationId}]", request.OrganisationId);
         var query = _companyRepository.GetQueryable().Where(x => x.OrganisationId == request.OrganisationId);
         _logger.LogInformation("Fetched companies from Organisation with id: [{organisationId}]", request.OrganisationId);
 
@@ -50,6 +52,7 @@ public class ListCompaniesQueryHandler(
         return query;
 
     }
+    
     private IQueryable<Company> SortQuery(ListCompaniesQuery request, IQueryable<Company> query)
     {
         return request.SortBy switch

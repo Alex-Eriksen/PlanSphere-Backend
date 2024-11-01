@@ -21,10 +21,11 @@ public class CreateWorkScheduleCommandHandler(
     
     public async Task Handle(CreateWorkScheduleCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Creating workschedule on {sourcelevel} with id: [{sourcelevelId}]", command.Request.SourceLevel, command.Request.SourceLevelId);
+        _logger.BeginScope("Creating workschedule on {sourcelevel}", command.Request.SourceLevel);
+        _logger.LogInformation("Creating workschedule on {sourcelevel}] with id: [{sourcelevelId}]", command.Request.SourceLevel, command.Request.SourceLevelId);
         var workSchedule = mapper.Map<Domain.Entities.WorkSchedule>(command.Request);
         
-        var createdWorkSchedule = await _workScheduleRepository.CreateAsync(workSchedule, cancellationToken);
+        await _workScheduleRepository.CreateAsync(workSchedule, cancellationToken);
         _logger.LogInformation("Created workschedule on {sourcelevel} with id: [{sourcelevelId}]", command.Request.SourceLevel, command.Request.SourceLevelId);
     }
 }

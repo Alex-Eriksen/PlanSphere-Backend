@@ -10,14 +10,12 @@ using PlanSphere.Core.Features.Companies.Qurries.ListCompanies;
 using PlanSphere.SystemApi.Controllers.Base;
 using PlanSphere.SystemApi.Extensions;
 
-namespace PlanSphere.SystemApi.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CompanyController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : ApiControllerBase(mediator)
+namespace PlanSphere.SystemApi.Controllers;
+
+    
+    public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     {
         private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext?.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         
         [HttpGet("{companyId}", Name = nameof(GetCompanyById))]
         public async Task<IActionResult> GetCompanyById([FromRoute] ulong companyId)
@@ -30,14 +28,14 @@ namespace PlanSphere.SystemApi.Controllers
         [HttpGet(Name = nameof(ListCompaniesAsync))]
         public async Task<IActionResult> ListCompaniesAsync([FromQuery] ListCompaniesQuery query)
         {
-            query.OrganisationId = _claims.GetOrganizationId();
+            query.OrganisationId = Request.HttpContext.User.GetOrganizationId();
             var response = await _mediator.Send(query);
             return Ok(response);
         }
         [HttpPost(Name = nameof(CreateCompanyAsync))]
         public async Task<IActionResult> CreateCompanyAsync([FromBody] CreateCompanyCommand command)
         {
-            command.OrganisationId = _claims.GetOrganizationId();
+            command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
             await _mediator.Send(command);
             return Created();
         }
@@ -62,4 +60,4 @@ namespace PlanSphere.SystemApi.Controllers
     
     
     
-}
+

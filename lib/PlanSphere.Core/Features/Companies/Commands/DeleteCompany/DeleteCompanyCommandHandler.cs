@@ -16,6 +16,7 @@ public class DeleteCompanyCommandHandler(
     
     public async Task Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
     {
+        _logger.BeginScope("Deleting Company");
         _logger.LogInformation("Deleting Company with id [{id}]", request.Id);
         await _companyRepository.DeleteAsync(request.Id, cancellationToken);
         _logger.LogInformation("Deleted Company with id [{id}]!", request.Id);

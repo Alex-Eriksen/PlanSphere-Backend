@@ -25,7 +25,8 @@ public class UpdateCompanyCommandHandler(
 
     public async Task Handle(UpdateCompanyCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching company with id: [{companyId}]", command.Id);
+        _logger.BeginScope("Fetching company");
+        _logger.LogInformation("Fetching company with id: [{companyId}]", command.Id);
         var company = await _companyRepository.GetByIdAsync(command.Id, cancellationToken);
         _logger.LogInformation("Fetched company with id: [{companyId}]", command.Id);
 

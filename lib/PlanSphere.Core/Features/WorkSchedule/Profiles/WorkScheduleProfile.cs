@@ -12,6 +12,7 @@ public class WorkScheduleProfile : Profile
         CreateMap<WorkScheduleRequest, Domain.Entities.WorkSchedule>()
             .ForMember(dest => dest.WorkScheduleShifts, opt => opt.MapFrom(src => src.WorkScheduleShifts))
             .ForMember(dest => dest.IsDefaultWorkSchedule, opt => opt.MapFrom(src => src.IsDefaultWorkSchedule));
+        
         CreateMap<WorkScheduleShiftRequest, WorkScheduleShift>()
             .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime))
             .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))

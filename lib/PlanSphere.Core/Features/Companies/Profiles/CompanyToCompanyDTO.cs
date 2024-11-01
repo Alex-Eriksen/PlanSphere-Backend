@@ -14,8 +14,6 @@ public class CompanyToCompanyDTO : Profile
             .ForMember(dest => dest.CVR, opt => opt.MapFrom(src => src.VAT))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.CareOf, opt => opt.MapFrom(src => src.CareOf))
-            .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
-            .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.ContactName))
-            .ForMember(dest => dest.ContactPhoneNumber, opt => opt.MapFrom(src => src.ContactPhoneNumber));
+            .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contact));
     }
 }

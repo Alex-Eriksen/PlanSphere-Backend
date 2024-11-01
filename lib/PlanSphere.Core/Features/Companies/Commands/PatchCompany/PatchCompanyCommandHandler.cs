@@ -20,19 +20,17 @@ public class PatchCompanyCommandHandler(
     
     public async Task Handle(PatchCompanyCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching company with id: [{companyId}]", command.Id);
+        _logger.BeginScope("Fetching company");
+        _logger.LogInformation("Fetching company with id: [{companyId}]", command.Id);
         var company = await _companyRepository.GetByIdAsync(command.Id, cancellationToken);
         _logger.LogInformation("Fetched company with id: [{companyId}]", command.Id);
         
-        
-
         var companyPatchRequest = _mapper.Map<CompanyUpdateRequest>(company);
         
         command.PatchDocument.ApplyTo(companyPatchRequest);
         
         company = _mapper.Map(companyPatchRequest, company);
         
-
         _logger.LogInformation("Patching Company with id: [{companyId}]", command.Id);
         await _companyRepository.UpdateAsync(command.Id, company, cancellationToken);
         _logger.LogInformation("Patched Company with id: [{companyId}]", command.Id);

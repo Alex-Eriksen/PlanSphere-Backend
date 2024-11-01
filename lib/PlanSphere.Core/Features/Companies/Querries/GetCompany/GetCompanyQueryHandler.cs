@@ -22,9 +22,11 @@ public class GetCompanyQueryHandler(
     private readonly ICompanyRepository _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
     private readonly ILogger<GetCompanyQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+    
     public async Task<CompanyDTO> Handle(GetCompanyQuery request, CancellationToken cancellationToken)
     {
-        logger.BeginScope("Fetching Company with id: [{Id}]", request.Id);
+        logger.BeginScope("Fetching Company");
+        logger.LogInformation("Fetching Company with id: [{Id}]", request.Id);
         var company = await _companyRepository.GetByIdAsync(request.Id, cancellationToken);
         logger.LogInformation("Fetched Company with id: [{Id}]", request.Id);
 
