@@ -12,6 +12,7 @@ using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
+[Route("api/[controller]")]
 public class OrganisationController(IMediator mediator) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -27,7 +28,6 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     [HttpGet(Name = nameof(ListOrganisationAsync))]
     public async Task<IActionResult> ListOrganisationAsync([FromQuery] ListOrganisationsQuery query)
     {
-        query.OrganisationId = HttpContext.User.GetOrganizationId();
         var response = await _mediator.Send(query);
         return Ok(response);
     }
@@ -51,8 +51,8 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     [HttpDelete("{organisationId}", Name = nameof(DeleteOrganisationAsync))]
     public async Task<IActionResult> DeleteOrganisationAsync([FromRoute] ulong organisationId, [FromBody] DeleteOrganisationCommand command)
     {
-        command.Id = organisationId;
+        command = command with { Id = organisationId };
         await _mediator.Send(command);
-        return Ok();
+        return NoContent();
     }
 }

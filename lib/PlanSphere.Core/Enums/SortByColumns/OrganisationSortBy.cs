@@ -1,6 +1,6 @@
 namespace PlanSphere.Core.Enums.SortByColumns;
 
-public enum SortByOrganisation
+public enum OrganisationSortBy
 {
     Name,
     OrganisationMembers,
