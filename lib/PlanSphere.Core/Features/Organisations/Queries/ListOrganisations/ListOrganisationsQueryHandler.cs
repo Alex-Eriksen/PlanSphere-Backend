@@ -23,13 +23,13 @@ public class ListOrganisationsQueryHandler(
 
     public async Task<IPaginatedResponse<OrganisationDTO>> Handle(ListOrganisationsQuery request, CancellationToken cancellationToken)
     {
-        logger.BeginScope("ListOrganisationsCommandHandler");
+        _logger.BeginScope("ListOrganisationsCommandHandler");
         
         _logger.LogInformation("Listing all organisations");
         var query = _organisationRepository.GetQueryable();
         _logger.LogInformation("Listed organisations");
 
-        query = SearchQuery(request, query);
+        query = SearchQuery(request.Search, query);
         query = SortQuery(request, query);
         
         var paginatedResponse = await _paginationService.PaginateAsync<Organisation, OrganisationDTO>(query, request);
@@ -37,12 +37,12 @@ public class ListOrganisationsQueryHandler(
         return paginatedResponse;
     }
 
-    private IQueryable<Organisation> SearchQuery(ListOrganisationsQuery request, IQueryable<Organisation> query)
+    private IQueryable<Organisation> SearchQuery(string? search, IQueryable<Organisation> query)
     {
-        var search = request.Search.Trim().ToLower();
-        if (!string.IsNullOrWhiteSpace(search))
+        var filtertSearch = search.Trim().ToLower();
+        if (!string.IsNullOrWhiteSpace(filtertSearch))
         {
-            query = query.Where(x => x.Name.ToLower().Contains(search));
+            query = query.Where(x => x.Name.ToLower().Contains(filtertSearch));
         }
 
         return query;

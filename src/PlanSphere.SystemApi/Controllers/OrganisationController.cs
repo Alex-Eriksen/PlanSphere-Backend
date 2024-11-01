@@ -1,12 +1,16 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using Azure.Core;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.DeleteOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.UpdateOrganisation;
 using PlanSphere.Core.Features.Organisations.Queries;
+using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 using PlanSphere.SystemApi.Controllers.Base;
+using PlanSphere.SystemApi.Extensions;
 
-namespace PlanSphere.SystemApi.Controllers.Organisation;
+namespace PlanSphere.SystemApi.Controllers;
 
 public class OrganisationController(IMediator mediator) : ApiControllerBase(mediator)
 {
@@ -21,9 +25,11 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpGet(Name = nameof(ListOrganisationAsync))]
-    public async Task<IActionResult> ListOrganisationAsync()
+    public async Task<IActionResult> ListOrganisationAsync([FromQuery] ListOrganisationsQuery query)
     {
-        return Ok();
+        query.OrganisationId = HttpContext.User.GetOrganizationId();
+        var response = await _mediator.Send(query);
+        return Ok(response);
     }
     
     [HttpPost(Name = nameof(CreateOrganisationAsync))]

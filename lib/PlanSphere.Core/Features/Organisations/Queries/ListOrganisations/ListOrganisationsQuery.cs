@@ -8,4 +8,7 @@ namespace PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 
 public record ListOrganisationsQuery(string? Search, SortByOrganisation SortBy, bool SortDescending)
     : BasePaginatedQuery, IRequest<IPaginatedResponse<OrganisationDTO>>, ISearchableQuery,
-        ISortableQuery<SortByOrganisation>;
+        ISortableQuery<SortByOrganisation>
+{
+    public ulong OrganisationId { get; set; }
+}

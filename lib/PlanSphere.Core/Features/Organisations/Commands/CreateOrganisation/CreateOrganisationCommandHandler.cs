@@ -2,10 +2,12 @@
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
 
 namespace PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
-
+[HandlerType(HandlerType.SystemApi)]
 public class CreateOrganisationCommandHandler(
     IOrganisationRepository organisationRepository,
     ILogger<CreateOrganisationCommandHandler> logger,
