@@ -2,11 +2,11 @@
 
 namespace PlanSphere.Core.Features.Companies.Qurries.GetCompany;
 
-    public class GetCompanyQueryValidator : AbstractValidator<GetCompanyQuery>
+public class GetCompanyQueryValidator : AbstractValidator<GetCompanyQuery>
+{
+    public GetCompanyQueryValidator() 
     {
-        public GetCompanyQueryValidator() 
-        {
-            RuleFor(x => x.Id)
-                .NotNull();
-        }
+        RuleFor(x => x.Id)
+            .NotNull();
     }
+}

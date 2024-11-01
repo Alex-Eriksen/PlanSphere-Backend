@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 namespace PlanSphere.Core.Features.Companies.Commands.UpdateCompany;
-    public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyCommand>
+public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyCommand>
+{
+    public UpdateCompanyCommandValidator()
     {
-        public UpdateCompanyCommandValidator()
-        {
-            RuleFor(x => x.Request.CompanyName)
-                .NotNull();
-        }
+        RuleFor(x => x.Request.CompanyName)
+            .NotNull();
     }
+}
