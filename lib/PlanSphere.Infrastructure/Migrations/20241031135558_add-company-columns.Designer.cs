@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanSphere.Infrastructure.Contexts;
 
@@ -11,9 +12,11 @@ using PlanSphere.Infrastructure.Contexts;
 namespace PlanSphere.Infrastructure.Migrations
 {
     [DbContext(typeof(PlanSphereDatabaseContext))]
-    partial class PlanSphereDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241031135558_add-company-columns")]
+    partial class addcompanycolumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,13 +202,10 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.CompanyRoleRight", b =>
                 {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<decimal>("CompanyId")
                         .HasColumnType("decimal(20,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
-
-                    b.Property<decimal>("CompanyId")
+                    b.Property<decimal>("Id")
                         .HasColumnType("decimal(20,0)");
 
                     b.Property<decimal>("RightId")
@@ -214,9 +214,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Property<decimal>("RoleId")
                         .HasColumnType("decimal(20,0)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
+                    b.HasKey("CompanyId");
 
                     b.HasIndex("RightId");
 
@@ -395,12 +393,6 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.DepartmentRoleRight", b =>
                 {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
-
                     b.Property<decimal>("DepartmentId")
                         .HasColumnType("decimal(20,0)");
 
@@ -410,9 +402,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Property<decimal>("RoleId")
                         .HasColumnType("decimal(20,0)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
+                    b.HasKey("DepartmentId");
 
                     b.HasIndex("RightId");
 
@@ -562,13 +552,10 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.OrganisationRoleRight", b =>
                 {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<decimal>("OrganisationId")
                         .HasColumnType("decimal(20,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
-
-                    b.Property<decimal>("OrganisationId")
+                    b.Property<decimal>("Id")
                         .HasColumnType("decimal(20,0)");
 
                     b.Property<decimal>("RightId")
@@ -577,9 +564,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Property<decimal>("RoleId")
                         .HasColumnType("decimal(20,0)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganisationId");
+                    b.HasKey("OrganisationId");
 
                     b.HasIndex("RightId");
 
@@ -835,11 +820,8 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.TeamRoleRight", b =>
                 {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<decimal>("TeamId")
                         .HasColumnType("decimal(20,0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
 
                     b.Property<decimal>("RightId")
                         .HasColumnType("decimal(20,0)");
@@ -847,16 +829,11 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Property<decimal>("RoleId")
                         .HasColumnType("decimal(20,0)");
 
-                    b.Property<decimal>("TeamId")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.HasKey("Id");
+                    b.HasKey("TeamId");
 
                     b.HasIndex("RightId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("TeamRoleRight");
                 });
