@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Domain.Entities.EmbeddedEntities;
+﻿using Domain.Entities.EmbeddedEntities;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Exceptions;
@@ -20,12 +19,8 @@ public class RoleActionFilter(
     {
         var user = await _userRepository.GetByIdAsync(context.HttpContext.User.GetUserId(), CancellationToken.None);
         var userRoles = user.Roles.Select(x => x.Role).ToList();
-        
-        // The id of the source level entity (read from the request route), e.x.: Company id
         var sourceLevelId = context.HttpContext.GetSourceLevelId();
-        
-        // Source level of the request (read from the request body).
-        var sourceLevel = await context.HttpContext.GetSourceLevelAsync();
+        var sourceLevel = context.HttpContext.GetSourceLevel();
 
         var authorized = false;
 

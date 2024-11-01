@@ -46,6 +46,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
                 .ThenInclude(x => x.Role)
                     .ThenInclude(x => x.TeamRoleRights)
                         .ThenInclude(x => x.Right)
+            .AsSplitQuery()
+            .AsNoTracking()
             .SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
         
         if (user == null)

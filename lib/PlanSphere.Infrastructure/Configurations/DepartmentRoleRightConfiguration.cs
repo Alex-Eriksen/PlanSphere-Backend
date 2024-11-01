@@ -8,7 +8,10 @@ public class DepartmentRoleRightConfiguration : IEntityTypeConfiguration<Departm
 {
     public void Configure(EntityTypeBuilder<DepartmentRoleRight> builder)
     {
-        builder.HasKey(e => e.DepartmentId);
+        builder.HasKey(e => e.Id);
+
+        builder.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
 
         builder.HasOne(e => e.Department)
             .WithMany()

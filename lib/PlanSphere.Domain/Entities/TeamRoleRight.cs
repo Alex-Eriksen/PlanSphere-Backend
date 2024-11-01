@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Entities.EmbeddedEntities;
 
-public class TeamRoleRight
+namespace Domain.Entities;
+
+public class TeamRoleRight : BaseEntity
 {
     public ulong TeamId { get; set; }
     public virtual Team Team { get; set; }

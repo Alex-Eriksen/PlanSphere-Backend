@@ -16,7 +16,15 @@ public static class HttpContextExtensions
         return sourceLevelId;
     }
 
-    public static async Task<SourceLevel> GetSourceLevelAsync(this HttpContext context)
+    public static SourceLevel GetSourceLevel(this HttpContext context)
+    {
+        context.Request.RouteValues.TryGetValue(PermissionFilterConstants.SourceLevelKey, out var sourceLevelValue);
+        Enum.TryParse<SourceLevel>(sourceLevelValue.ToString(), out var sourceLevel);
+
+        return sourceLevel;
+    }
+    
+    private static async Task<SourceLevel> GetSourceLevelAsync(this HttpContext context)
     {
         var jsonDoc = await context.GetRequestBodyAsJsonAsync();
 

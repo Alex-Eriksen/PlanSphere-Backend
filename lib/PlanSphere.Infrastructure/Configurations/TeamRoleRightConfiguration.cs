@@ -2,13 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace PlanSphere.Infrastructure;
+namespace PlanSphere.Infrastructure.Configurations;
 
 public class TeamRoleRightConfiguration : IEntityTypeConfiguration<TeamRoleRight>
 {
     public void Configure(EntityTypeBuilder<TeamRoleRight> builder)
     {
-        builder.HasKey(e => e.TeamId);
+        builder.HasKey(e => e.Id);
+
+        builder.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
 
         builder.HasOne(e => e.Team)
             .WithMany()

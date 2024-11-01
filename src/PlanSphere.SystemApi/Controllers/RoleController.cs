@@ -17,10 +17,11 @@ public class RoleController(IMediator mediator, IHttpContextAccessor httpContext
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext?.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
 
-    [HttpPost("{sourceLevelId}", Name = nameof(CreateRoleAsync))]
+    [HttpPost("{sourceLevel}/{sourceLevelId}", Name = nameof(CreateRoleAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> CreateRoleAsync([FromRoute] ulong sourceLevelId, [FromBody] CreateRoleCommand command)
+    public async Task<IActionResult> CreateRoleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromBody] CreateRoleCommand command)
     {
+        command.SourceLevel = sourceLevel;
         command.SourceLevelId = sourceLevelId;
         command.UserId = _claims.GetUserId();
         await _mediator.Send(command);
