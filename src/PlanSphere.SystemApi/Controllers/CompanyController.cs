@@ -1,12 +1,15 @@
 ﻿using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Companies.Commands.CreateCompany;
 using PlanSphere.Core.Features.Companies.Commands.DeleteCompany;
+using PlanSphere.Core.Features.Companies.Commands.PatchCompany;
 using PlanSphere.Core.Features.Companies.DTOs;
 using PlanSphere.Core.Features.Companies.Qurries.GetCompany;
 using PlanSphere.Core.Features.Companies.Qurries.ListCompanies;
+using PlanSphere.Core.Features.Companies.Request;
 using PlanSphere.SystemApi.Controllers.Base;
 using PlanSphere.SystemApi.Extensions;
 
@@ -40,9 +43,10 @@ namespace PlanSphere.SystemApi.Controllers;
             return Created();
         }
         [HttpPatch("{companyId}", Name = nameof(PatchCompanyAsync))] 
-        public async Task<IActionResult> PatchCompanyAsync([FromRoute] ulong organisationId, [FromBody] CreateCompanyCommand command)
+        public async Task<IActionResult> PatchCompanyAsync([FromRoute] ulong companyId, [FromBody] JsonPatchDocument<CompanyUpdateRequest> patchRequest)
         {
-            command.OrganisationId = organisationId;
+            var command = new PatchCompanyCommand(patchRequest);
+            command.Id = companyId;
             await _mediator.Send(command);
             return Created();
         }

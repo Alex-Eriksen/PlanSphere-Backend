@@ -5,9 +5,9 @@ using PlanSphere.Core.Features.Companies.Request;
 
 namespace PlanSphere.Core.Features.Companies.Profiles;
 
-public class CompanyToCompanyDTO : Profile
+public class CompanyDTOProfile : Profile
 {
-    public CompanyToCompanyDTO()
+    public CompanyDTOProfile()
     {
         CreateMap<Company, CompanyDTO>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PlanSphere.Core.Features.Address.Requests;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Requests;
@@ -32,7 +33,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
             Email = "test@test.com",
             FirstName = "Test",
             LastName = "Test",
-            Address =
+            Address = new AddressRequest()
             {
                 StreetName = null,
                 HouseNumber = null,

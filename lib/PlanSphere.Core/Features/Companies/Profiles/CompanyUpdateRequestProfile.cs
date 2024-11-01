@@ -6,9 +6,9 @@ using PlanSphere.Core.Features.Companies.Request;
 
 namespace PlanSphere.Core.Features.Companies.Profiles;
 
-public class PatchCompanyProfile : Profile
+public class CompanyUpdateRequestProfile : Profile
 {
-    public PatchCompanyProfile()
+    public CompanyUpdateRequestProfile()
     {
         CreateMap<Company, CompanyUpdateRequest>()
             .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Name))

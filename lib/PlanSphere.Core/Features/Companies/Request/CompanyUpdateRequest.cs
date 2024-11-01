@@ -11,6 +11,7 @@ namespace PlanSphere.Core.Features.Companies.Request;
 public class CompanyUpdateRequest : IContactable
 {
     public string CompanyName { get; set; }
+    public string CVR { get; set; }
     public string CompanyLogo { get; set; }
     public AddressRequest Address { get; set; }
     public string? ContactName { get; set; }
