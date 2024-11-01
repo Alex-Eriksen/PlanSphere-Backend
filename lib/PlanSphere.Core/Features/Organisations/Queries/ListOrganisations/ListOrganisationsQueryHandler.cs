@@ -25,7 +25,7 @@ public class ListOrganisationsQueryHandler(
 
     public async Task<IPaginatedResponse<OrganisationDTO>> Handle(ListOrganisationsQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("ListOrganisationsCommandHandler");
+        _logger.BeginScope("List Organisations Command Handler");
         
         _logger.LogInformation("Listing all organisations");
         var query = _organisationRepository.GetQueryable();
@@ -41,7 +41,7 @@ public class ListOrganisationsQueryHandler(
 
     private IQueryable<Organisation> SearchQuery(string? search, IQueryable<Organisation> query)
     {
-        var filtertSearch = search.Trim().ToLower();
+        var filtertSearch = search?.Trim().ToLower();
         if (!string.IsNullOrWhiteSpace(filtertSearch))
         {
             query = query.Where(x => x.Name.ToLower().Contains(filtertSearch));
@@ -52,20 +52,15 @@ public class ListOrganisationsQueryHandler(
 
     private IQueryable<Organisation> SortQuery(ListOrganisationsQuery request, IQueryable<Organisation> query)
     {
-        return request.OrganisationSortBy switch
+        return request.SortBy switch
         {
             OrganisationSortBy.Name => query.OrderByExpression(o => o.Name, request.SortDescending),
-            // OrganisationSortBy.Users => query.OrderByExpression(o => o.Users, request.SortDescending),
-            // OrganisationSortBy.OrganisationMembers => query.OrderByExpression(o => o.Users.Count,
-            //     request.SortDescending),
-            // OrganisationSortBy.CompanyMembers => query.OrderByExpression(
-            //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.CompanyRole != null), request.SortDescending),
-            // OrganisationSortBy.DepartmentMembers => query.OrderByExpression(
-            //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.DepartmentRole != null),
-            //     request.SortDescending),
-            // OrganisationSortBy.TeamMembers => query.OrderByExpression(
-            //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.TeamRole != null), request.SortDescending),
-            // OrganisationSortBy.Roles => query.OrderByExpression(o => o.Roles.Count, request.SortDescending),
+            OrganisationSortBy.Users => query.OrderByExpression(o => o.Users.Count, request.SortDescending),
+            OrganisationSortBy.OrganisationMembers => query.OrderByExpression(o => o.Users.Count, request.SortDescending),
+            OrganisationSortBy.CompanyMembers => query.OrderByExpression(o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.CompanyRole != null), request.SortDescending),
+            OrganisationSortBy.DepartmentMembers => query.OrderByExpression(o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.DepartmentRole != null), request.SortDescending),
+            OrganisationSortBy.TeamMembers => query.OrderByExpression(o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.TeamRole != null), request.SortDescending),
+            OrganisationSortBy.Roles => query.OrderByExpression(o => o.Roles.Count, request.SortDescending)
         };
     }
 }
