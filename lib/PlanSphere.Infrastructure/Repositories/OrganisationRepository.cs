@@ -30,9 +30,11 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
         return organisation;
     }
 
-    public Task<Organisation> UpdateAsync(ulong id, Organisation request, CancellationToken cancellationToken)
+    public async Task<Organisation> UpdateAsync(ulong id, Organisation request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.Organisations.Update(request);
+        await _context.SaveChangesAsync(cancellationToken);
+        return request;
     }
 
     public async Task<Organisation> DeleteAsync(ulong id, CancellationToken cancellationToken)
@@ -45,6 +47,7 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
         }
         
         _context.Organisations.Remove(organisation);
+        await _context.SaveChangesAsync(cancellationToken);
         return organisation;
     }
 
@@ -55,9 +58,6 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
 
     public IQueryable<Organisation> GetQueryable()
     {
-        return _context.Organisations
-            .Include(x => x.Users)
-            .Include(x => x.Roles)
-            .AsQueryable();
+        return _context.Organisations.AsQueryable();
     }
 }

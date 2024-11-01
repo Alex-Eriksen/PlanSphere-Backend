@@ -1,16 +1,18 @@
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Enums;
 using PlanSphere.Core.Enums.SortByColumns;
 using PlanSphere.Core.Extensions;
 using PlanSphere.Core.Features.Organisations.DTOs;
-using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
 using PlanSphere.Core.Interfaces.Services;
 
-namespace PlanSphere.Core.Features.Organisations.Commands.ListOrganisations;
+namespace PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 
+[HandlerType(HandlerType.SystemApi)]
 public class ListOrganisationsQueryHandler(
     IOrganisationRepository organisationRepository,
     ILogger<ListOrganisationsQueryHandler> logger,
@@ -50,20 +52,20 @@ public class ListOrganisationsQueryHandler(
 
     private IQueryable<Organisation> SortQuery(ListOrganisationsQuery request, IQueryable<Organisation> query)
     {
-        return request.SortBy switch
+        return request.OrganisationSortBy switch
         {
-            SortByOrganisation.Name => query.OrderByExpression(o => o.Name, request.SortDescending),
-            SortByOrganisation.Users => query.OrderByExpression(o => o.Users, request.SortDescending),
-            SortByOrganisation.OrganisationMembers => query.OrderByExpression(o => o.Users.Count,
-                request.SortDescending),
-            SortByOrganisation.CompanyMembers => query.OrderByExpression(
-                o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.CompanyRole != null), request.SortDescending),
-            SortByOrganisation.DepartmentMembers => query.OrderByExpression(
-                o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.DepartmentRole != null),
-                request.SortDescending),
-            SortByOrganisation.TeamMembers => query.OrderByExpression(
-                o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.TeamRole != null), request.SortDescending),
-            SortByOrganisation.Roles => query.OrderByExpression(o => o.Roles.Count, request.SortDescending),
+            OrganisationSortBy.Name => query.OrderByExpression(o => o.Name, request.SortDescending),
+            // SortByOrganisation.Users => query.OrderByExpression(o => o.Users, request.SortDescending),
+            // SortByOrganisation.OrganisationMembers => query.OrderByExpression(o => o.Users.Count,
+            //     request.SortDescending),
+            // SortByOrganisation.CompanyMembers => query.OrderByExpression(
+            //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.CompanyRole != null), request.SortDescending),
+            // SortByOrganisation.DepartmentMembers => query.OrderByExpression(
+            //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.DepartmentRole != null),
+            //     request.SortDescending),
+            // SortByOrganisation.TeamMembers => query.OrderByExpression(
+            //     o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.TeamRole != null), request.SortDescending),
+            // SortByOrganisation.Roles => query.OrderByExpression(o => o.Roles.Count, request.SortDescending),
         };
     }
 }
