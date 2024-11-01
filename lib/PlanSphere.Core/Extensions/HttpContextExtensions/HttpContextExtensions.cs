@@ -23,30 +23,4 @@ public static class HttpContextExtensions
 
         return sourceLevel;
     }
-    
-    private static async Task<SourceLevel> GetSourceLevelAsync(this HttpContext context)
-    {
-        var jsonDoc = await context.GetRequestBodyAsJsonAsync();
-
-        jsonDoc.RootElement.TryGetProperty(PermissionFilterConstants.SourceLevelKey, out var sourceLevelJson);
-
-        Enum.TryParse<SourceLevel>(sourceLevelJson.ToString(), out var sourceLevel);
-        
-        return sourceLevel;
-    }
-
-    private static async Task<JsonDocument> GetRequestBodyAsJsonAsync(this HttpContext context)
-    {
-        context.Request.EnableBuffering();
-        context.Request.Body.Position = 0;
-        var body = string.Empty;
-
-        using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, leaveOpen: true))
-        {
-            body = await reader.ReadToEndAsync();
-        }
-        context.Request.Body.Position = 0;
-        
-        return JsonDocument.Parse(body);
-    }
 }
