@@ -21,7 +21,7 @@ public class UpdateOrganisationCommandHandler(
     
     public async Task Handle(UpdateOrganisationCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Updateing organistion with UpdateOrganisationCommandHandler with id: [{organisationId}]",command.OrganisationId);
+        _logger.BeginScope("Updating organistion with UpdateOrganisationCommandHandler with id: [{organisationId}]",command.OrganisationId);
         _logger.LogInformation("Fetching organisation with id: [{organisationId}]", command.OrganisationId);
         var organisation = await _organisationRepository.GetByIdAsync(command.OrganisationId, cancellationToken);
         _logger.LogInformation("Fetched organisation with id: [{organisationId}]", command.OrganisationId);
