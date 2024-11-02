@@ -17,7 +17,8 @@ public class DeleteJobTitleCommandHandler(
     
     public async Task Handle(DeleteJobTitleCommand request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", request.Id, request.SourceLevel, request.SourceLevelId);
+        _logger.BeginScope("Deleting job title");
+        _logger.LogInformation("Fetching job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", request.Id, request.SourceLevel, request.SourceLevelId);
         await _jobTitleRepository.DeleteAsync(request.Id, cancellationToken);
         _logger.LogInformation("Fetched job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", request.Id, request.SourceLevel, request.SourceLevelId);
 
