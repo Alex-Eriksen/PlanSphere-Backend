@@ -21,7 +21,9 @@ public class UpdateJobTitleCommandHandler(
 
     public async Task Handle(UpdateJobTitleCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", command.Id, command.SourceLevel, command.SourceLevelId);
+        _logger.BeginScope("Updating job title");
+        
+        _logger.LogInformation("Fetching job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", command.Id, command.SourceLevel, command.SourceLevelId);
         var jobTitle = await _jobTitleRepository.GetByIdAsync(command.Id, cancellationToken);
         _logger.LogInformation("Fetched job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", command.Id, command.SourceLevel, command.SourceLevelId);
         jobTitle = HandleJobTitleSourceLevel(command, jobTitle);

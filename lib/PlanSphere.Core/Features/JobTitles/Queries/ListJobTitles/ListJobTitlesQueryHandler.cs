@@ -25,7 +25,9 @@ public class ListJobTitlesQueryHandler(
     
     public async Task<IPaginatedResponse<JobTitleDTO>> Handle(ListJobTitlesQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching job titles on {sourceLevel} with id: [{sourceLevelId}].", request.SourceLevel, request.SourceLevelId);
+        _logger.BeginScope("Fetching job titles");
+        
+        _logger.LogInformation("Fetching job titles on {sourceLevel} with id: [{sourceLevelId}].", request.SourceLevel, request.SourceLevelId);
         var query = GetJobTitles(request);
         _logger.LogInformation("Fetched job titles on {sourceLevel} with id: [{sourceLevelId}].", request.SourceLevel, request.SourceLevelId);
         

@@ -21,7 +21,9 @@ public class GetJobTitleQueryHandler(
 
     public async Task<JobTitleDTO> Handle(GetJobTitleQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching job title with id: [{jobTitleId}].", request.Id);
+        _logger.BeginScope("Fetching a job title");
+        
+        _logger.LogInformation("Fetching job title with id: [{jobTitleId}].", request.Id);
         var jobTitle = await _jobTitleRepository.GetByIdAsync(request.Id, cancellationToken);
         _logger.LogInformation("Fetched job title with id: [{jobTitleId}].", request.Id);
 
