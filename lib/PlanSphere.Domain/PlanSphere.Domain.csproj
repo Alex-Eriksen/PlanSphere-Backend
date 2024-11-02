@@ -12,10 +12,4 @@
         <HintPath>..\..\..\..\.dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.Extensions.Identity.Stores.dll</HintPath>
       </Reference>
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
-    </ItemGroup>
-
 </Project>
