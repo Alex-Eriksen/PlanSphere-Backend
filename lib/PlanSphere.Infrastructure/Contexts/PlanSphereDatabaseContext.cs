@@ -1,11 +1,16 @@
 ﻿using System.Reflection;
+using System.Security.Claims;
 using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Interfaces.Database;
+using Right = Domain.Entities.Right;
 
 namespace PlanSphere.Infrastructure.Contexts;
 
-public partial class PlanSphereDatabaseContext(DbContextOptions<PlanSphereDatabaseContext> options) : DbContext(options), IPlanSphereDatabaseContext
+public partial class PlanSphereDatabaseContext(DbContextOptions<PlanSphereDatabaseContext> options, IHttpContextAccessor _httpContextAccessor, TimeProvider _timeProvider) : DbContext(options), IPlanSphereDatabaseContext
 {
     public DbSet<Organisation> Organisations { get; set; }
     public DbSet<OrganisationSettings> OrganisationSettings { get; set; }
@@ -43,6 +48,25 @@ public partial class PlanSphereDatabaseContext(DbContextOptions<PlanSphereDataba
     public DbSet<Country> Countries { get; set; }
     public DbSet<Right> Rights { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = _timeProvider.GetUtcNow().UtcDateTime;
+                    entry.Entity.CreatedBy = GetUserIdFromContext();
+                    break;
+
+                case EntityState.Modified:
+                    entry.Entity.UpdatedAt = _timeProvider.GetUtcNow().UtcDateTime;
+                    entry.Entity.UpdatedBy = GetUserIdFromContext();
+                    break;
+            }
+
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -50,4 +74,16 @@ public partial class PlanSphereDatabaseContext(DbContextOptions<PlanSphereDataba
     }
 
     partial void OnModelCreatingPartial(ModelBuilder builder);
+    
+    private ulong? GetUserIdFromContext()
+    {
+        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimsConstants.UserId);
+
+        if (ulong.TryParse(userIdClaim, out var userId))
+        {
+            return userId;
+        }
+
+        return null;
+    }
 }

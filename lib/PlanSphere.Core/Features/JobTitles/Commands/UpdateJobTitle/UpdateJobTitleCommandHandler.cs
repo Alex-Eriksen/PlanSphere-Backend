@@ -27,7 +27,7 @@ public class UpdateJobTitleCommandHandler(
         var jobTitle = await _jobTitleRepository.GetByIdAsync(command.Id, cancellationToken);
         _logger.LogInformation("Fetched job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", command.Id, command.SourceLevel, command.SourceLevelId);
         jobTitle = HandleJobTitleSourceLevel(command, jobTitle);
-        var mappedJobTitle = _mapper.Map(command, jobTitle);
+        var mappedJobTitle = _mapper.Map(command.Request, jobTitle);
         _logger.LogInformation("Updating job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", command.Id, command.SourceLevel, command.SourceLevelId);
         await _jobTitleRepository.UpdateAsync(command.Id, mappedJobTitle, cancellationToken);
         _logger.LogInformation("Updated job title with id: [{jobTitleId}] on {sourceLevel} with id: [{sourceLevelId}].", command.Id, command.SourceLevel, command.SourceLevelId);

@@ -50,12 +50,17 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
         return Created();
     }
     
-    [HttpPut("{jobTitleId}", Name = nameof(UpdateJobTitleAsync))]
-    public async Task<IActionResult> UpdateJobTitleAsync([FromRoute] ulong jobTitleId, [FromBody] UpdateJobTitleCommand command)
+    [HttpPut("{sourceLevel}/{sourceLevelId}/{jobTitleId}", Name = nameof(UpdateJobTitleAsync))]
+    public async Task<IActionResult> UpdateJobTitleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong jobTitleId, [FromBody] JobTitleRequest request)
     {
-        command.Id = jobTitleId;
+        var command = new UpdateJobTitleCommand(request)
+        {
+            SourceLevel = sourceLevel,
+            SourceLevelId = sourceLevelId,
+            Id = jobTitleId
+        };
         await _mediator.Send(command);
-        return Created();
+        return NoContent();
     }
     
     [HttpDelete("{jobTitleId}", Name = nameof(DeleteJobTitleAsync))]
@@ -63,6 +68,6 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
     {
         command.Id = jobTitleId;
         await _mediator.Send(command);
-        return Created();
+        return NoContent();
     }
 }
