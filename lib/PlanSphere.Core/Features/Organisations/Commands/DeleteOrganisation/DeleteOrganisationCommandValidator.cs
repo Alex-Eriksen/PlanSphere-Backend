@@ -6,7 +6,7 @@ public class DeleteOrganisationCommandValidator : AbstractValidator<DeleteOrgani
 {
     public DeleteOrganisationCommandValidator()
     {
-        RuleFor(x => x.Id)
+        RuleFor(x => x.OrganisationId)
             .NotNull();
     }
 }

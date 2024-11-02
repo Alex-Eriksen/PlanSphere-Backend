@@ -48,10 +48,10 @@ public class OrganisationController(IMediator mediator, IHttpContextAccessor htt
         return Ok();
     }
 
-    [HttpDelete(Name = nameof(DeleteOrganisationAsync))]
-    public async Task<IActionResult> DeleteOrganisationAsync([FromBody] DeleteOrganisationCommand command)
+    [HttpDelete("{organisationId}", Name = nameof(DeleteOrganisationAsync))]
+    public async Task<IActionResult> DeleteOrganisationAsync([FromRoute] ulong organisationId, [FromBody] DeleteOrganisationCommand command)
     {
-        command = command with { OrganisationId = _claims.GetOrganizationId() };
+        command = command with { OrganisationId = organisationId };
         await _mediator.Send(command);
         return NoContent();
     }
