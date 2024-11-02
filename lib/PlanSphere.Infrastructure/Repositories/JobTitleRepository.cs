@@ -8,8 +8,8 @@ namespace PlanSphere.Infrastructure.Repositories;
 
 public class JobTitleRepository(IPlanSphereDatabaseContext context, ILogger<JobTitleRepository> logger) : IJobTitleRepository
 {
-private readonly IPlanSphereDatabaseContext _context = context ?? throw new ArgumentNullException(nameof(context));
-private readonly ILogger<JobTitleRepository> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly IPlanSphereDatabaseContext _context = context ?? throw new ArgumentNullException(nameof(context));
+    private readonly ILogger<JobTitleRepository> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
     public async Task<JobTitle> CreateAsync(JobTitle request, CancellationToken cancellationToken)
     {
@@ -59,10 +59,10 @@ private readonly ILogger<JobTitleRepository> _logger = logger ?? throw new Argum
     public IQueryable<JobTitle> GetQueryable()
     {
         return _context.JobTitles
-            .Include(x => x.OrganisationJobTitle)
-            .Include(x => x.CompanyJobTitle)
-            .Include(x => x.DepartmentJobTitle)
-            .Include(x => x.TeamJobTitle)
+            .Include(x => x.OrganisationJobTitle).ThenInclude(x => x.Organisation)
+            .Include(x => x.CompanyJobTitle).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .Include(x => x.DepartmentJobTitle).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .Include(x => x.TeamJobTitle).ThenInclude(x => x.Team).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
             .Include(x => x.UpdatedByUser)
             .Include(x => x.CreatedByUser)
             .AsNoTracking()
