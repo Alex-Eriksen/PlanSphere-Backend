@@ -7,7 +7,9 @@ using PlanSphere.Core.Interfaces;
 
 namespace PlanSphere.Core.Features.JobTitles.Queries.ListJobTitles;
 
-public record ListJobTitlesQuery(string? Search, JobTitleSortBy SortBy, bool SortDescending, SourceLevel SourceLevel, ulong SourceLevelId) : BasePaginatedQuery, IRequest<IPaginatedResponse<JobTitleDTO>>, ISearchableQuery, ISortableQuery<JobTitleSortBy>
+public record ListJobTitlesQuery(string? Search, JobTitleSortBy SortBy, bool SortDescending) : BasePaginatedQuery, IRequest<IPaginatedResponse<JobTitleDTO>>, ISearchableQuery, ISortableQuery<JobTitleSortBy>
 {
+    public SourceLevel SourceLevel { get; set; }
+    public ulong SourceLevelId { get; set; }
     public ulong OrganisationId { get; set; }
 }
