@@ -20,7 +20,12 @@ public class JobTitleRepository(IPlanSphereDatabaseContext context, ILogger<JobT
 
     public async Task<JobTitle> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
-        var jobTitle = await _context.JobTitles.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var jobTitle = await _context.JobTitles
+            .Include(x => x.OrganisationJobTitle)
+            .Include(x => x.CompanyJobTitle)
+            .Include(x => x.DepartmentJobTitle)
+            .Include(x => x.TeamJobTitle)
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (jobTitle == null)
         {
             _logger.LogInformation("Could not find job title with id: [{jobTitleId}]. Job title doesn't exist!", id);
