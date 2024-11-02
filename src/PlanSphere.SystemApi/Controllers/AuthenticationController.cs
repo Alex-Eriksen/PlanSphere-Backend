@@ -69,8 +69,9 @@ public class AuthenticationController(IMediator mediator, IHttpContextAccessor h
         CookieOptions options = new()
         {
             HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTimeOffset.UtcNow.AddDays(7)
+            SameSite = SameSiteMode.None,
+            Expires = DateTimeOffset.UtcNow.AddDays(7),
+            Secure = true
         };
 
         Response.Cookies.Append(HttpContextConstants.RefreshToken, token, options);
