@@ -17,7 +17,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsUnique();
 
         builder.HasOne(e => e.Organisation)
-            .WithMany(e => e.Users)
+            .WithMany()
             .HasForeignKey(e => e.OrganisationId)
             .OnDelete(DeleteBehavior.Cascade);
 
