@@ -73,8 +73,8 @@ public class ListJobTitlesQueryHandler(
 
         return query;
     }
+    
     private IQueryable<JobTitle> SortQuery(ListJobTitlesQuery request, IQueryable<JobTitle> query)
-
     {
         
         return request.SortBy switch

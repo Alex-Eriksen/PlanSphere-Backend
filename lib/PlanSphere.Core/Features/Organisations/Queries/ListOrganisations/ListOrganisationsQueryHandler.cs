@@ -25,7 +25,7 @@ public class ListOrganisationsQueryHandler(
 
     public async Task<IPaginatedResponse<OrganisationDTO>> Handle(ListOrganisationsQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("List Organisations Command Handler");
+        _logger.BeginScope($"Starting to List Organisations with [ListOrganisationsCommandHandler]");
         
         _logger.LogInformation("Listing all organisations");
         var query = _organisationRepository.GetQueryable();
@@ -41,10 +41,10 @@ public class ListOrganisationsQueryHandler(
 
     private IQueryable<Organisation> SearchQuery(string? search, IQueryable<Organisation> query)
     {
-        var filtertSearch = search?.Trim().ToLower();
-        if (!string.IsNullOrWhiteSpace(filtertSearch))
+        var filteredSearch = search?.Trim().ToLower();
+        if (!string.IsNullOrWhiteSpace(filteredSearch))
         {
-            query = query.Where(x => x.Name.ToLower().Contains(filtertSearch));
+            query = query.Where(x => x.Name.ToLower().Contains(filteredSearch));
         }
 
         return query;

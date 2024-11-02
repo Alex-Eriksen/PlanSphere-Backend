@@ -20,18 +20,13 @@ public class CreateOrganisationCommandHandler(
     
     public async Task Handle(CreateOrganisationCommand request, CancellationToken cancellationToken) 
     {
-       logger.LogInformation("CreateOrganisationCommandHandler");
-       _logger.LogInformation("Creating organisation with name: [{Name}]", request.Name);
+       _logger.BeginScope("Starting to create an organistion with CreateOrganisationCommandHandler with name: [{organisationName}]",request.OrganisationName);
+       _logger.LogInformation("Creating organisation with name: [{organisationName}]", request.OrganisationName);
         
-       var address = _mapper.Map<Domain.Entities.Address>(request.Address);
+       var organisation = _mapper.Map<Organisation>(request);
         
-       var organisation = new Organisation
-       {
-           Name = request.Name,
-           Address = address
-       };
        await _organisationRepository.CreateAsync(organisation, cancellationToken);
        
-       _logger.LogInformation("Organisation created successfully with name: [{Name}]", request.Name); 
+       _logger.LogInformation("Organisation created successfully with name: [{organisationName}]", request.OrganisationName); 
     }
 }
