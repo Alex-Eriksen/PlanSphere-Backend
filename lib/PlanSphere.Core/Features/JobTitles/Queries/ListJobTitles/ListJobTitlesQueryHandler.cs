@@ -25,7 +25,9 @@ public class ListJobTitlesQueryHandler(
     
     public async Task<IPaginatedResponse<JobTitleDTO>> Handle(ListJobTitlesQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching job titles on {sourceLevel} with id: [{sourceLevelId}].", request.SourceLevel, request.SourceLevelId);
+        _logger.BeginScope("Fetching job titles");
+        
+        _logger.LogInformation("Fetching job titles on {sourceLevel} with id: [{sourceLevelId}].", request.SourceLevel, request.SourceLevelId);
         var query = GetJobTitles(request);
         _logger.LogInformation("Fetched job titles on {sourceLevel} with id: [{sourceLevelId}].", request.SourceLevel, request.SourceLevelId);
         
@@ -44,8 +46,19 @@ public class ListJobTitlesQueryHandler(
         query = request.SourceLevel switch
         {
             SourceLevel.Organisation => query.Where(x => x.OrganisationJobTitle != null && x.OrganisationJobTitle.OrganisationId == request.SourceLevelId), 
-            // TODO: Add remaining levels
-            _ => query
+            
+            SourceLevel.Company => query.Where(x => x.CompanyJobTitle != null && x.CompanyJobTitle.CompanyId == request.SourceLevelId ||
+                                                    x.OrganisationJobTitle.OrganisationId == request.OrganisationId && x.OrganisationJobTitle.IsInheritanceActive),
+            
+            SourceLevel.Department => query.Where(x => x.DepartmentJobTitle != null && x.DepartmentJobTitle.DepartmentId == request.SourceLevelId ||
+                                                       x.OrganisationJobTitle != null && x.OrganisationJobTitle.OrganisationId == request.OrganisationId && x.OrganisationJobTitle.IsInheritanceActive ||
+                                                       x.CompanyJobTitle != null && x.CompanyJobTitle.Company.OrganisationId == request.OrganisationId && x.CompanyJobTitle.IsInheritanceActive),
+            
+            SourceLevel.Team => query.Where(x => x.TeamJobTitle != null && x.TeamJobTitle.TeamId == request.SourceLevelId ||
+                                                 x.OrganisationJobTitle != null && x.OrganisationJobTitle.OrganisationId == request.OrganisationId && x.OrganisationJobTitle.IsInheritanceActive ||
+                                                 x.CompanyJobTitle != null && x.CompanyJobTitle.Company.OrganisationId == request.OrganisationId && x.CompanyJobTitle.IsInheritanceActive ||
+                                                 x.DepartmentJobTitle != null && x.DepartmentJobTitle.Department.Company.OrganisationId == request.OrganisationId && x.DepartmentJobTitle.IsInheritanceActive),
+            _ => throw new ArgumentOutOfRangeException(nameof(SourceLevel), request.SourceLevel, null)
         };
         
         return query;
@@ -63,11 +76,24 @@ public class ListJobTitlesQueryHandler(
     
     private IQueryable<JobTitle> SortQuery(ListJobTitlesQuery request, IQueryable<JobTitle> query)
     {
+        
         return request.SortBy switch
         {
             JobTitleSortBy.Name => query.OrderByExpression(jt => jt.Name, request.SortDescending),
-            JobTitleSortBy.Active => query.OrderByExpression(jt => jt.Name, request.SortDescending),
+            JobTitleSortBy.Active => SortByIsInheritanceActive(request, query),
             _ => throw new ArgumentOutOfRangeException(nameof(JobTitleSortBy), request.SortBy, null)
+        };
+    }
+
+    private IQueryable<JobTitle> SortByIsInheritanceActive(ListJobTitlesQuery request, IQueryable<JobTitle> query)
+    {
+        return request.SourceLevel switch
+        {
+            SourceLevel.Organisation => query.OrderByExpression(x => x.OrganisationJobTitle.IsInheritanceActive, request.SortDescending ),
+            SourceLevel.Company => query.OrderByExpression(x => x.CompanyJobTitle.IsInheritanceActive, request.SortDescending ),
+            SourceLevel.Department => query.OrderByExpression(x => x.DepartmentJobTitle.IsInheritanceActive, request.SortDescending ),
+            SourceLevel.Team => query.OrderByExpression(x => x.TeamJobTitle.IsInheritanceActive, request.SortDescending ),
+            _ => throw new ArgumentOutOfRangeException(nameof(SourceLevel), request.SourceLevel, null)
         };
     }
 }

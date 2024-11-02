@@ -21,10 +21,11 @@ public class CreateJobTitleCommandHandler(
     
     public async Task Handle(CreateJobTitleCommand command, CancellationToken cancellationToken)
     {
+        _logger.BeginScope("Creating job title");
         var jobTitle = _mapper.Map<JobTitle>(command);
         HandleJobTitleSourceLevel(command, jobTitle);
 
-        _logger.BeginScope("Creating job title on {sourceLevel} with id: [{sourceLevelId}].", command.SourceLevel, command.SourceLevelId);
+        _logger.LogInformation("Creating job title on {sourceLevel} with id: [{sourceLevelId}].", command.SourceLevel, command.SourceLevelId);
         await _jobTitleRepository.CreateAsync(jobTitle, cancellationToken);
         _logger.LogInformation("Created job title on {sourceLevel} with id: [{sourceLevelId}].", command.SourceLevel, command.SourceLevelId);
     }
