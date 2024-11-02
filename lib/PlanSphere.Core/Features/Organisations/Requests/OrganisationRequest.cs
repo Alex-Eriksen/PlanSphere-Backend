@@ -1,4 +1,4 @@
-using PlanSphere.Core.Features.Companies.Requests;
+using PlanSphere.Core.Features.Companies.Request;
 using PlanSphere.Core.Features.JobTitles.Requests;
 using PlanSphere.Core.Features.Roles.Requests;
 

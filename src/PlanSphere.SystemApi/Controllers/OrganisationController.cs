@@ -49,9 +49,9 @@ public class OrganisationController(IMediator mediator, IHttpContextAccessor htt
     }
 
     [HttpDelete("{organisationId}", Name = nameof(DeleteOrganisationAsync))]
-    public async Task<IActionResult> DeleteOrganisationAsync([FromRoute] ulong organisationId, [FromBody] DeleteOrganisationCommand command)
+    public async Task<IActionResult> DeleteOrganisationAsync([FromRoute] ulong organisationId)
     {
-        command = command with { OrganisationId = organisationId };
+        var command = new DeleteOrganisationCommand(organisationId);
         await _mediator.Send(command);
         return NoContent();
     }

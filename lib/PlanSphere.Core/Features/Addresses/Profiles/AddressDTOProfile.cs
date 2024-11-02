@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
-using PlanSphere.Core.Features.Address.DTOs;
+using Domain.Entities;
+using PlanSphere.Core.Features.Addresses.DTOs;
 
-namespace PlanSphere.Core.Features.Address.Profiles;
+namespace PlanSphere.Core.Features.Addresses.Profiles;
 
 public class AddressDTOProfile : Profile
 {
     public AddressDTOProfile()
     {
-        CreateMap<Domain.Entities.Address, AddressDTO>()
+        CreateMap<Address, AddressDTO>()
             .ForMember(dest => dest.StreetName, opt => opt.MapFrom(src => src.StreetName))
             .ForMember(dest => dest.HouseNumber, opt => opt.MapFrom(src => src.HouseNumber))
             .ForMember(dest => dest.Floor, opt => opt.MapFrom(src => src.Floor))
