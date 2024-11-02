@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.JobTitles.Commands.CreateJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.DeleteJobTitle;
+using PlanSphere.Core.Features.JobTitles.Commands.ToggleJobTitleInheritance;
 using PlanSphere.Core.Features.JobTitles.Commands.UpdateJobTitle;
 using PlanSphere.Core.Features.JobTitles.Queries.GetJobTitle;
 using PlanSphere.Core.Features.JobTitles.Queries.ListJobTitles;
@@ -69,5 +70,13 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
         command.Id = jobTitleId;
         await _mediator.Send(command);
         return NoContent();
+    }
+    
+    [HttpPost("{jobTitleId}", Name = nameof(ToggleInheritanceAsync))]
+    public async Task<IActionResult> ToggleInheritanceAsync([FromRoute] ulong jobTitleId)
+    {
+        var command = new ToggleJobTitleInheritanceCommand(jobTitleId);
+        var response = await _mediator.Send(command);
+        return Ok(response);
     }
 }
