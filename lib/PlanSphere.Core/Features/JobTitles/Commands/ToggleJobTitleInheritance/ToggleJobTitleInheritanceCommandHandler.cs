@@ -17,7 +17,7 @@ public class ToggleJobTitleInheritanceCommandHandler(
     
     public async Task<bool> Handle(ToggleJobTitleInheritanceCommand request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Toggling inheritance on job");
+        _logger.BeginScope("Toggling inheritance on job title");
         
         _logger.LogInformation("Toggling inheritance on job title with id: [{jobTitleId}]", request.JobTitleId);
         var isInheritance = await _jobTitleRepository.ToggleInheritanceAsync(request.JobTitleId, cancellationToken);
