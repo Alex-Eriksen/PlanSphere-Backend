@@ -21,14 +21,15 @@ public class UpdateOrganisationCommandHandler(
     
     public async Task Handle(UpdateOrganisationCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching organisation with id: [{organisationId}]", command.Id);
-        var organisation = await _organisationRepository.GetByIdAsync(command.Id, cancellationToken);
-        _logger.LogInformation("Fetched organisation with id: [{organisationId}]", command.Id);
+        _logger.BeginScope("Updateing organistion with UpdateOrganisationCommandHandler with id: [{organisationId}]",command.OrganisationId);
+        _logger.LogInformation("Fetching organisation with id: [{organisationId}]", command.OrganisationId);
+        var organisation = await _organisationRepository.GetByIdAsync(command.OrganisationId, cancellationToken);
+        _logger.LogInformation("Fetched organisation with id: [{organisationId}]", command.OrganisationId);
         
         var mappedOrganisation = _mapper.Map(command, organisation);
         
-        _logger.LogInformation("Updating organisation with id: [{organisationId}]", command.Id);
-        await _organisationRepository.UpdateAsync(command.Id, mappedOrganisation, cancellationToken);
-        _logger.LogInformation("Updated organisation with id: [{organisationId}]", command.Id);
+        _logger.LogInformation("Updating organisation with id: [{organisationId}]", command.OrganisationId);
+        await _organisationRepository.UpdateAsync(command.OrganisationId, mappedOrganisation, cancellationToken);
+        _logger.LogInformation("Updated organisation with id: [{organisationId}]", command.OrganisationId);
     }
 }

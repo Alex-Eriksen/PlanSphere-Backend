@@ -10,7 +10,7 @@ public class OrganisationProfile : Profile
     public OrganisationProfile()
     {
         CreateMap<CreateOrganisationCommand, Organisation>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.OrganisationName))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
 
         CreateMap<UpdateOrganisationCommand, Organisation>()

@@ -10,7 +10,7 @@ public class UpdateOrganisationCommandValidator : AbstractValidator<UpdateOrgani
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
 
-        RuleFor(x => x.Id).NotNull();
+        RuleFor(x => x.OrganisationId).NotNull();
         RuleFor(x => x.OrganisationUpdateRequest).SetValidator(_validator);
     }
 }

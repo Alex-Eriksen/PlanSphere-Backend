@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Azure.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
@@ -13,20 +12,22 @@ using PlanSphere.SystemApi.Extensions;
 namespace PlanSphere.SystemApi.Controllers;
 
 [Route("api/[controller]")]
-public class OrganisationController(IMediator mediator) : ApiControllerBase(mediator)
+public class OrganisationController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-    [HttpGet("{organisationId}", Name = nameof(GetOrganisationAsync))]
-    public async Task<IActionResult> GetOrganisationAsync([FromRoute] ulong organisationId)
+    private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+
+    [HttpGet("{organisationId}", Name = nameof(GetOrganisationByIdAsync))]
+    public async Task<IActionResult> GetOrganisationByIdAsync([FromRoute] ulong organisationId)
     {
         var query = new GetOrganisationQuery(organisationId);
         var response = await _mediator.Send(query);
         return Ok(response);
     }
 
-    [HttpGet(Name = nameof(ListOrganisationAsync))]
-    public async Task<IActionResult> ListOrganisationAsync([FromQuery] ListOrganisationsQuery query)
+    [HttpGet(Name = nameof(ListOrganisationsAsync))]
+    public async Task<IActionResult> ListOrganisationsAsync([FromQuery] ListOrganisationsQuery query)
     {
         var response = await _mediator.Send(query);
         return Ok(response);
@@ -39,19 +40,18 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
         return Created();
     }
 
-    [HttpPut("{organisationId}", Name = nameof(UpdateOrganisationAsync))]
-    public async Task<IActionResult> UpdateOrganisationAsync([FromRoute] ulong organisationId,
-        [FromBody] UpdateOrganisationCommand command)
+    [HttpPut(Name = nameof(UpdateOrganisationAsync))]
+    public async Task<IActionResult> UpdateOrganisationAsync([FromBody] UpdateOrganisationCommand command)
     {
-        command.Id = organisationId;
+        command.OrganisationId = _claims.GetOrganizationId();
         await _mediator.Send(command);
         return Ok();
     }
 
-    [HttpDelete("{organisationId}", Name = nameof(DeleteOrganisationAsync))]
-    public async Task<IActionResult> DeleteOrganisationAsync([FromRoute] ulong organisationId, [FromBody] DeleteOrganisationCommand command)
+    [HttpDelete(Name = nameof(DeleteOrganisationAsync))]
+    public async Task<IActionResult> DeleteOrganisationAsync([FromBody] DeleteOrganisationCommand command)
     {
-        command = command with { Id = organisationId };
+        command = command with { OrganisationId = _claims.GetOrganizationId() };
         await _mediator.Send(command);
         return NoContent();
     }

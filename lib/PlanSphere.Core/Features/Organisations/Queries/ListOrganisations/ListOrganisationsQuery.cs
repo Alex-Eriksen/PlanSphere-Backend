@@ -6,9 +6,7 @@ using PlanSphere.Core.Interfaces;
 
 namespace PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 
-public record ListOrganisationsQuery(string? Search, bool SortDescending)
-    : BasePaginatedQuery, IRequest<IPaginatedResponse<OrganisationDTO>>, ISearchableQuery,
-        ISortableQuery<OrganisationSortBy>
+public record ListOrganisationsQuery(string? Search, bool SortDescending): BasePaginatedQuery, IRequest<IPaginatedResponse<OrganisationDTO>>, ISearchableQuery, ISortableQuery<OrganisationSortBy>
 {
     public OrganisationSortBy SortBy { get; init; }
 }

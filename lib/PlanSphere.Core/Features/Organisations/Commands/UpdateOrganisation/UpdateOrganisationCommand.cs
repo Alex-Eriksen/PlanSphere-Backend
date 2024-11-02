@@ -5,5 +5,5 @@ namespace PlanSphere.Core.Features.Organisations.Commands.UpdateOrganisation;
 
 public record UpdateOrganisationCommand(OrganisationUpdateRequest OrganisationUpdateRequest) : IRequest
 {
-    public ulong Id { get; set; }
+    public ulong OrganisationId { get; set; }
 }
