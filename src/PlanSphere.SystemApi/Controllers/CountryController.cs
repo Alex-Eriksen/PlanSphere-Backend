@@ -9,10 +9,10 @@ public class CountryController(IMediator mediator) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-    [HttpGet (Name =nameof(GetCountriesAsync))]
-    public async Task<IActionResult> GetCountriesAsync()
+    [HttpGet (Name =nameof(GetCountryLookUpsAsync))]
+    public async Task<IActionResult> GetCountryLookUpsAsync()
     {
-        var query = new GetCountriesQuery();
+        var query = new GetCountryLookUpsQuery();
         var respone = await _mediator.Send(query);
         return Ok(respone);
     }

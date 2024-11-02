@@ -38,7 +38,7 @@ public class CountryRepository(IPlanSphereDatabaseContext context) : ICountryRep
         throw new NotImplementedException();
     }
 
-    public async Task<List<Country>> GetCountryLookUps(CancellationToken cancellationToken)
+    public async Task<List<Country>> GetCountryLookUpsAsync(CancellationToken cancellationToken)
     {
         return await _context.Countries.ToListAsync(cancellationToken);
     }
