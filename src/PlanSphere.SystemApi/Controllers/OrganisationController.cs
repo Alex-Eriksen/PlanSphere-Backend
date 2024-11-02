@@ -5,6 +5,7 @@ using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.DeleteOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.UpdateOrganisation;
 using PlanSphere.Core.Features.Organisations.Queries;
+using PlanSphere.Core.Features.Organisations.Queries.GetOrganisation;
 using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 using PlanSphere.SystemApi.Controllers.Base;
 using PlanSphere.SystemApi.Extensions;

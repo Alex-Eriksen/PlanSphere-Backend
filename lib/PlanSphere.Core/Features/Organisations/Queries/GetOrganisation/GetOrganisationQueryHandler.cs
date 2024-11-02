@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.Organisations.DTOs;
+using PlanSphere.Core.Features.Organisations.Queries.GetOrganisation;
 using PlanSphere.Core.Interfaces.Repositories;
 
 namespace PlanSphere.Core.Features.Organisations.Queries;
