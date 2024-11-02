@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Core.Interfaces.Repositories;
 
@@ -72,5 +73,32 @@ public class JobTitleRepository(IPlanSphereDatabaseContext context, ILogger<JobT
             .Include(x => x.CreatedByUser)
             .AsNoTracking()
             .AsQueryable();
+    }
+
+    public async Task<bool> ToggleInheritanceAsync(ulong jobTitleId, CancellationToken cancellationToken)
+    {
+        var jobTitle = await GetByIdAsync(jobTitleId, cancellationToken);
+        if (jobTitle.OrganisationJobTitle != null)
+            jobTitle.OrganisationJobTitle.IsInheritanceActive = !jobTitle.OrganisationJobTitle.IsInheritanceActive;
+        if (jobTitle.CompanyJobTitle != null)
+            jobTitle.CompanyJobTitle.IsInheritanceActive = !jobTitle.CompanyJobTitle.IsInheritanceActive;
+        if (jobTitle.DepartmentJobTitle != null)
+            jobTitle.DepartmentJobTitle.IsInheritanceActive = !jobTitle.DepartmentJobTitle.IsInheritanceActive;
+        if (jobTitle.TeamJobTitle != null)
+            jobTitle.TeamJobTitle.IsInheritanceActive = !jobTitle.TeamJobTitle.IsInheritanceActive;
+        await _context.SaveChangesAsync(cancellationToken);
+        return GetInheritance(jobTitle);
+
+    }
+
+    private bool GetInheritance(JobTitle jobTitle)
+    {
+        if (jobTitle.OrganisationJobTitle != null)
+            return jobTitle.OrganisationJobTitle.IsInheritanceActive;
+        if (jobTitle.CompanyJobTitle != null)
+            return jobTitle.CompanyJobTitle.IsInheritanceActive;
+        if (jobTitle.DepartmentJobTitle != null)
+            return jobTitle.DepartmentJobTitle.IsInheritanceActive;
+        return jobTitle.TeamJobTitle.IsInheritanceActive;
     }
 }
