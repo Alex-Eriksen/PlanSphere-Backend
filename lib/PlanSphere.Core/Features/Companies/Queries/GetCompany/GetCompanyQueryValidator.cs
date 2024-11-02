@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace PlanSphere.Core.Features.Companies.Qurries.GetCompany;
+namespace PlanSphere.Core.Features.Companies.Queries.GetCompany;
 
 public class GetCompanyQueryValidator : AbstractValidator<GetCompanyQuery>
 {
