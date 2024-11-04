@@ -1,13 +1,16 @@
 ﻿using System.Security.Claims;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.DeleteOrganisation;
+using PlanSphere.Core.Features.Organisations.Commands.PatchOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.UpdateOrganisation;
 using PlanSphere.Core.Features.Organisations.Queries;
 using PlanSphere.Core.Features.Organisations.Queries.GetOrganisation;
 using PlanSphere.Core.Features.Organisations.Queries.GetOrganisationDetails;
 using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
+using PlanSphere.Core.Features.Organisations.Requests;
 using PlanSphere.SystemApi.Controllers.Base;
 using PlanSphere.SystemApi.Extensions;
 
@@ -63,5 +66,14 @@ public class OrganisationController(IMediator mediator, IHttpContextAccessor htt
         var command = new DeleteOrganisationCommand(organisationId);
         await _mediator.Send(command);
         return NoContent();
+    }
+
+    [HttpPatch("{organisationId}", Name = nameof(PatchOrganisationAsync))]
+    public async Task<IActionResult> PatchOrganisationAsync([FromRoute] ulong organisationId, [FromBody] JsonPatchDocument<OrganisationUpdateRequest> patchRequest)
+    {
+        var command = new PatchOrganisationCommand(patchRequest);
+        command.Id = organisationId;
+        await _mediator.Send(command);
+        return Created();
     }
 }

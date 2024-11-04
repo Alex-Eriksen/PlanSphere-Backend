@@ -19,7 +19,6 @@ public class GetOrganisationDetailsQueryHandler(
     private readonly ILogger<GetOrganisationDetailsQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
-
     public async Task<OrganisationDetailDTO> Handle(GetOrganisationDetailsQuery request, CancellationToken cancellationToken)
     {
         logger.BeginScope("Fetching organisation with id: [{organisationId}]", request.Id);

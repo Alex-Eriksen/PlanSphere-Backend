@@ -7,5 +7,5 @@ public class OrganisationUpdateRequest
     public string Name { get; set; }
     public string? LogoUrl { get; set; }
     public AddressRequest Address { get; set; }
-    public OrganisationSettingsRequest Settings { get; set; }
+    public OrganisationSettingsRequest? Settings { get; set; }
 }
