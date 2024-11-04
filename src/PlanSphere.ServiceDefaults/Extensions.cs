@@ -35,6 +35,8 @@ public static class Extensions
                     builder.Configuration.GetConnectionString("DefaultConnection"),
                     optionsBuilder => optionsBuilder.EnableRetryOnFailure())
                 .EnableDetailedErrors();
+
+            options.EnableSensitiveDataLogging();
         });
 
         builder.AddIdentityUser();

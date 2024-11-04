@@ -2,7 +2,7 @@
 
 namespace PlanSphere.Core.Features.Departments.DTOs;
 
-public class DepartmentLookUpDTO : BaseLookUpDTO
+public class DepartmentLookUpDTO : BaseLookUpDTO<ulong>
 {
     
 }

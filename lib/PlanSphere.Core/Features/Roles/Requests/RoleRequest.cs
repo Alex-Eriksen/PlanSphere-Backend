@@ -1,6 +1,4 @@
-﻿using PlanSphere.Core.Enums;
-
-namespace PlanSphere.Core.Features.Roles.Requests;
+﻿namespace PlanSphere.Core.Features.Roles.Requests;
 
 public class RoleRequest
 {

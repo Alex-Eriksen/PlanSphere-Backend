@@ -9,6 +9,7 @@ public class CompanyRoleRightProfile : Profile
     public CompanyRoleRightProfile()
     {
         CreateMap<RoleRightRequest, CompanyRoleRight>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.RightId, opt => opt.MapFrom(src => src.RightId))
             .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.SourceLevelId));
     }

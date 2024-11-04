@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
+using PlanSphere.Core.Features.Roles.Requests;
 using PlanSphere.Core.Interfaces.Repositories;
 
 namespace PlanSphere.Core.Features.Roles.Commands.UpdateRole;
@@ -21,5 +23,44 @@ public class UpdateRoleCommandHandler(
     public async Task Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
     {
         _logger.BeginScope("Update role");
+        _logger.LogInformation("Updating role with id: [{roleId}] by user with id: [{userId}]", request.RoleId, request.UserId);
+        var roleRequest = _mapper.Map<Role>(request);
+        
+        foreach (var roleRightRequest in request.Request.RoleRightRequests)
+        {
+            HandleRoleRightSourceLevel(roleRightRequest, roleRequest);
+        }
+
+        var role = await _roleRepository.GetByIdAsync(request.RoleId, cancellationToken);
+
+        role = _mapper.Map(roleRequest, role);
+
+        await _roleRepository.UpdateAsync(role.Id, role, cancellationToken);
+        _logger.LogInformation("Updated role with id: [{roleId}] by user with id: [{userId}]", request.RoleId, request.UserId);
+    }
+    
+    private void HandleRoleRightSourceLevel(RoleRightRequest roleRightRequest, Role role)
+    {
+        switch (roleRightRequest.SourceLevel)
+        {
+            case SourceLevel.Organisation:
+                var organisationRoleRight = _mapper.Map<OrganisationRoleRight>(roleRightRequest);
+                role.OrganisationRoleRights.Add(organisationRoleRight);
+                break;
+            case SourceLevel.Company:
+                var companyRoleRight = _mapper.Map<CompanyRoleRight>(roleRightRequest);
+                role.CompanyRoleRights.Add(companyRoleRight);
+                break;
+            case SourceLevel.Department:
+                var departmentRoleRight = _mapper.Map<DepartmentRoleRight>(roleRightRequest);
+                role.DepartmentRoleRights.Add(departmentRoleRight);
+                break;
+            case SourceLevel.Team:
+                var teamRoleRight = _mapper.Map<TeamRoleRight>(roleRightRequest);
+                role.TeamRoleRights.Add(teamRoleRight);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }

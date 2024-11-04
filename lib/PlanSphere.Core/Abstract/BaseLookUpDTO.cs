@@ -1,7 +1,7 @@
 ﻿namespace PlanSphere.Core.Abstract;
 
-public class BaseLookUpDTO
+public class BaseLookUpDTO<T>
 {
-    public ulong Id { get; set; }
+    public T Id { get; set; }
     public string Value { get; set; }
 }
