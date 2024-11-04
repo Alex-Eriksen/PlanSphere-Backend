@@ -1,7 +1,8 @@
-﻿namespace PlanSphere.Core.Features.Countries.DTOs;
+﻿using PlanSphere.Core.Abstract;
 
-public class CountryLookUpDTO
+namespace PlanSphere.Core.Features.Countries.DTOs;
+
+public class CountryLookUpDTO : BaseLookUpDTO<string>
 {
-    public string Id { get; set; }
-    public string? Name { get; set; }
+    
 }

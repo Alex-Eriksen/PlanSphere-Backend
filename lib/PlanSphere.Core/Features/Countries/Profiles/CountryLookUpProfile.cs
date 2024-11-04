@@ -10,6 +10,6 @@ public class CountryLookUpProfile : Profile
     {
         CreateMap<Country, CountryLookUpDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.IsoCode))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Name));
     }
 }
