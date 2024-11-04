@@ -136,7 +136,9 @@ public class JobTitleRepository(IPlanSphereDatabaseContext context, ILogger<JobT
         return query.Where(x =>
             (x.OrganisationJobTitle != null &&
              x.OrganisationJobTitle.IsInheritanceActive &&
-             x.CompanyBlockedJobTitles.All(cbj => cbj.JobTitleId != x.OrganisationJobTitle.JobTitleId)) ||
+             x.CompanyBlockedJobTitles.All(cbj => cbj.JobTitleId != x.OrganisationJobTitle.JobTitleId) &&
+             x.DepartmentBlockedJobTitles.All(cbj => cbj.JobTitleId != x.OrganisationJobTitle.JobTitleId) &&
+             x.TeamBlockedJobTitles.All(cbj => cbj.JobTitleId != x.OrganisationJobTitle.JobTitleId)) ||
 
             (x.CompanyJobTitle != null &&
              x.CompanyJobTitle.IsInheritanceActive &&
