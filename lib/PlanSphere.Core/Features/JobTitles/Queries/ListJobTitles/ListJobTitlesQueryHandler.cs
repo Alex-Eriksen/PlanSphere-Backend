@@ -41,16 +41,12 @@ public class ListJobTitlesQueryHandler(
 
     private IQueryable<JobTitle> GetJobTitles(ListJobTitlesQuery request)
     {
-        var query = _jobTitleRepository.GetQueryable();
+        var query = _jobTitleRepository.GetQueryable().Where(j => j.OrganisationJobTitle != null && j.OrganisationJobTitle.OrganisationId == request.OrganisationId);
     
         query = request.SourceLevel switch
         {
             SourceLevel.Organisation => query.Where(x => x.OrganisationJobTitle != null && x.OrganisationJobTitle.OrganisationId == request.SourceLevelId), 
-            SourceLevel.Company => query.Where(x => x.CompanyJobTitle != null && x.CompanyJobTitle.CompanyId == request.SourceLevelId ||
-                                                        x.OrganisationJobTitle != null && 
-                                                        x.OrganisationJobTitle.OrganisationId == request.OrganisationId && 
-                                                        x.OrganisationJobTitle.IsInheritanceActive && 
-                                                        x.CompanyBlockedJobTitles.All(cbj => cbj.CompanyId != request.SourceLevelId)),
+            SourceLevel.Company => _jobTitleRepository.GetCompanyJobTitles(request.SourceLevelId, query),
             SourceLevel.Department => _jobTitleRepository.GetDepartmentJobTitles(request.SourceLevelId, query),
             SourceLevel.Team => _jobTitleRepository.GetTeamJobTitles(request.SourceLevelId, query),
             _ => throw new ArgumentOutOfRangeException(nameof(SourceLevel), request.SourceLevel, null)
