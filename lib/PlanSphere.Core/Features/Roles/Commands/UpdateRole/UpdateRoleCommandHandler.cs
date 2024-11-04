@@ -33,9 +33,14 @@ public class UpdateRoleCommandHandler(
 
         var role = await _roleRepository.GetByIdAsync(request.RoleId, cancellationToken);
 
-        role = _mapper.Map(roleRequest, role);
+        role.Name = roleRequest.Name;
+        role.OrganisationRoleRights = roleRequest.OrganisationRoleRights;
+        role.CompanyRoleRights = roleRequest.CompanyRoleRights;
+        role.DepartmentRoleRights = roleRequest.DepartmentRoleRights;
+        role.TeamRoleRights = roleRequest.TeamRoleRights;
+        role.UpdatedBy = roleRequest.UpdatedBy;
 
-        await _roleRepository.UpdateAsync(role.Id, role, cancellationToken);
+        await _roleRepository.UpdateAsync(request.RoleId, role, cancellationToken);
         _logger.LogInformation("Updated role with id: [{roleId}] by user with id: [{userId}]", request.RoleId, request.UserId);
     }
     
