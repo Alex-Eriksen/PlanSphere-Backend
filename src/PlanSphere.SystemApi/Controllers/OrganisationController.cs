@@ -6,13 +6,13 @@ using PlanSphere.Core.Features.Organisations.Commands.DeleteOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.UpdateOrganisation;
 using PlanSphere.Core.Features.Organisations.Queries;
 using PlanSphere.Core.Features.Organisations.Queries.GetOrganisation;
+using PlanSphere.Core.Features.Organisations.Queries.GetOrganisationDetails;
 using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 using PlanSphere.SystemApi.Controllers.Base;
 using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
-[Route("api/[controller]")]
 public class OrganisationController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -23,6 +23,14 @@ public class OrganisationController(IMediator mediator, IHttpContextAccessor htt
     public async Task<IActionResult> GetOrganisationByIdAsync([FromRoute] ulong organisationId)
     {
         var query = new GetOrganisationQuery(organisationId);
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
+    
+    [HttpGet("{organisationId}", Name = nameof(GetOrganisationDetailsByIdAsync))]
+    public async Task<IActionResult> GetOrganisationDetailsByIdAsync([FromRoute] ulong organisationId)
+    {
+        var query = new GetOrganisationDetailsQuery(organisationId);
         var response = await _mediator.Send(query);
         return Ok(response);
     }
