@@ -10,7 +10,7 @@ public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyComm
 {
     public UpdateCompanyCommandValidator()
     {
-        RuleFor(x => x.Request.CompanyName)
+        RuleFor(x => x.Request.Name)
             .NotNull();
     }
 }
