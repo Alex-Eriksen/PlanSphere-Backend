@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Core.Interfaces.Repositories;
 
@@ -42,5 +43,10 @@ public class RoleRepository(IPlanSphereDatabaseContext dbContext) : IRoleReposit
     public IQueryable<Role> GetQueryable()
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<List<Right>> GetRightsAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.Rights.ToListAsync(cancellationToken);
     }
 }

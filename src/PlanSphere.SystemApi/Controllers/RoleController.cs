@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
+using PlanSphere.Core.Features.Rights.Queries.LookUp;
 using PlanSphere.Core.Features.Roles.Commands.CreateRole;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -26,5 +27,14 @@ public class RoleController(IMediator mediator, IHttpContextAccessor httpContext
         command.UserId = _claims.GetUserId();
         await _mediator.Send(command);
         return Ok();
+    }
+
+    [HttpGet(Name = nameof(LookUpRightsAsync))]
+    public async Task<IActionResult> LookUpRightsAsync()
+    {
+        var query = new LookUpRightsQuery();
+        var response = await _mediator.Send(query);
+
+        return Ok(response);
     }
 }
