@@ -1,4 +1,4 @@
-using PlanSphere.Core.Features.Address.DTOs;
+using PlanSphere.Core.Features.Addresses.DTOs;
 using PlanSphere.Core.Interfaces;
 
 namespace PlanSphere.Core.Features.Companies.DTOs;
