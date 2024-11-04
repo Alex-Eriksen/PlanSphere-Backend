@@ -60,7 +60,6 @@ public class ListOrganisationsQueryHandler(
             OrganisationSortBy.CompanyMembers => query.OrderByExpression(o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.CompanyRole != null), request.SortDescending),
             OrganisationSortBy.DepartmentMembers => query.OrderByExpression(o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.DepartmentRole != null), request.SortDescending),
             OrganisationSortBy.TeamMembers => query.OrderByExpression(o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.TeamRole != null), request.SortDescending),
-            OrganisationSortBy.Roles => query.OrderByExpression(o => o.Roles.Count, request.SortDescending)
         };
     }
 }

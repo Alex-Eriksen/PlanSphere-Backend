@@ -58,7 +58,7 @@ public class JwtHelper(IOptions<JwtOptions> options) : IJwtHelper
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(ClaimsConstants.UserId, user.Id.ToString()),
-            new(ClaimsConstants.OrganizationId, user.OrganisationId.ToString()),
+            new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
             new(ClaimsConstants.LastName, user.LastName)
