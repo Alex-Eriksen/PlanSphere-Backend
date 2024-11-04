@@ -9,8 +9,10 @@ public class CompanyUpdateRequestProfile : Profile
     public CompanyUpdateRequestProfile()
     {
         CreateMap<Company, CompanyUpdateRequest>()
-            .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.CVR, opt => opt.MapFrom(src => src.VAT))
             .ForMember(dest => dest.CompanyLogo, opt => opt.MapFrom(src => src.LogoUrl))
+            .ForMember(dest => dest.CareOf, opt => opt.MapFrom(src => src.CareOf))
             .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.ContactName))
             .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
             .ForMember(dest => dest.ContactPhoneNumber, opt => opt.MapFrom(src => src.ContactPhoneNumber))
