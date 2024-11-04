@@ -9,6 +9,7 @@ using PlanSphere.Core.Features.Roles.Commands.CreateRole;
 using PlanSphere.Core.Features.Roles.Commands.DeleteRole;
 using PlanSphere.Core.Features.Roles.Commands.UpdateRole;
 using PlanSphere.Core.Features.Roles.Queries.GetRoleById;
+using PlanSphere.Core.Features.Roles.Queries.ListRoles;
 using PlanSphere.Core.Features.Roles.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -72,6 +73,18 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     public async Task<IActionResult> GetRoleByIdAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong roleId)
     {
         var query = new GetRoleByIdQuery(sourceLevel, sourceLevelId, roleId);
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
+
+    [HttpGet("{sourceLevel}/{sourceLevelId}", Name = nameof(ListRolesAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
+    public async Task<IActionResult> ListRolesAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromQuery] ListRolesQuery query)
+    {
+        var organisationId = Request.HttpContext.User.GetOrganizationId();
+        query.OrganisationId = organisationId;
+        query.SourceLevelId = sourceLevelId;
+        query.SourceLevel = sourceLevel;
         var response = await _mediator.Send(query);
         return Ok(response);
     }

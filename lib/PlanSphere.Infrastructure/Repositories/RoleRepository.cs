@@ -85,6 +85,10 @@ public class RoleRepository(
             .Include(x => x.TeamRole).ThenInclude(x => x.Team).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
             .Include(x => x.UpdatedByUser)
             .Include(x => x.CreatedByUser)
+            .Include(x => x.OrganisationRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.DepartmentRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.TeamRoleRights).ThenInclude(x => x.Right)
             .AsNoTracking()
             .AsQueryable();
     }

@@ -42,7 +42,7 @@ public class ListRolesQueryHandler(
 
     private IQueryable<Role> GetRoles(ListRolesQuery request)
     {
-                var query = _roleRepository.GetQueryable();
+        var query = _roleRepository.GetQueryable();
     
         query = request.SourceLevel switch
         {
@@ -69,7 +69,9 @@ public class ListRolesQueryHandler(
     {
         if (!string.IsNullOrWhiteSpace(search))
         {
-            query = query.Where(r => r.Name.Contains(search));
+            query = query.Where(r => r.Name.Contains(search) ||
+                                     r.CreatedByUser.FirstName.Contains(search) ||
+                                     r.CreatedByUser.LastName.Contains(search));
         }
 
         return query;
