@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using PlanSphere.Core.Common.DTOs;
-using PlanSphere.Core.Features.Companies.Commands.PatchCompany;
 using PlanSphere.Core.Features.Companies.Request;
 
 namespace PlanSphere.Core.Features.Companies.Profiles;

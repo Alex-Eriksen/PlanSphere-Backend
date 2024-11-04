@@ -2,11 +2,14 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.JobTitles.Commands.CreateJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.DeleteJobTitle;
+using PlanSphere.Core.Features.JobTitles.Commands.ToggleJobTitleInheritance;
 using PlanSphere.Core.Features.JobTitles.Commands.UpdateJobTitle;
 using PlanSphere.Core.Features.JobTitles.Queries.GetJobTitle;
 using PlanSphere.Core.Features.JobTitles.Queries.ListJobTitles;
+using PlanSphere.Core.Features.JobTitles.Requests;
 using PlanSphere.SystemApi.Controllers.Base;
 using PlanSphere.SystemApi.Extensions;
 
@@ -26,27 +29,39 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
         return Ok(response);
     }
     
-    [HttpGet(Name = nameof(ListJobTitleAsync))]
-    public async Task<IActionResult> ListJobTitleAsync([FromQuery] ListJobTitlesQuery query)
+    [HttpGet("{sourceLevel}/{sourceLevelId}", Name = nameof(ListJobTitleAsync))]
+    public async Task<IActionResult> ListJobTitleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromQuery] ListJobTitlesQuery query)
     {
+        query.SourceLevel = sourceLevel;
+        query.SourceLevelId = sourceLevelId;
         query.OrganisationId = _claims.GetOrganizationId();
         var response = await _mediator.Send(query);
         return Ok(response);
     }
     
-    [HttpPost(Name = nameof(CreateJobTitleAsync))]
-    public async Task<IActionResult> CreateJobTitleAsync([FromBody] CreateJobTitleCommand command)
+    [HttpPost("{sourceLevel}/{sourceLevelId}", Name = nameof(CreateJobTitleAsync))]
+    public async Task<IActionResult> CreateJobTitleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromBody] JobTitleRequest request)
     {
+        var command = new CreateJobTitleCommand(request)
+        {
+            SourceLevel = sourceLevel,
+            SourceLevelId = sourceLevelId
+        };
         await _mediator.Send(command);
         return Created();
     }
     
-    [HttpPut("{jobTitleId}", Name = nameof(UpdateJobTitleAsync))]
-    public async Task<IActionResult> UpdateJobTitleAsync([FromRoute] ulong jobTitleId, [FromBody] UpdateJobTitleCommand command)
+    [HttpPut("{sourceLevel}/{sourceLevelId}/{jobTitleId}", Name = nameof(UpdateJobTitleAsync))]
+    public async Task<IActionResult> UpdateJobTitleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong jobTitleId, [FromBody] JobTitleRequest request)
     {
-        command.Id = jobTitleId;
+        var command = new UpdateJobTitleCommand(request)
+        {
+            SourceLevel = sourceLevel,
+            SourceLevelId = sourceLevelId,
+            Id = jobTitleId
+        };
         await _mediator.Send(command);
-        return Created();
+        return NoContent();
     }
     
     [HttpDelete("{jobTitleId}", Name = nameof(DeleteJobTitleAsync))]
@@ -54,6 +69,14 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
     {
         command.Id = jobTitleId;
         await _mediator.Send(command);
-        return Created();
+        return NoContent();
+    }
+    
+    [HttpPost("{jobTitleId}", Name = nameof(ToggleInheritanceAsync))]
+    public async Task<IActionResult> ToggleInheritanceAsync([FromRoute] ulong jobTitleId)
+    {
+        var command = new ToggleJobTitleInheritanceCommand(jobTitleId);
+        var response = await _mediator.Send(command);
+        return Ok(response);
     }
 }

@@ -11,23 +11,10 @@ public class JobTitleProfile : Profile
 {
     public JobTitleProfile()
     {
+        CreateMap<JobTitleRequest, JobTitle>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
         CreateMap<CreateJobTitleCommand, JobTitle>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Request.Name));
     }
-    
-    private class InheritanceActiveResolver : IValueResolver<UpdateJobTitleCommand, JobTitle, bool>
-    {
-        public bool Resolve(UpdateJobTitleCommand source, JobTitle destination, bool destMember, ResolutionContext context)
-        {
-            return source.SourceLevel switch
-            {
-                SourceLevel.Organisation when destination.OrganisationJobTitle != null => source.Request.IsInheritanceActive,
-                SourceLevel.Company when destination.CompanyJobTitle != null => source.Request.IsInheritanceActive,
-                SourceLevel.Department when destination.DepartmentJobTitle != null => source.Request.IsInheritanceActive,
-                SourceLevel.Team when destination.TeamJobTitle != null => source.Request.IsInheritanceActive,
-                _ => destMember
-            };
-        }
-    }
-
 }
