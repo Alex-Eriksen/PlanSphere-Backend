@@ -42,7 +42,15 @@ public class RoleRepository(IPlanSphereDatabaseContext dbContext) : IRoleReposit
 
     public IQueryable<Role> GetQueryable()
     {
-        throw new NotImplementedException();
+        return _dbContext.Roles
+            .Include(x => x.OrganisationRole).ThenInclude(x => x.Organisation)
+            .Include(x => x.CompanyRole).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .Include(x => x.DepartmentRole).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .Include(x => x.TeamRole).ThenInclude(x => x.Team).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .Include(x => x.UpdatedByUser)
+            .Include(x => x.CreatedByUser)
+            .AsNoTracking()
+            .AsQueryable();
     }
 
     public async Task<List<Right>> GetRightsAsync(CancellationToken cancellationToken)
