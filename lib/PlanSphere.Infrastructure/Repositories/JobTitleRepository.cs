@@ -65,6 +65,9 @@ public class JobTitleRepository(IPlanSphereDatabaseContext context, ILogger<JobT
     public IQueryable<JobTitle> GetQueryable()
     {
         return _context.JobTitles
+            .Include(x => x.CompanyBlockedJobTitles)
+            .Include(x => x.DepartmentBlockedJobTitles)
+            .Include(x => x.TeamBlockedJobTitles)
             .Include(x => x.OrganisationJobTitle).ThenInclude(x => x.Organisation)
             .Include(x => x.CompanyJobTitle).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
             .Include(x => x.DepartmentJobTitle).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)

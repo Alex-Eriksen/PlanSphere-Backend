@@ -137,8 +137,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("CompanyId", "JobTitleId");
 
-                    b.HasIndex("JobTitleId")
-                        .IsUnique();
+                    b.HasIndex("JobTitleId");
 
                     b.ToTable("CompanyBlockedJobTitles");
                 });
@@ -333,8 +332,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("DepartmentId", "JobTitleId");
 
-                    b.HasIndex("JobTitleId")
-                        .IsUnique();
+                    b.HasIndex("JobTitleId");
 
                     b.ToTable("DepartmentBlockedJobTitles");
                 });
@@ -773,8 +771,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("TeamId", "JobTitleId");
 
-                    b.HasIndex("JobTitleId")
-                        .IsUnique();
+                    b.HasIndex("JobTitleId");
 
                     b.ToTable("TeamBlockedJobTitles");
                 });
@@ -1247,8 +1244,8 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.JobTitle", "JobTitle")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.CompanyBlockedJobTitle", "JobTitleId")
+                        .WithMany("CompanyBlockedJobTitles")
+                        .HasForeignKey("JobTitleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1410,8 +1407,8 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.JobTitle", "JobTitle")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.DepartmentBlockedJobTitle", "JobTitleId")
+                        .WithMany("DepartmentBlockedJobTitles")
+                        .HasForeignKey("JobTitleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1729,8 +1726,8 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.TeamBlockedJobTitle", b =>
                 {
                     b.HasOne("Domain.Entities.JobTitle", "JobTitle")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.TeamBlockedJobTitle", "JobTitleId")
+                        .WithMany("TeamBlockedJobTitles")
+                        .HasForeignKey("JobTitleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2026,11 +2023,17 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.JobTitle", b =>
                 {
+                    b.Navigation("CompanyBlockedJobTitles");
+
                     b.Navigation("CompanyJobTitle");
+
+                    b.Navigation("DepartmentBlockedJobTitles");
 
                     b.Navigation("DepartmentJobTitle");
 
                     b.Navigation("OrganisationJobTitle");
+
+                    b.Navigation("TeamBlockedJobTitles");
 
                     b.Navigation("TeamJobTitle");
                 });
