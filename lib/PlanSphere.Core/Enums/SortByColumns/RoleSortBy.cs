@@ -2,7 +2,7 @@
 
 public enum RoleSortBy
 {
-    Active,
+    IsInheritanceActive,
     Name,
     CreatedAt,
     CreatedBy
