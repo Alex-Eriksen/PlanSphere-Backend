@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using PlanSphere.Core.Common.DTOs;
 using PlanSphere.Core.Features.Companies.Request;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PlanSphere.Core.Features.Companies.Commands.CreateCompany;
 
 namespace PlanSphere.Core.Features.Companies.Profiles

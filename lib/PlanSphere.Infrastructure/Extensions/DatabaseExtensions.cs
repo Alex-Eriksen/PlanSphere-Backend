@@ -14,6 +14,7 @@ public static class DatabaseExtensions
         services.AddScoped<IJobTitleRepository, JobTitleRepository>();
         services.AddScoped<ICompanyRepository, CompanyRepository>();
         services.AddScoped<IWorkScheduleRepository, WorkScheduleRepository>();
+        services.AddScoped<ICountryRepository, CountryRepository>();
         return services;
     }
 }
