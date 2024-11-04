@@ -16,7 +16,7 @@ public class PatchCompanyCommandValidator : AbstractValidator<PatchCompanyComman
         
         RuleForEach(x => x.PatchDocument.Operations)
             .AllowOperators(PatchOperators.REPLACE)
-            .NotNull(nameof(CompanyUpdateRequest.CompanyName))
+            .NotNull(nameof(CompanyUpdateRequest.Name))
             .NotNull(nameof(CompanyUpdateRequest.CVR));
         
 
