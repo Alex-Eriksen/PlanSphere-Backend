@@ -89,7 +89,7 @@ public class RoleActionFilter(
             switch (sourceLevel)
             {
                 case SourceLevel.Organisation:
-                    if (role.OrganisationRoleRights.SingleOrDefault(x => x.Right.AsEnum <= requiredRight && x.OrganisationId == sourceLevelId) == null)
+                    if (!role.OrganisationRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.OrganisationId == sourceLevelId))
                     {
                         continue;
                     }
@@ -97,7 +97,7 @@ public class RoleActionFilter(
                     authorized = true;
                     break;
                 case SourceLevel.Company:
-                    if (role.CompanyRoleRights.SingleOrDefault(x => x.Right.AsEnum <= requiredRight && x.CompanyId == sourceLevelId) == null)
+                    if (!role.CompanyRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.CompanyId == sourceLevelId))
                     {
                         continue;
                     }
@@ -105,7 +105,7 @@ public class RoleActionFilter(
                     authorized = true;
                     break;
                 case SourceLevel.Department:
-                    if (role.DepartmentRoleRights.SingleOrDefault(x => x.Right.AsEnum <= requiredRight && x.DepartmentId == sourceLevelId) == null)
+                    if (!role.DepartmentRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.DepartmentId == sourceLevelId))
                     {
                         continue;
                     }
@@ -113,7 +113,7 @@ public class RoleActionFilter(
                     authorized = true;
                     break;
                 case SourceLevel.Team:
-                    if (role.TeamRoleRights.SingleOrDefault(x => x.Right.AsEnum <= requiredRight && x.TeamId == sourceLevelId) == null)
+                    if (!role.TeamRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.TeamId == sourceLevelId))
                     {
                         continue;
                     }
