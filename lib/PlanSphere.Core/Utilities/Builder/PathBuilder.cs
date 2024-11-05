@@ -7,7 +7,7 @@ public class PathBuilder
 {
     private string path;
 
-    public PathBuilder AddOrganisationDirectory(string organisationId)
+    public PathBuilder AddOrganisationDirectory(ulong organisationId)
     {
         path = $"{FileStorageConstants.OrganisationDirectory}/{organisationId}";
         return this;

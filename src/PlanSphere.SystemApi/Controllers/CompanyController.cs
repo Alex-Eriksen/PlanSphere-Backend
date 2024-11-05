@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Companies.Commands.CreateCompany;
 using PlanSphere.Core.Features.Companies.Commands.DeleteCompany;
 using PlanSphere.Core.Features.Companies.Commands.PatchCompany;
+using PlanSphere.Core.Features.Companies.Commands.UploadCompanyLogo;
 using PlanSphere.Core.Features.Companies.DTOs;
 using PlanSphere.Core.Features.Companies.Qurries.GetCompany;
 using PlanSphere.Core.Features.Companies.Qurries.ListCompanies;
@@ -56,6 +57,15 @@ namespace PlanSphere.SystemApi.Controllers;
             var command = new DeleteCompanyCommand(companyId);
             await _mediator.Send(command);
             return NoContent();
+        }
+
+        [HttpPost("{companyId}", Name = nameof(UploadCompanyLogoAsync))] 
+        public async Task<IActionResult> UploadCompanyLogoAsync([FromRoute] ulong companyId, [FromForm] UploadCompanyLogoCommand command)
+        {
+            command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
+            command.CompanyId = companyId;
+            var response = await _mediator.Send(command);
+            return Ok(response);
         }
         
         
