@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanSphere.Infrastructure.Contexts;
 
@@ -11,9 +12,11 @@ using PlanSphere.Infrastructure.Contexts;
 namespace PlanSphere.Infrastructure.Migrations
 {
     [DbContext(typeof(PlanSphereDatabaseContext))]
-    partial class PlanSphereDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241104102118_fix-blocked-jobtitle")]
+    partial class fixblockedjobtitle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,7 +155,8 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("CompanyId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
 
                     b.ToTable("CompanyBlockedRoles");
                 });
@@ -346,7 +350,8 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("DepartmentId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
 
                     b.ToTable("DepartmentBlockedRoles");
                 });
@@ -784,7 +789,8 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("TeamId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
 
                     b.ToTable("TeamBlockedRoles");
                 });
@@ -1260,8 +1266,8 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Role", "Role")
-                        .WithMany("BlockedCompanies")
-                        .HasForeignKey("RoleId")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CompanyBlockedRole", "RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1423,8 +1429,8 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Role", "Role")
-                        .WithMany("BlockedDepartments")
-                        .HasForeignKey("RoleId")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.DepartmentBlockedRole", "RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1742,8 +1748,8 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.TeamBlockedRole", b =>
                 {
                     b.HasOne("Domain.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.TeamBlockedRole", "RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2045,10 +2051,6 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
                 {
-                    b.Navigation("BlockedCompanies");
-
-                    b.Navigation("BlockedDepartments");
-
                     b.Navigation("CompanyRole");
 
                     b.Navigation("CompanyRoleRights");
