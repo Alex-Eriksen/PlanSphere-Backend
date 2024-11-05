@@ -6,22 +6,21 @@ using PlanSphere.Core.Enums;
 using PlanSphere.Core.Enums.SortByColumns;
 using PlanSphere.Core.Extensions;
 using PlanSphere.Core.Features.Companies.DTOs;
-using PlanSphere.Core.Features.Companies.Qurries.ListCompanies;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
 using PlanSphere.Core.Interfaces.Services;
 
-namespace PlanSphere.Core.Features.Companies.Querries.ListCompanies;
+namespace PlanSphere.Core.Features.Companies.Queries.ListCompanies;
 
 [HandlerType(HandlerType.SystemApi)]
-public class ListCompaniesQuerriesHandler(
+public class ListCompaniesQueryHandler(
     ICompanyRepository companyRepository,
-    ILogger<ListCompaniesQuerriesHandler> logger,
+    ILogger<ListCompaniesQueryHandler> logger,
     IPaginationService paginationService
 ) : IRequestHandler<ListCompaniesQuery, IPaginatedResponse<CompanyDTO>>
 {
     private readonly ICompanyRepository _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-    private readonly ILogger<ListCompaniesQuerriesHandler> _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
+    private readonly ILogger<ListCompaniesQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
     private readonly IPaginationService _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
     
     public async Task<IPaginatedResponse<CompanyDTO>> Handle(ListCompaniesQuery request, CancellationToken cancellationToken)
