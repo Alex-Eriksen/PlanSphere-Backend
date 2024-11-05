@@ -16,7 +16,6 @@ Console.WriteLine($"Booting up in: {builder.Environment.EnvironmentName} mode.")
 builder.AddServiceDefaults(builder.Environment.IsDevelopment(), withControllers: true);
 builder.Services.AddSingleton<IJwtHelper, JwtHelper>();
 
-
 builder.Services.AddAuthorization(options =>
 {
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
