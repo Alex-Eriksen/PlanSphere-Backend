@@ -11,17 +11,17 @@ using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
 using PlanSphere.Core.Interfaces.Services;
 
-namespace PlanSphere.Core.Features.Companies.Query.ListCompanies;
+namespace PlanSphere.Core.Features.Companies.Querries.ListCompanies;
 
 [HandlerType(HandlerType.SystemApi)]
-public class ListCompaniesQueryHandler(
+public class ListCompaniesQuerriesHandler(
     ICompanyRepository companyRepository,
-    ILogger<ListCompaniesQueryHandler> logger,
+    ILogger<ListCompaniesQuerriesHandler> logger,
     IPaginationService paginationService
 ) : IRequestHandler<ListCompaniesQuery, IPaginatedResponse<CompanyDTO>>
 {
     private readonly ICompanyRepository _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-    private readonly ILogger<ListCompaniesQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
+    private readonly ILogger<ListCompaniesQuerriesHandler> _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
     private readonly IPaginationService _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
     
     public async Task<IPaginatedResponse<CompanyDTO>> Handle(ListCompaniesQuery request, CancellationToken cancellationToken)
