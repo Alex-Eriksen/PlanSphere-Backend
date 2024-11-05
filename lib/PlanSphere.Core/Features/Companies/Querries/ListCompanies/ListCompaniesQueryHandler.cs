@@ -6,12 +6,12 @@ using PlanSphere.Core.Enums;
 using PlanSphere.Core.Enums.SortByColumns;
 using PlanSphere.Core.Extensions;
 using PlanSphere.Core.Features.Companies.DTOs;
+using PlanSphere.Core.Features.Companies.Qurries.ListCompanies;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
-
 using PlanSphere.Core.Interfaces.Services;
 
-namespace PlanSphere.Core.Features.Companies.Qurries.ListCompanies;
+namespace PlanSphere.Core.Features.Companies.Querries.ListCompanies;
 
 [HandlerType(HandlerType.SystemApi)]
 public class ListCompaniesQueryHandler(
@@ -42,11 +42,10 @@ public class ListCompaniesQueryHandler(
 
     private IQueryable<Company> SearchQuery(ListCompaniesQuery request, IQueryable<Company> query)
     {
-        var search = request.Search.ToLower().Trim();
-        if (!string.IsNullOrWhiteSpace(search))
+        if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            query = query.Where(c => c.Name.Contains(search) || 
-            (c.Address.StreetName.ToLower() + " " + c.Address.HouseNumber.ToLower()).Contains(search));
+            var search = request.Search.ToLower().Trim();
+            query = query.Where(c => c.Name.ToLower().Contains(search));
         }
 
         return query;
@@ -58,8 +57,7 @@ public class ListCompaniesQueryHandler(
         return request.SortBy switch
         {
             CompanySortBy.Name => query.OrderByExpression(x => x.Name, request.SortDescending),
-            CompanySortBy.Address => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending)
-                .ThenByExpression(x => x.Address.HouseNumber, request.SortDescending),
+            _ => throw new ArgumentOutOfRangeException(nameof(CompanySortBy), request.SortBy, null)
         };
     }
 }
