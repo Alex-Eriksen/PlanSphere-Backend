@@ -25,11 +25,13 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
 
     [HttpPost("{sourceLevel}/{sourceLevelId}", Name = nameof(CreateRoleAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> CreateRoleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromBody] CreateRoleCommand command)
+    public async Task<IActionResult> CreateRoleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromBody] RoleRequest request)
     {
-        command.SourceLevel = sourceLevel;
-        command.SourceLevelId = sourceLevelId;
-        command.UserId = Request.HttpContext.User.GetUserId();
+        var command = new CreateRoleCommand(request, Request.HttpContext.User.GetUserId())
+        {
+            SourceLevel = sourceLevel,
+            SourceLevelId = sourceLevelId,
+        };
         await _mediator.Send(command);
         return Ok();
     }
