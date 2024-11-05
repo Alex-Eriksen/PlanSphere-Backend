@@ -11,7 +11,7 @@ using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
 using PlanSphere.Core.Interfaces.Services;
 
-namespace PlanSphere.Core.Features.Companies.Querries.ListCompanies;
+namespace PlanSphere.Core.Features.Companies.Query.ListCompanies;
 
 [HandlerType(HandlerType.SystemApi)]
 public class ListCompaniesQueryHandler(
