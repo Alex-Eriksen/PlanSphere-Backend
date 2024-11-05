@@ -3,4 +3,5 @@
 public interface IAzureBlobStorageFactory
 {
     IPublicAzureBlobStorage CreatePublicStorage();
+    IPrivateAzureBlobStorage CreatePrivateStorage();
 }

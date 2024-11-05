@@ -25,4 +25,14 @@ public class AzureBlobStorageFactory(
             _serviceProvider.GetRequiredService<ILogger<PublicAzureBlobStorage>>(), 
             containerClient);
     }
+
+    public IPrivateAzureBlobStorage CreatePrivateStorage()
+    {
+        _logger.LogInformation("Creating a private  Azure Blob Storage instance.");
+
+        var containerClient = _blobServiceClient.GetBlobContainerClient(FileStorageConstants.PrivateContainerName);
+        return new PrivateAzureBlobStorage(
+            _serviceProvider.GetRequiredService<ILogger<PrivateAzureBlobStorage>>(), 
+            containerClient);
+    }
 }
