@@ -22,11 +22,12 @@ public class PatchOrganisationCommandHandler(
 
     public async Task Handle(PatchOrganisationCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching organisation");
+        _logger.BeginScope("Trying to patch organisation with [PatchOrganisationCommandHandler], first getting the organisation then patching");
         _logger.LogInformation("Fetching organisation with id: [{organisationId}]", command.Id);
         var organisation = await _organisationRepository.GetByIdAsync(command.Id, cancellationToken);
         _logger.LogInformation("Fetched organisation with id: [{organisationId}]", command.Id);
         
+        _logger.LogInformation("Mapping organisation with id: [{organisationId}]", command.Id);
         var organisationPatchRequest = _mapper.Map<OrganisationUpdateRequest>(organisation);
         
         command.PatchDocument.ApplyTo(organisationPatchRequest);

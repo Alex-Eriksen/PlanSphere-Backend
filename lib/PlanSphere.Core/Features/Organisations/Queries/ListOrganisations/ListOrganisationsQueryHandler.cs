@@ -25,7 +25,7 @@ public class ListOrganisationsQueryHandler(
 
     public async Task<IPaginatedResponse<OrganisationDTO>> Handle(ListOrganisationsQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope($"Starting to List Organisations with [ListOrganisationsCommandHandler]");
+        _logger.BeginScope("Starting to List Organisations with [ListOrganisationsCommandHandler]");
         
         _logger.LogInformation("Listing all organisations");
         var query = _organisationRepository.GetQueryable();

@@ -18,6 +18,5 @@ public class PatchOrganisationCommandValidator : AbstractValidator<PatchOrganisa
             .AllowOperators(PatchOperators.REPLACE)
             .NotNull(nameof(OrganisationUpdateRequest.Name))
             .NotNull(nameof(OrganisationUpdateRequest.Address));
-        //.NotNull(nameof(OrganisationUpdateRequest.Settings));
     }
 }

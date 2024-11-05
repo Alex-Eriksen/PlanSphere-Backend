@@ -22,7 +22,8 @@ public class GetOrganisationQueryHandler(
     
     public async Task<OrganisationDTO> Handle(GetOrganisationQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Fetching organisation with id: [{organisationId}]", request.Id);
+        _logger.BeginScope("Starting to Get organisation with [GetOrganisationQueryHandler]");
+        _logger.LogInformation("Fetching organisation with id: [{organisationId}]", request.Id);
         var organisation = await _organisationRepository.GetByIdAsync(request.Id, cancellationToken);
         _logger.LogInformation("Fetched organisation with id: [{organisationId}]", request.Id);
 
