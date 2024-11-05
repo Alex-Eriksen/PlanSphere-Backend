@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -72,10 +73,14 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
         return NoContent();
     }
     
-    [HttpPost("{jobTitleId}", Name = nameof(ToggleInheritanceAsync))]
-    public async Task<IActionResult> ToggleInheritanceAsync([FromRoute] ulong jobTitleId)
+    [HttpPost("{sourceLevel}/{sourceLevelId}/{jobTitleId}", Name = nameof(ToggleInheritanceAsync))]
+    public async Task<IActionResult> ToggleInheritanceAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong jobTitleId)
     {
-        var command = new ToggleJobTitleInheritanceCommand(jobTitleId);
+        var command = new ToggleJobTitleInheritanceCommand(jobTitleId)
+        {
+            SourceLevel = sourceLevel,
+            SourceLevelId = sourceLevelId
+        };
         var response = await _mediator.Send(command);
         return Ok(response);
     }

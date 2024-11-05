@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.Roles.DTOs;
 

@@ -21,4 +21,24 @@ public class JobTitle : BaseEntity, IAuditableEntity
     public DateTime? UpdatedAt { get; set; }
     public ulong? UpdatedBy { get; set; }
     public User? UpdatedByUser { get; set; }
+    
+    public SourceLevel SourceLevel
+    {
+        get
+        {
+            if (OrganisationJobTitle != null)
+            {
+                return SourceLevel.Organisation;
+            }
+            if (CompanyJobTitle != null)
+            {
+                return SourceLevel.Company;
+            }
+            if (DepartmentJobTitle != null)
+            {
+                return SourceLevel.Department;
+            }
+            return SourceLevel.Team;
+        }
+    }
 }
