@@ -38,7 +38,7 @@ public class ListJobTitlesQueryHandler(
         var paginatedResponse = await _paginationService.PaginateAsync<JobTitle, JobTitleDTO>(query, request, opt =>
             {
                 opt.Items["SourceLevelId"] = request.SourceLevelId;
-                opt.Items["SourceLevel"] = request.SourceLevel; // Add the enum to the context items
+                opt.Items["SourceLevel"] = request.SourceLevel;
             });
 
 

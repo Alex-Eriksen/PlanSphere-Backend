@@ -13,6 +13,6 @@ public class ToggleJobTitleInheritanceCommandValidator : AbstractValidator<Toggl
         RuleFor(x => x.SourceLevel)
             .IsInEnum()
             .NotEqual(SourceLevel.Team)
-            .WithMessage("You can disable inheritance on team level.");
+            .WithMessage("You cannot disable inheritance on team level.");
     }
 }

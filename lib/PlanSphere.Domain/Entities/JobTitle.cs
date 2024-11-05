@@ -38,7 +38,13 @@ public class JobTitle : BaseEntity, IAuditableEntity
             {
                 return SourceLevel.Department;
             }
-            return SourceLevel.Team;
+
+            if (TeamJobTitle != null)
+            {
+                return SourceLevel.Team;
+            }
+
+            throw new NullReferenceException();
         }
     }
 }
