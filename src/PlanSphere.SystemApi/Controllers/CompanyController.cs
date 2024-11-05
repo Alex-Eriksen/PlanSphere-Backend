@@ -40,9 +40,9 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
     
-    [HttpPost(Name = nameof(CreateCompanyAsync))]
+    [HttpPost("{sourceLevel}/{sourceLevelId}", Name = nameof(CreateCompanyAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> CreateCompanyAsync([FromBody] CompanyRequest request)
+    public async Task<IActionResult> CreateCompanyAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId,[FromBody] CompanyRequest request)
     {
         var command = new CreateCompanyCommand(request);
         command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
