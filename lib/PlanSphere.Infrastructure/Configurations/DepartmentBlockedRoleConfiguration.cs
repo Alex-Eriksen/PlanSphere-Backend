@@ -16,8 +16,8 @@ public class DepartmentBlockedRoleConfiguration : IEntityTypeConfiguration<Depar
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.Role)
-            .WithOne()
-            .HasForeignKey<DepartmentBlockedRole>(e => e.RoleId)
+            .WithMany(e => e.BlockedDepartments)
+            .HasForeignKey(e => e.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

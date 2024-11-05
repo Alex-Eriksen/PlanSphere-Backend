@@ -1,9 +1,11 @@
-﻿using PlanSphere.Core.Enums;
+﻿using Domain.Entities.EmbeddedEntities;
+using PlanSphere.Core.Enums;
 
 namespace PlanSphere.Core.Features.Roles.Requests;
 
 public class RoleRightRequest
 {
+    public ulong? Id { get; set; }
     public SourceLevel SourceLevel { get; set; }
     
     /// <summary>

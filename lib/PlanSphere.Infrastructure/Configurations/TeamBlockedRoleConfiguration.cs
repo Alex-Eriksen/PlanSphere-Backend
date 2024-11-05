@@ -16,8 +16,8 @@ public class TeamBlockedRoleConfiguration : IEntityTypeConfiguration<TeamBlocked
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.Role)
-            .WithOne()
-            .HasForeignKey<TeamBlockedRole>(e => e.RoleId)
+            .WithMany()
+            .HasForeignKey(e => e.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

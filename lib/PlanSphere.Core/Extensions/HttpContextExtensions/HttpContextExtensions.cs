@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Domain.Entities.EmbeddedEntities;
 using Microsoft.AspNetCore.Http;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;

@@ -16,8 +16,8 @@ public class CompanyBlockedJobTitleConfiguration : IEntityTypeConfiguration<Comp
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.JobTitle)
-            .WithOne()
-            .HasForeignKey<CompanyBlockedJobTitle>(e => e.JobTitleId)
+            .WithMany(j => j.CompanyBlockedJobTitles)
+            .HasForeignKey(e => e.JobTitleId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

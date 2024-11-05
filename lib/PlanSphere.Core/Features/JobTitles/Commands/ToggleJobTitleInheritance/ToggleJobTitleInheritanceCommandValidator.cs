@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Domain.Entities.EmbeddedEntities;
+using FluentValidation;
 
 namespace PlanSphere.Core.Features.JobTitles.Commands.ToggleJobTitleInheritance;
 
@@ -8,5 +9,10 @@ public class ToggleJobTitleInheritanceCommandValidator : AbstractValidator<Toggl
     {
         RuleFor(x => x.JobTitleId)
             .NotNull();
+
+        RuleFor(x => x.SourceLevel)
+            .IsInEnum()
+            .NotEqual(SourceLevel.Team)
+            .WithMessage("You cannot disable inheritance on team level.");
     }
 }

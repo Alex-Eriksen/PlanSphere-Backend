@@ -18,5 +18,15 @@ public class RoleDTOProfile : Profile
                     .Concat(src.Role.DepartmentRoleRights)
                     .Concat(src.Role.TeamRoleRights)
             ));
+        
+        CreateMap<Role, RoleDTO>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Rights, opt => opt.MapFrom(src => 
+                src.OrganisationRoleRights
+                    .Cast<object>()
+                    .Concat(src.CompanyRoleRights)
+                    .Concat(src.DepartmentRoleRights)
+                    .Concat(src.TeamRoleRights)
+            ));
     }
 }
