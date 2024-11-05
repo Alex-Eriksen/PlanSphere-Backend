@@ -54,6 +54,7 @@ public class RoleActionFilter(
                     if (role.OrganisationRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.OrganisationId == sourceLevelId) == null)
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.CompanyRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.CompanyId == sourceLevelId) == null)
                     {
@@ -66,10 +67,12 @@ public class RoleActionFilter(
                     if (role.OrganisationRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.OrganisationId == sourceLevelId) == null)
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.CompanyRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.CompanyId == sourceLevelId) == null)
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.DepartmentRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.DepartmentId == sourceLevelId) == null)
                     {
@@ -82,14 +85,17 @@ public class RoleActionFilter(
                     if (role.OrganisationRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.OrganisationId == sourceLevelId) == null)
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.CompanyRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.CompanyId == sourceLevelId) == null)
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.DepartmentRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.DepartmentId == sourceLevelId) == null)
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.TeamRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.TeamId == sourceLevelId) == null)
                     {
@@ -124,6 +130,7 @@ public class RoleActionFilter(
                     if (role.OrganisationRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.OrganisationId == sourceLevelId))
                     {
                         authorized = true;
+                        break;
                     }
                     if (!role.CompanyRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.CompanyId == sourceLevelId))
                     {
@@ -136,10 +143,12 @@ public class RoleActionFilter(
                     if (role.OrganisationRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.OrganisationId == sourceLevelId))
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.CompanyRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.CompanyId == sourceLevelId))
                     {
                         authorized = true;
+                        break;
                     }
                     if (!role.DepartmentRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.DepartmentId == sourceLevelId))
                     {
@@ -152,14 +161,17 @@ public class RoleActionFilter(
                     if (role.OrganisationRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.OrganisationId == sourceLevelId))
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.CompanyRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.CompanyId == sourceLevelId))
                     {
                         authorized = true;
+                        break;
                     }
                     if (role.DepartmentRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.DepartmentId == sourceLevelId))
                     {
                         authorized = true;
+                        break;
                     }
                     if (!role.TeamRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.TeamId == sourceLevelId))
                     {
