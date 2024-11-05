@@ -18,7 +18,8 @@ public class RoleListItemDTOProfile : Profile
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedByUser.FullName))
             .ForMember(dest => dest.SourceLevel, opt => opt.MapFrom(src => src.SourceLevel))
-            .ForMember(dest => dest.IsInheritanceActive, opt => opt.MapFrom<IsInheritanceActiveResolver>());
+            .ForMember(dest => dest.IsInheritanceActive, opt => opt.MapFrom<IsInheritanceActiveResolver>())
+            .ForMember(dest => dest.IsDefaultRole, opt => opt.MapFrom<IsDefaultRoleResolver>());
     }
     
     private class IsInheritanceActiveResolver : IValueResolver<Role, RoleListItemDTO, bool>
@@ -42,6 +43,21 @@ public class RoleListItemDTOProfile : Profile
                 return source.TeamRole.IsInheritanceActive;
             }
             return false; 
+        }
+    }
+    
+    private class IsDefaultRoleResolver : IValueResolver<Role, RoleListItemDTO, bool>
+    {
+        public bool Resolve(Role source, RoleListItemDTO destination, bool destMember, ResolutionContext context)
+        {
+            return source.SourceLevel switch
+            {
+                SourceLevel.Organisation => source.Id == source.OrganisationRole.Organisation.Settings.DefaultRoleId,
+                SourceLevel.Company => source.Id == source.CompanyRole.Company.Settings.DefaultRoleId,
+                SourceLevel.Department => source.Id == source.DepartmentRole.Department.Settings.DefaultRoleId,
+                SourceLevel.Team => source.Id == source.TeamRole.Team.Settings.DefaultRoleId,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }

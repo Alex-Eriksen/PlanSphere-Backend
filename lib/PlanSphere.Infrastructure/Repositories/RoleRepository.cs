@@ -83,10 +83,13 @@ public class RoleRepository(
     public IQueryable<Role> GetQueryable()
     {
         return _dbContext.Roles
-            .Include(x => x.OrganisationRole).ThenInclude(x => x.Organisation)
+            .Include(x => x.OrganisationRole).ThenInclude(x => x.Organisation).ThenInclude(x => x.Settings)
             .Include(x => x.CompanyRole).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
             .Include(x => x.DepartmentRole).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
             .Include(x => x.TeamRole).ThenInclude(x => x.Team).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .Include(x => x.CompanyRole).ThenInclude(x => x.Company).ThenInclude(x => x.Settings)
+            .Include(x => x.DepartmentRole).ThenInclude(x => x.Department).ThenInclude(x => x.Settings)
+            .Include(x => x.TeamRole).ThenInclude(x => x.Team).ThenInclude(x => x.Settings)
             .Include(x => x.UpdatedByUser)
             .Include(x => x.CreatedByUser)
             .Include(x => x.OrganisationRoleRights).ThenInclude(x => x.Right)
