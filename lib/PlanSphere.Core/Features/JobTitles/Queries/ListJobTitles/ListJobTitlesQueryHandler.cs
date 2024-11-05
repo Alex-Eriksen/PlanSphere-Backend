@@ -41,23 +41,14 @@ public class ListJobTitlesQueryHandler(
 
     private IQueryable<JobTitle> GetJobTitles(ListJobTitlesQuery request)
     {
-        var query = _jobTitleRepository.GetQueryable();
+        var query = _jobTitleRepository.GetQueryable().Where(j => j.OrganisationJobTitle != null && j.OrganisationJobTitle.OrganisationId == request.OrganisationId);
     
         query = request.SourceLevel switch
         {
             SourceLevel.Organisation => query.Where(x => x.OrganisationJobTitle != null && x.OrganisationJobTitle.OrganisationId == request.SourceLevelId), 
-            
-            SourceLevel.Company => query.Where(x => x.CompanyJobTitle != null && x.CompanyJobTitle.CompanyId == request.SourceLevelId ||
-                                                    x.OrganisationJobTitle.OrganisationId == request.OrganisationId && x.OrganisationJobTitle.IsInheritanceActive),
-            
-            SourceLevel.Department => query.Where(x => x.DepartmentJobTitle != null && x.DepartmentJobTitle.DepartmentId == request.SourceLevelId ||
-                                                       x.OrganisationJobTitle != null && x.OrganisationJobTitle.OrganisationId == request.OrganisationId && x.OrganisationJobTitle.IsInheritanceActive ||
-                                                       x.CompanyJobTitle != null && x.CompanyJobTitle.Company.OrganisationId == request.OrganisationId && x.CompanyJobTitle.IsInheritanceActive),
-            
-            SourceLevel.Team => query.Where(x => x.TeamJobTitle != null && x.TeamJobTitle.TeamId == request.SourceLevelId ||
-                                                 x.OrganisationJobTitle != null && x.OrganisationJobTitle.OrganisationId == request.OrganisationId && x.OrganisationJobTitle.IsInheritanceActive ||
-                                                 x.CompanyJobTitle != null && x.CompanyJobTitle.Company.OrganisationId == request.OrganisationId && x.CompanyJobTitle.IsInheritanceActive ||
-                                                 x.DepartmentJobTitle != null && x.DepartmentJobTitle.Department.Company.OrganisationId == request.OrganisationId && x.DepartmentJobTitle.IsInheritanceActive),
+            SourceLevel.Company => _jobTitleRepository.GetCompanyJobTitles(request.SourceLevelId, query),
+            SourceLevel.Department => _jobTitleRepository.GetDepartmentJobTitles(request.SourceLevelId, query),
+            SourceLevel.Team => _jobTitleRepository.GetTeamJobTitles(request.SourceLevelId, query),
             _ => throw new ArgumentOutOfRangeException(nameof(SourceLevel), request.SourceLevel, null)
         };
         

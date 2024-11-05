@@ -65,6 +65,9 @@ public class JobTitleRepository(IPlanSphereDatabaseContext context, ILogger<JobT
     public IQueryable<JobTitle> GetQueryable()
     {
         return _context.JobTitles
+            .Include(x => x.CompanyBlockedJobTitles)
+            .Include(x => x.DepartmentBlockedJobTitles)
+            .Include(x => x.TeamBlockedJobTitles)
             .Include(x => x.OrganisationJobTitle).ThenInclude(x => x.Organisation)
             .Include(x => x.CompanyJobTitle).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
             .Include(x => x.DepartmentJobTitle).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
@@ -88,6 +91,72 @@ public class JobTitleRepository(IPlanSphereDatabaseContext context, ILogger<JobT
             jobTitle.TeamJobTitle.IsInheritanceActive = !jobTitle.TeamJobTitle.IsInheritanceActive;
         await _context.SaveChangesAsync(cancellationToken);
         return GetInheritance(jobTitle);
+
+    }
+
+    public IQueryable<JobTitle> GetCompanyJobTitles(ulong companyId, IQueryable<JobTitle> query)
+    {
+        return query.Where(x => (x.CompanyJobTitle != null && x.CompanyJobTitle.CompanyId == companyId) ||
+                                (x.OrganisationJobTitle != null &&
+                                x.OrganisationJobTitle.IsInheritanceActive &&
+                                x.CompanyBlockedJobTitles.All(cbj => cbj.CompanyId != companyId)));
+    }
+    
+    public IQueryable<JobTitle> GetDepartmentJobTitles(ulong departmentId, IQueryable<JobTitle> query)
+    {
+        var companyId = _context.Departments
+            .Where(d => d.Id == departmentId)
+            .Select(d => d.CompanyId)
+            .FirstOrDefault();
+
+        return query.Where(x =>
+            (x.OrganisationJobTitle != null &&
+             x.OrganisationJobTitle.IsInheritanceActive &&
+             x.CompanyBlockedJobTitles.All(cbj => cbj.JobTitleId != x.OrganisationJobTitle.JobTitleId)) ||
+            
+            (x.CompanyJobTitle != null &&
+             x.CompanyJobTitle.IsInheritanceActive &&
+             x.CompanyBlockedJobTitles.All(cbj => cbj.CompanyId != companyId) &&
+             x.DepartmentBlockedJobTitles.All(dbj => dbj.DepartmentId != departmentId)) ||
+
+            (x.DepartmentJobTitle != null &&
+             x.DepartmentJobTitle.DepartmentId == departmentId &&
+             x.CompanyBlockedJobTitles.All(cbj => cbj.CompanyId != companyId) &&
+             x.DepartmentBlockedJobTitles.All(dbj => dbj.DepartmentId != departmentId)));
+    }
+
+
+    public IQueryable<JobTitle> GetTeamJobTitles(ulong teamId, IQueryable<JobTitle> query)
+    {
+        var team = _context.Teams
+            .Where(t => t.Id == teamId)
+            .Select(t => new { t.DepartmentId, t.Department.CompanyId })
+            .FirstOrDefault();
+
+        return query.Where(x =>
+            (x.OrganisationJobTitle != null &&
+             x.OrganisationJobTitle.IsInheritanceActive &&
+             x.CompanyBlockedJobTitles.All(cbj => cbj.JobTitleId != x.OrganisationJobTitle.JobTitleId) &&
+             x.DepartmentBlockedJobTitles.All(cbj => cbj.JobTitleId != x.OrganisationJobTitle.JobTitleId) &&
+             x.TeamBlockedJobTitles.All(cbj => cbj.JobTitleId != x.OrganisationJobTitle.JobTitleId)) ||
+
+            (x.CompanyJobTitle != null &&
+             x.CompanyJobTitle.IsInheritanceActive &&
+             x.CompanyBlockedJobTitles.All(cbj => cbj.CompanyId != team.CompanyId) &&
+             x.DepartmentBlockedJobTitles.All(dbj => dbj.DepartmentId != team.DepartmentId) &&
+             x.TeamBlockedJobTitles.All(tbj => tbj.TeamId != teamId)) ||
+
+            (x.DepartmentJobTitle != null &&
+             x.DepartmentJobTitle.IsInheritanceActive &&
+             x.CompanyBlockedJobTitles.All(cbj => cbj.CompanyId != team.CompanyId) &&
+             x.DepartmentBlockedJobTitles.All(dbj => dbj.DepartmentId != team.DepartmentId) &&
+             x.TeamBlockedJobTitles.All(tbj => tbj.TeamId != teamId)) ||
+
+            (x.TeamJobTitle != null &&
+             x.TeamJobTitle.TeamId == teamId &&
+             x.CompanyBlockedJobTitles.All(cbj => cbj.CompanyId != team.CompanyId) &&
+             x.DepartmentBlockedJobTitles.All(dbj => dbj.DepartmentId != team.DepartmentId) &&
+             x.TeamBlockedJobTitles.All(tbj => tbj.TeamId != teamId)));
 
     }
 
