@@ -2,5 +2,5 @@
 namespace PlanSphere.Core.Interfaces.Repositories; 
 public interface ICompanyRepository : IRepository<Company>
 {
-    Task<string> UploadLogo(ulong companyId, string fileUrl, CancellationToken cancellationToken);
+    Task<string> UploadLogoAsync(ulong companyId, string fileUrl, CancellationToken cancellationToken);
 }

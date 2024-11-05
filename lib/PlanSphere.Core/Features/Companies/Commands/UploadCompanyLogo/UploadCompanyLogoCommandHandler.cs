@@ -40,7 +40,7 @@ public class UploadCompanyLogoCommandHandler(
             _logger.LogInformation("Successfully saved file to directory: {filepath}", filePath);
         }
         _logger.LogInformation("Saving logo file path on company with id: [{companyId}]", request.CompanyId);
-        await _companyRepository.UploadLogo(request.CompanyId, filePath, cancellationToken);
+        await _companyRepository.UploadLogoAsync(request.CompanyId, filePath, cancellationToken);
         _logger.LogInformation("Saved logo file path on company with id: [{companyId}]", request.CompanyId);
 
         return filePath;

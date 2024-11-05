@@ -57,7 +57,7 @@ namespace PlanSphere.Infrastructure.Repositories
                 .AsQueryable();
         }
 
-        public async Task<string> UploadLogo(ulong companyId, string fileUrl, CancellationToken cancellationToken)
+        public async Task<string> UploadLogoAsync(ulong companyId, string fileUrl, CancellationToken cancellationToken)
         {
             var company = await _context.Companies.SingleOrDefaultAsync(x => x.Id == companyId, cancellationToken);
             if (company == null)
