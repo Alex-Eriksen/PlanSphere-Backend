@@ -22,9 +22,9 @@ public class GetDepartmentQueryHandler(
     public async Task<DepartmentDTO> Handle(GetDepartmentQuery request, CancellationToken cancellationToken)
     {
         logger.BeginScope("Fetching Department");
-        logger.LogInformation("Fetchting Department with id: [{Id}]", request.id);
-        var department = await _departmentRepository.GetByIdAsync(request.id, cancellationToken);
-        logger.LogInformation("Fetched Department with id: [{Id}]", request.id);
+        logger.LogInformation("Fetchting Department with id: [{Id}]", request.departmentId);
+        var department = await _departmentRepository.GetByIdAsync(request.departmentId, cancellationToken);
+        logger.LogInformation("Fetched Department with id: [{Id}]", request.departmentId);
 
         var mappedDepartment = _mapper.Map<DepartmentDTO>(department);
         return mappedDepartment;

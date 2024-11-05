@@ -6,7 +6,7 @@ public class GetDepartmentQueryValidator : AbstractValidator<GetDepartmentQuery>
 {
     public GetDepartmentQueryValidator()
     {
-        RuleFor(x => x.id)
+        RuleFor(x => x.departmentId)
             .NotNull();
     }
 }

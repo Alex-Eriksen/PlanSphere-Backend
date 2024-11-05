@@ -26,6 +26,6 @@ public class CreateDepartmentCommandHandler(
         var department = _mapper.Map<Department>(command);
 
         var createdDepartment = await _departmentRepository.CreateAsync(department, cancellationToken);
-        _logger.LogInformation("Created department company with new id: [{departmentId}] on company with id: [{companyId}]", command.CompanyId, createdDepartment.DepartmentId);
+        _logger.LogInformation("Created department company with new id: [{departmentId}] on company with id: [{companyId}]", command.CompanyId, createdDepartment.Id);
     }
 }
