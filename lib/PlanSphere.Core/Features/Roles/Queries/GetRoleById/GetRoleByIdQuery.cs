@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain.Entities.EmbeddedEntities;
+using MediatR;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.Roles.DTOs;
 

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;

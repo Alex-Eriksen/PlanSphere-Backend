@@ -24,7 +24,7 @@ namespace PlanSphere.ServiceDefaults;
 
 public static class Extensions
 {
-    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder, bool withControllers = false)
+    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder,  bool isDevelopment, bool withControllers = false)
     {
         builder.ConfigureOpenTelemetry();
 
@@ -33,10 +33,11 @@ public static class Extensions
         {
             options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection"),
-                    optionsBuilder => optionsBuilder.EnableRetryOnFailure())
-                .EnableDetailedErrors();
+                    optionsBuilder => optionsBuilder.EnableRetryOnFailure());
 
+            if (!isDevelopment) return;
             options.EnableSensitiveDataLogging();
+            options.EnableDetailedErrors();
         });
 
         builder.AddIdentityUser();

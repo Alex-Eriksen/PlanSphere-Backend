@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
@@ -83,7 +84,7 @@ public class ListRolesQueryHandler(
         return request.SortBy switch
         {
             RoleSortBy.Name => query.OrderByExpression(r => r.Name, request.SortDescending),
-            RoleSortBy.Active => SortByIsInheritanceActive(request, query),
+            RoleSortBy.IsInheritanceActive => SortByIsInheritanceActive(request, query),
             RoleSortBy.CreatedAt => query.OrderByExpression(r => r.CreatedAt, request.SortDescending),
             RoleSortBy.CreatedBy => query.OrderByExpression(r => r.CreatedBy, request.SortDescending),
             _ => throw new ArgumentOutOfRangeException(nameof(RoleSortBy), request.SortBy, null)

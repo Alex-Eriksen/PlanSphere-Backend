@@ -16,8 +16,8 @@ public class CompanyBlockedRoleConfiguration : IEntityTypeConfiguration<CompanyB
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.Role)
-            .WithOne()
-            .HasForeignKey<CompanyBlockedRole>(e => e.RoleId)
+            .WithMany(e => e.BlockedCompanies)
+            .HasForeignKey(e => e.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

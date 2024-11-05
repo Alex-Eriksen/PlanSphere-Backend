@@ -1,4 +1,5 @@
-﻿using PlanSphere.Core.Abstract;
+﻿using Domain.Entities.EmbeddedEntities;
+using PlanSphere.Core.Abstract;
 using PlanSphere.Core.Enums;
 
 namespace PlanSphere.Core.Features.Roles.DTOs;

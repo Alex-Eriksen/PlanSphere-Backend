@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,5 @@
-﻿using PlanSphere.Core.Enums;
+﻿using Domain.Entities.EmbeddedEntities;
+using PlanSphere.Core.Enums;
 
 namespace PlanSphere.Core.Features.Roles.Requests;
 

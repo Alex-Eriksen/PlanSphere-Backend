@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain.Entities.EmbeddedEntities;
+using MediatR;
 using PlanSphere.Core.Enums;
 
 namespace PlanSphere.Core.Features.JobTitles.Commands.DeleteJobTitle;

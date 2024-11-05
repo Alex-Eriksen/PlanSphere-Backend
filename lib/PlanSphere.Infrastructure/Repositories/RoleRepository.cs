@@ -1,8 +1,10 @@
 ﻿using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Core.Interfaces.Repositories;
+using Right = Domain.Entities.Right;
 
 namespace PlanSphere.Infrastructure.Repositories;
 
@@ -35,6 +37,8 @@ public class RoleRepository(
             .Include(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
             .Include(x => x.DepartmentRoleRights).ThenInclude(x => x.Right)
             .Include(x => x.TeamRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.BlockedCompanies)
+            .Include(x => x.BlockedDepartments)
             .AsSplitQuery()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         
@@ -96,5 +100,29 @@ public class RoleRepository(
     public async Task<List<Right>> GetRightsAsync(CancellationToken cancellationToken)
     {
         return await _dbContext.Rights.ToListAsync(cancellationToken);
+    }
+
+    public async Task<Role> ToggleRoleInheritanceAsync(Role role, CancellationToken cancellationToken)
+    {
+        switch (role.SourceLevel)
+        {
+            case SourceLevel.Organisation:
+                role.OrganisationRole!.IsInheritanceActive = !role.OrganisationRole.IsInheritanceActive;
+                break;
+            case SourceLevel.Company:
+                role.CompanyRole!.IsInheritanceActive = !role.CompanyRole.IsInheritanceActive;
+                break;
+            case SourceLevel.Department:
+                role.DepartmentRole!.IsInheritanceActive = !role.DepartmentRole.IsInheritanceActive;
+                break;
+            case SourceLevel.Team:
+                role.TeamRole!.IsInheritanceActive = !role.TeamRole.IsInheritanceActive;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        await UpdateAsync(role.Id, role, cancellationToken);
+        return role;
     }
 }
