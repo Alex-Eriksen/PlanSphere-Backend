@@ -79,7 +79,6 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     }
     
     [HttpGet(Name = nameof(LookUpCompaniesAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
     public async Task<IActionResult> LookUpCompaniesAsync()
     {
         var organisationId = Request.HttpContext.User.GetOrganizationId();
