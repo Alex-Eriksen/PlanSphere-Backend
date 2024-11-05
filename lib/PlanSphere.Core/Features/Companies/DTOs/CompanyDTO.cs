@@ -1,9 +1,10 @@
-﻿using PlanSphere.Core.Features.Address.DTOs;
+﻿using PlanSphere.Core.Abstract;
+using PlanSphere.Core.Features.Address.DTOs;
 using PlanSphere.Core.Interfaces;
 
 namespace PlanSphere.Core.Features.Companies.DTOs;
 
-public class CompanyDTO : IContactable
+public class CompanyDTO : BaseDTO, IContactable
 {
     public string Name { get; set; }
     public string CVR { get; set; }
