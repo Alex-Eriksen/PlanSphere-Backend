@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlanSphere.Core.Clients.FileStorage;
+using PlanSphere.Core.Interfaces;
 
 namespace PlanSphere.Core.Extensions.DIExtensions;
 
@@ -21,6 +22,14 @@ public static class FileStorageDIExtensions
         builder.Services.AddSingleton<IAzureBlobStorageFactory, AzureBlobStorageFactory>();
         builder.Services.AddSingleton<IPublicAzureBlobStorage>(sp => 
             sp.GetRequiredService<IAzureBlobStorageFactory>().CreatePublicStorage());
+        builder.Services.AddSingleton<IPrivateAzureBlobStorage>(sp => 
+            sp.GetRequiredService<IAzureBlobStorageFactory>().CreatePrivateStorage());
+        
+        builder.Services.AddSingleton<IFileStorage>(sp => 
+            sp.GetRequiredService<IPublicAzureBlobStorage>());
+        
+        builder.Services.AddSingleton<IFileStorage>(sp => 
+            sp.GetRequiredService<IPrivateAzureBlobStorage>());
 
         return builder;
     }
