@@ -26,7 +26,6 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
             _logger.LogInformation("Could not find Organisation with id: [{organisationId}]. Organisation doesn't exist!", id);
             throw new KeyNotFoundException($"Could not find Organisation with id: [{id}]. Organisation doesn't exist!");
         }
-
         return organisation;
     }
 
@@ -45,7 +44,6 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
             _logger.LogInformation("Organisation with id: [{id}] does not exist", id);
             throw new KeyNotFoundException($"Organisation with id: [{id}] does not exist");
         }
-        
         _context.Organisations.Remove(organisation);
         await _context.SaveChangesAsync(cancellationToken);
         return organisation;
