@@ -2,12 +2,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Extensions.APIExtensions;
+using PlanSphere.Core.Extensions.DIExtensions;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Utilities.Helpers.JWT;
 using PlanSphere.ServiceDefaults;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddFileStorage();
 
 Console.WriteLine($"Booting up in: {builder.Environment.EnvironmentName} mode.");
 builder.AddServiceDefaults(builder.Environment.IsDevelopment(), withControllers: true);

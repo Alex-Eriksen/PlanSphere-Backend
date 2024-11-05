@@ -22,7 +22,7 @@ namespace PlanSphere.Core.Features.Companies.Profiles
             CreateMap<CompanyUpdateRequest, Company>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.VAT, opt => opt.MapFrom(src => src.CVR))
-                .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.CompanyLogo))
+                .ForMember(dest => dest.LogoUrl, opt => opt.Ignore())
                 .ForMember(dest => dest.CareOf, opt => opt.MapFrom(src => src.CareOf))
                 .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.ContactName))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))

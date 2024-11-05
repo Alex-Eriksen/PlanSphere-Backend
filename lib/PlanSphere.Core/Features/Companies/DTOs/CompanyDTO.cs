@@ -7,6 +7,7 @@ namespace PlanSphere.Core.Features.Companies.DTOs;
 public class CompanyDTO : BaseDTO, IContactable
 {
     public string Name { get; set; }
+    public string LogoUrl { get; set; }
     public string CVR { get; set; }
     public string? ContactName { get; set; }
     public string? ContactEmail { get; set; }

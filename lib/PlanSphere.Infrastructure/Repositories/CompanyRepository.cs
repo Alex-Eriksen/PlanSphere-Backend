@@ -57,6 +57,21 @@ namespace PlanSphere.Infrastructure.Repositories
                 .AsQueryable();
         }
 
+        public async Task<string> UploadLogoAsync(ulong companyId, string fileUrl, CancellationToken cancellationToken)
+        {
+            var company = await _context.Companies.SingleOrDefaultAsync(x => x.Id == companyId, cancellationToken);
+            if (company == null)
+            {
+                _logger.LogInformation("Could not find company with the id: [{companyId}]. Company doesn't exist!", companyId);
+                throw new KeyNotFoundException($"Could not find company with id: [{companyId}]. Company doesn't exist!");
+            }
+
+            company.LogoUrl = fileUrl;
+            _context.Companies.Update(company);
+            await _context.SaveChangesAsync(cancellationToken);
+            return fileUrl;
+        }
+
         public Task SaveChangesAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
