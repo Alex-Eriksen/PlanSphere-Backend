@@ -1,4 +1,4 @@
-﻿namespace PlanSphere.Core.Enums;
+﻿namespace Domain.Entities.EmbeddedEntities;
 
 public enum SourceLevel
 {

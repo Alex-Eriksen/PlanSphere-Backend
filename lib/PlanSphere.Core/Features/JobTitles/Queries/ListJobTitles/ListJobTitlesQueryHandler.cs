@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
@@ -34,19 +35,24 @@ public class ListJobTitlesQueryHandler(
         query = SearchQuery(request.Search, query);
         query = SortQuery(request, query);
 
-        var paginatedResponse = await _paginationService.PaginateAsync<JobTitle, JobTitleDTO>(query, request);
+        var paginatedResponse = await _paginationService.PaginateAsync<JobTitle, JobTitleDTO>(query, request, opt =>
+            {
+                opt.Items["SourceLevelId"] = request.SourceLevelId;
+                opt.Items["SourceLevel"] = request.SourceLevel;
+            });
+
 
         return paginatedResponse;
     }
 
     private IQueryable<JobTitle> GetJobTitles(ListJobTitlesQuery request)
     {
-        var query = _jobTitleRepository.GetQueryable().Where(j => j.OrganisationJobTitle != null && j.OrganisationJobTitle.OrganisationId == request.OrganisationId);
+        var query = _jobTitleRepository.GetQueryable();
     
         query = request.SourceLevel switch
         {
             SourceLevel.Organisation => query.Where(x => x.OrganisationJobTitle != null && x.OrganisationJobTitle.OrganisationId == request.SourceLevelId), 
-            SourceLevel.Company => _jobTitleRepository.GetCompanyJobTitles(request.SourceLevelId, query),
+            SourceLevel.Company => _jobTitleRepository.GetCompanyJobTitles(request.SourceLevelId, request.OrganisationId, query),
             SourceLevel.Department => _jobTitleRepository.GetDepartmentJobTitles(request.SourceLevelId, query),
             SourceLevel.Team => _jobTitleRepository.GetTeamJobTitles(request.SourceLevelId, query),
             _ => throw new ArgumentOutOfRangeException(nameof(SourceLevel), request.SourceLevel, null)

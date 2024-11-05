@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
