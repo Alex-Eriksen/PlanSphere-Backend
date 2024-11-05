@@ -45,7 +45,8 @@ public class ListCompaniesQueryHandler(
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.ToLower().Trim();
-            query = query.Where(c => c.Name.ToLower().Contains(search));
+            query = query.Where(c => c.Name.ToLower().Contains(search) || 
+                    (c.Address.StreetName.ToLower() + " " + c.Address.HouseNumber.ToLower()).Contains(search));
         }
 
         return query;
@@ -57,7 +58,8 @@ public class ListCompaniesQueryHandler(
         return request.SortBy switch
         {
             CompanySortBy.Name => query.OrderByExpression(x => x.Name, request.SortDescending),
-            _ => throw new ArgumentOutOfRangeException(nameof(CompanySortBy), request.SortBy, null)
+            CompanySortBy.Address => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending)
+                .ThenByExpression(x => x.Address.HouseNumber, request.SortDescending),
         };
     }
 }
