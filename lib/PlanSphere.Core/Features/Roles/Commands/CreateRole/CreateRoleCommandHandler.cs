@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
@@ -23,7 +24,7 @@ public class CreateRoleCommandHandler(
 
         HandleRoleSourceLevel(request, role);
         
-        foreach (var roleRightRequest in request.Request.RoleRightRequests)
+        foreach (var roleRightRequest in request.Request.Rights)
         {
             HandleRoleRightSourceLevel(roleRightRequest, role);
         }

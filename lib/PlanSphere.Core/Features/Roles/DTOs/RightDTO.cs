@@ -1,9 +1,13 @@
-﻿using PlanSphere.Core.Enums;
+﻿using Domain.Entities.EmbeddedEntities;
+using PlanSphere.Core.Abstract;
+using PlanSphere.Core.Enums;
 
 namespace PlanSphere.Core.Features.Roles.DTOs;
 
-public class RightDTO
+public class RightDTO : BaseDTO
 {
+    public ulong RightId { get; set; }
+    
     public string Name { get; set; }
     public string Description { get; set; }
     

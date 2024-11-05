@@ -11,10 +11,13 @@ public class Role : BaseEntity, IAuditableEntity
     public virtual DepartmentRole? DepartmentRole { get; set; }
     public virtual TeamRole? TeamRole { get; set; }
 
-    public List<OrganisationRoleRight> OrganisationRoleRights { get; set; } = new List<OrganisationRoleRight>();
-    public List<CompanyRoleRight> CompanyRoleRights { get; set; } = new List<CompanyRoleRight>();
-    public List<DepartmentRoleRight> DepartmentRoleRights { get; set; } = new List<DepartmentRoleRight>();
-    public List<TeamRoleRight> TeamRoleRights { get; set; } = new List<TeamRoleRight>();
+    public virtual List<OrganisationRoleRight> OrganisationRoleRights { get; set; } = new List<OrganisationRoleRight>();
+    public virtual List<CompanyRoleRight> CompanyRoleRights { get; set; } = new List<CompanyRoleRight>();
+    public virtual List<DepartmentRoleRight> DepartmentRoleRights { get; set; } = new List<DepartmentRoleRight>();
+    public virtual List<TeamRoleRight> TeamRoleRights { get; set; } = new List<TeamRoleRight>();
+
+    public virtual List<CompanyBlockedRole> BlockedCompanies { get; set; } = new List<CompanyBlockedRole>();
+    public virtual List<DepartmentBlockedRole> BlockedDepartments { get; set; } = new List<DepartmentBlockedRole>();
 
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }
@@ -22,4 +25,32 @@ public class Role : BaseEntity, IAuditableEntity
     public DateTime? UpdatedAt { get; set; }
     public ulong? UpdatedBy { get; set; }
     public virtual User? UpdatedByUser { get; set; }
+    
+    public SourceLevel SourceLevel
+    {
+        get
+        {
+            if (OrganisationRole != null)
+            {
+                return SourceLevel.Organisation;
+            }
+
+            if (CompanyRole != null)
+            {
+                return SourceLevel.Company;
+            }
+
+            if (DepartmentRole != null)
+            {
+                return SourceLevel.Department;
+            }
+
+            if (TeamRole != null)
+            {
+                return SourceLevel.Team;
+            }
+
+            throw new NullReferenceException("Most likely missing an include.");
+        }
+    }
 }

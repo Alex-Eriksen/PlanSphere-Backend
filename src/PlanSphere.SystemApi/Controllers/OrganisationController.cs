@@ -1,8 +1,8 @@
-﻿using System.Security.Claims;
-using Domain.Entities.EmbeddedEntities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using PlanSphere.Core.Features.Organisations.Queries.LookUp;
 using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.DeleteOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.PatchOrganisation;
@@ -17,12 +17,20 @@ using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
-public class OrganisationController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : ApiControllerBase(mediator)
+[Authorize]
+public class OrganisationController(IMediator mediator) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
-    private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-
+    
+    [HttpGet(Name = nameof(LookUpOrganisationsAsync))]
+    public async Task<IActionResult> LookUpOrganisationsAsync()
+    {
+        var userId = Request.HttpContext.User.GetUserId();
+        var query = new LookUpOrganisationsQuery(userId);
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
+    
     [HttpGet("{organisationId?}", Name = nameof(GetOrganisationByIdAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
     public async Task<IActionResult> GetOrganisationByIdAsync([FromRoute] ulong? organisationId)
