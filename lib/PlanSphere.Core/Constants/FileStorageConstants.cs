@@ -2,6 +2,7 @@
 
 public static class FileStorageConstants
 {
+    public const string PublicContainerName = "public";
     public const string UserDirectory = "users";
     public const string ProfilePictureDirectory = "profile-picture";
     public const string LogoPath = "logo";
