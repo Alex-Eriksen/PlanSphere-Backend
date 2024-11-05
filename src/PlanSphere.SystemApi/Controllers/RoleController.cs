@@ -7,6 +7,7 @@ using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.Rights.Queries.LookUp;
 using PlanSphere.Core.Features.Roles.Commands.CreateRole;
 using PlanSphere.Core.Features.Roles.Commands.DeleteRole;
+using PlanSphere.Core.Features.Roles.Commands.ToggleInheritance;
 using PlanSphere.Core.Features.Roles.Commands.UpdateRole;
 using PlanSphere.Core.Features.Roles.Queries.GetRoleById;
 using PlanSphere.Core.Features.Roles.Queries.ListRoles;
@@ -87,5 +88,14 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
         query.SourceLevel = sourceLevel;
         var response = await _mediator.Send(query);
         return Ok(response);
+    }
+
+    [HttpPost("{sourceLevel}/{sourceLevelId}/{roleId}", Name = nameof(ToggleRoleInheritanceAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
+    public async Task<IActionResult> ToggleRoleInheritanceAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong roleId)
+    {
+        var command = new ToggleRoleInheritanceCommand(roleId) { SourceLevelId = sourceLevelId, SourceLevel = sourceLevel };
+        await _mediator.Send(command);
+        return NoContent();
     }
 }
