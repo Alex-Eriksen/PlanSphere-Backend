@@ -1,14 +1,16 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Extensions.APIExtensions;
+using PlanSphere.Core.Extensions.DIExtensions;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Utilities.Helpers.JWT;
 using PlanSphere.ServiceDefaults;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddFileStorage();
 
 builder.AddServiceDefaults(withControllers: true);
 builder.Services.AddSingleton<IJwtHelper, JwtHelper>();
