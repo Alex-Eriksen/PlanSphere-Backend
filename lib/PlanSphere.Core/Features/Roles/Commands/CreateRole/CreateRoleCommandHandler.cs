@@ -24,7 +24,7 @@ public class CreateRoleCommandHandler(
 
         HandleRoleSourceLevel(request, role);
         
-        foreach (var roleRightRequest in request.Request.RoleRightRequests)
+        foreach (var roleRightRequest in request.Request.Rights)
         {
             HandleRoleRightSourceLevel(roleRightRequest, role);
         }

@@ -27,7 +27,7 @@ public class UpdateRoleCommandHandler(
         _logger.LogInformation("Updating role with id: [{roleId}] by user with id: [{userId}]", request.RoleId, request.UserId);
         var roleRequest = _mapper.Map<Role>(request);
         
-        foreach (var roleRightRequest in request.Request.RoleRightRequests)
+        foreach (var roleRightRequest in request.Request.Rights)
         {
             HandleRoleRightSourceLevel(roleRightRequest, roleRequest);
         }

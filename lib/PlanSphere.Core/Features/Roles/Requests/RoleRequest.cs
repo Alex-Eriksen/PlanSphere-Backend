@@ -4,5 +4,5 @@ public class RoleRequest
 {
     public string Name { get; set; }
 
-    public List<RoleRightRequest> RoleRightRequests { get; set; } = new List<RoleRightRequest>();
+    public List<RoleRightRequest> Rights { get; set; } = new List<RoleRightRequest>();
 }

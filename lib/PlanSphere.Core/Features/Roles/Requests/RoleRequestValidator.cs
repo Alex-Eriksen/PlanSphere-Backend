@@ -11,7 +11,7 @@ public class RoleRequestValidator : AbstractValidator<RoleRequest>
         _requestValidator = requestValidator ?? throw new ArgumentNullException(nameof(requestValidator));
         RuleFor(x => x.Name).NotNull().NotEmpty().MaximumLength(FieldLengthConstants.Short);
         
-        RuleForEach(x => x.RoleRightRequests)
+        RuleForEach(x => x.Rights)
             .SetValidator(_requestValidator);
     }
 }
