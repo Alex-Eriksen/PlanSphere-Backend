@@ -34,8 +34,8 @@ public class RoleListItemDTOProfile : Profile
             {
                 return requestSourceLevel switch
                 {
-                    SourceLevel.Company => source.BlockedCompanies.Any(x => x.CompanyId == requestSourceLevelId && x.RoleId == source.Id),
-                    SourceLevel.Department => source.BlockedDepartments.Any(x => x.DepartmentId == requestSourceLevelId && x.RoleId == source.Id),
+                    SourceLevel.Company => !source.BlockedCompanies.Any(x => x.CompanyId == requestSourceLevelId && x.RoleId == source.Id),
+                    SourceLevel.Department => !source.BlockedDepartments.Any(x => x.DepartmentId == requestSourceLevelId && x.RoleId == source.Id),
                     SourceLevel.Team => true,
                     SourceLevel.Organisation => throw new ArgumentOutOfRangeException(),
                     _ => throw new ArgumentOutOfRangeException()
