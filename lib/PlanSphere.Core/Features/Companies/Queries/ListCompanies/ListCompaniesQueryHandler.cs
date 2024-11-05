@@ -41,11 +41,11 @@ public class ListCompaniesQueryHandler(
 
     private IQueryable<Company> SearchQuery(ListCompaniesQuery request, IQueryable<Company> query)
     {
-        var search = request.Search.ToLower().Trim();
-        if (!string.IsNullOrWhiteSpace(search))
+        if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            query = query.Where(c => c.Name.Contains(search) || 
-            (c.Address.StreetName.ToLower() + " " + c.Address.HouseNumber.ToLower()).Contains(search));
+            var search = request.Search.ToLower().Trim();
+            query = query.Where(c => c.Name.ToLower().Contains(search) || 
+                    (c.Address.StreetName.ToLower() + " " + c.Address.HouseNumber.ToLower()).Contains(search));
         }
 
         return query;

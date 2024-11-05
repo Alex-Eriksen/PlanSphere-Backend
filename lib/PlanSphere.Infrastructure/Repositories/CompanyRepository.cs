@@ -52,7 +52,7 @@ namespace PlanSphere.Infrastructure.Repositories
         public IQueryable<Company> GetQueryable()
         {
             return _context.Companies
-                .Include(x => x.Address)
+                .Include(x => x.Address).ThenInclude(x => x.ZipCode).ThenInclude(x => x.Country)
                 .AsNoTracking()
                 .AsQueryable();
         }
