@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain.Entities.EmbeddedEntities;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Features.Roles.DTOs;
 
 namespace PlanSphere.Core.Features.Roles.Profiles;
@@ -24,22 +25,43 @@ public class RoleListItemDTOProfile : Profile
     {
         public bool Resolve(Role source, RoleListItemDTO destination, bool destMember, ResolutionContext context)
         {
+            context.Items.TryGetValue(MappingKeys.SourceLevel, out var obj);
+            context.Items.TryGetValue(MappingKeys.SourceLevelId, out var obj1);
+            Enum.TryParse<SourceLevel>(obj!.ToString(), out var requestSourceLevel);
+            ulong.TryParse(obj1.ToString(), out var requestSourceLevelId);
+
+            if (requestSourceLevel != source.SourceLevel)
+            {
+                return requestSourceLevel switch
+                {
+                    SourceLevel.Company => source.BlockedCompanies.Any(x => x.CompanyId == requestSourceLevelId && x.RoleId == source.Id),
+                    SourceLevel.Department => source.BlockedDepartments.Any(x => x.DepartmentId == requestSourceLevelId && x.RoleId == source.Id),
+                    SourceLevel.Team => true,
+                    SourceLevel.Organisation => throw new ArgumentOutOfRangeException(),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+            }
+            
             if (source.OrganisationRole != null)
             {
                 return source.OrganisationRole.IsInheritanceActive;
             }
+            
             if (source.CompanyRole != null)
             {
                 return source.CompanyRole.IsInheritanceActive;
             }
+            
             if (source.DepartmentRole != null)
             {
                 return source.DepartmentRole.IsInheritanceActive;
             }
+            
             if (source.TeamRole != null)
             {
                 return source.TeamRole.IsInheritanceActive;
             }
+
             return false; 
         }
     }

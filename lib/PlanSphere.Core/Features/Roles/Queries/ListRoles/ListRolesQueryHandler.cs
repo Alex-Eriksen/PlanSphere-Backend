@@ -4,6 +4,7 @@ using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Enums.SortByColumns;
 using PlanSphere.Core.Extensions;
@@ -36,7 +37,11 @@ public class ListRolesQueryHandler(
         query = SearchQuery(request.Search, query);
         query = SortQuery(request, query);
 
-        var paginatedResponse = await _paginationService.PaginateAsync<Role, RoleListItemDTO>(query, request);
+        var paginatedResponse = await _paginationService.PaginateAsync<Role, RoleListItemDTO>(query, request, opt =>
+        {
+            opt.Items.Add(MappingKeys.SourceLevel, request.SourceLevel);
+            opt.Items.Add(MappingKeys.SourceLevelId, request.SourceLevelId);
+        });
 
         return paginatedResponse;
     }
