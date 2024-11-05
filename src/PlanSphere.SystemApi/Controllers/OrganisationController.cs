@@ -1,3 +1,4 @@
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
@@ -77,7 +78,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
     public async Task<IActionResult> UpdateOrganisationAsync([FromBody] UpdateOrganisationCommand command)
     {
-        command.OrganisationId = _claims.GetOrganizationId();
+        command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
         await _mediator.Send(command);
         return Ok();
     }
@@ -96,7 +97,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpPatch("{organisationId?}", Name = nameof(PatchOrganisationAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
+    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
     public async Task<IActionResult> PatchOrganisationAsync([FromRoute] ulong? organisationId, [FromBody] JsonPatchDocument<OrganisationUpdateRequest> patchRequest)
     {
         if (organisationId == null)
