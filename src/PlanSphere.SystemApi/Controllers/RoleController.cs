@@ -24,7 +24,7 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [HttpPost("{sourceLevel}/{sourceLevelId}", Name = nameof(CreateRoleAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
     public async Task<IActionResult> CreateRoleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromBody] RoleRequest request)
     {
         var command = new CreateRoleCommand(request, Request.HttpContext.User.GetUserId())
@@ -46,7 +46,7 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     }
 
     [HttpPut("{sourceLevel}/{sourceLevelId}/{roleId}", Name = nameof(UpdateRoleAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
     public async Task<IActionResult> UpdateRoleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong roleId, [FromBody] RoleRequest request)
     {
         var userId = Request.HttpContext.User.GetUserId();
@@ -58,7 +58,7 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     }
 
     [HttpDelete("{sourceLevel}/{sourceLevelId}/{roleId}", Name = nameof(DeleteRoleAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
     public async Task<IActionResult> DeleteRoleAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong roleId)
     {
         var userId = Request.HttpContext.User.GetUserId();
@@ -93,7 +93,7 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     }
 
     [HttpPost("{sourceLevel}/{sourceLevelId}/{roleId}", Name = nameof(ToggleRoleInheritanceAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
     public async Task<IActionResult> ToggleRoleInheritanceAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong roleId)
     {
         var command = new ToggleRoleInheritanceCommand(roleId) { SourceLevelId = sourceLevelId, SourceLevel = sourceLevel };
