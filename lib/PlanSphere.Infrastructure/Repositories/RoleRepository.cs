@@ -96,6 +96,8 @@ public class RoleRepository(
             .Include(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
             .Include(x => x.DepartmentRoleRights).ThenInclude(x => x.Right)
             .Include(x => x.TeamRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.BlockedCompanies)
+            .Include(x => x.BlockedDepartments)
             .AsNoTracking()
             .AsQueryable();
     }
