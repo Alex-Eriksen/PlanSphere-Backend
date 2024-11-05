@@ -32,7 +32,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     }
     
     [HttpGet(Name = nameof(ListCompaniesAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
     public async Task<IActionResult> ListCompaniesAsync([FromQuery] ListCompaniesQuery query)
     {
         query.OrganisationId = Request.HttpContext.User.GetOrganizationId();
@@ -41,7 +41,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     }
     
     [HttpPost(Name = nameof(CreateCompanyAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
     public async Task<IActionResult> CreateCompanyAsync([FromBody] CompanyRequest request)
     {
         var command = new CreateCompanyCommand(request);
