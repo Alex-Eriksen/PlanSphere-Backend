@@ -10,7 +10,7 @@ namespace PlanSphere.Core.Features.Companies.Profiles
         public CompanyProfile()
         {
             CreateMap<CompanyRequest, Company>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.CompanyName))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.VAT, opt => opt.MapFrom(src => src.CVR))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
                 .ForMember(dest => dest.CareOf, opt => opt.MapFrom(src => src.CareOf))
@@ -31,7 +31,7 @@ namespace PlanSphere.Core.Features.Companies.Profiles
 
             CreateMap<CreateCompanyCommand, Company>()
                 .ForMember(dest => dest.OrganisationId, opt => opt.MapFrom(src => src.OrganisationId))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Request.CompanyName))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Request.Name))
                 .ForMember(dest => dest.VAT, opt => opt.MapFrom(src => src.Request.CVR))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address))
                 .ForMember(dest => dest.CareOf, opt => opt.MapFrom(src => src.Request.CareOf))

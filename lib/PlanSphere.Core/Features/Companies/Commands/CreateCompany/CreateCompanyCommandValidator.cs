@@ -6,7 +6,7 @@ public class CreateCompanyCommandValidator : AbstractValidator<CreateCompanyComm
 {
     public CreateCompanyCommandValidator()
     {
-        RuleFor(x => x.Request.CompanyName)
+        RuleFor(x => x.Request.Name)
             .NotEmpty();
     }
 }
