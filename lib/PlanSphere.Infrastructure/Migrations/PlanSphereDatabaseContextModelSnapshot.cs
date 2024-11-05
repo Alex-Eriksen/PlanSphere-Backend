@@ -152,8 +152,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("CompanyId", "RoleId");
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("CompanyBlockedRoles");
                 });
@@ -347,8 +346,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("DepartmentId", "RoleId");
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("DepartmentBlockedRoles");
                 });
@@ -786,8 +784,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("TeamId", "RoleId");
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("TeamBlockedRoles");
                 });
@@ -1263,8 +1260,8 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Role", "Role")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.CompanyBlockedRole", "RoleId")
+                        .WithMany("BlockedCompanies")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1426,8 +1423,8 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Role", "Role")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.DepartmentBlockedRole", "RoleId")
+                        .WithMany("BlockedDepartments")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1745,8 +1742,8 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.TeamBlockedRole", b =>
                 {
                     b.HasOne("Domain.Entities.Role", "Role")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.TeamBlockedRole", "RoleId")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2048,6 +2045,10 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
                 {
+                    b.Navigation("BlockedCompanies");
+
+                    b.Navigation("BlockedDepartments");
+
                     b.Navigation("CompanyRole");
 
                     b.Navigation("CompanyRoleRights");

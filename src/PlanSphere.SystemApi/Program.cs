@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using PlanSphere.Core.Constants;
@@ -10,7 +9,8 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults(withControllers: true);
+Console.WriteLine($"Booting up in: {builder.Environment.EnvironmentName} mode.");
+builder.AddServiceDefaults(builder.Environment.IsDevelopment(), withControllers: true);
 builder.Services.AddSingleton<IJwtHelper, JwtHelper>();
 
 builder.Services.AddAuthorization(options =>
