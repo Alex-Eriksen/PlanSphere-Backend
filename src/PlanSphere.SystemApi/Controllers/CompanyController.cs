@@ -23,17 +23,17 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    [HttpGet("{companyId}", Name = nameof(GetCompanyById))]
-    public async Task<IActionResult> GetCompanyById([FromRoute] ulong companyId)
+    [HttpGet("{sourceLevel}/{sourceLevelId}/{companyId}", Name = nameof(GetCompanyById))]
+    public async Task<IActionResult> GetCompanyById([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId)
     {
         var query = new GetCompanyQuery(companyId);
         var response = await _mediator.Send(query);
         return Ok(response);
     }
     
-    [HttpGet(Name = nameof(ListCompaniesAsync))]
+    [HttpGet("{sourceLevel}/{sourceLevelId}",Name = nameof(ListCompaniesAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    public async Task<IActionResult> ListCompaniesAsync([FromQuery] ListCompaniesQuery query)
+    public async Task<IActionResult> ListCompaniesAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId,[FromQuery] ListCompaniesQuery query)
     {
         query.OrganisationId = Request.HttpContext.User.GetOrganizationId();
         var response = await _mediator.Send(query);
@@ -50,9 +50,9 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Created();
     }
     
-    [HttpPatch("{companyId}", Name = nameof(PatchCompanyAsync))] 
+    [HttpPatch("{sourceLevel}/{sourceLevelId}/{companyId}", Name = nameof(PatchCompanyAsync))] 
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> PatchCompanyAsync([FromRoute] ulong companyId, [FromBody] JsonPatchDocument<CompanyUpdateRequest> patchRequest)
+    public async Task<IActionResult> PatchCompanyAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId, [FromBody] JsonPatchDocument<CompanyUpdateRequest> patchRequest)
     {
         var command = new PatchCompanyCommand(patchRequest);
         command.Id = companyId;
@@ -61,17 +61,17 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     }
     
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    [HttpDelete("{companyId}", Name = nameof(DeleteCompanyAsync))] 
-    public async Task<IActionResult> DeleteCompanyAsync([FromRoute] ulong companyId)
+    [HttpDelete("{sourceLevel}/{sourceLevelId}/{companyId}", Name = nameof(DeleteCompanyAsync))] 
+    public async Task<IActionResult> DeleteCompanyAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId)
     {
         var command = new DeleteCompanyCommand(companyId);
         await _mediator.Send(command);
         return NoContent();
     }
     
-    [HttpPost("{companyId}", Name = nameof(UploadCompanyLogoAsync))] 
+    [HttpPost("{sourceLevel}/{sourceLevelId}/{companyId}", Name = nameof(UploadCompanyLogoAsync))] 
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
-    public async Task<IActionResult> UploadCompanyLogoAsync([FromRoute] ulong companyId, [FromForm] UploadCompanyLogoCommand command)
+    public async Task<IActionResult> UploadCompanyLogoAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId, [FromForm] UploadCompanyLogoCommand command)
     {
         command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
         command.CompanyId = companyId;
@@ -79,7 +79,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
     
-    [HttpGet(Name = nameof(LookUpCompaniesAsync))]
+    [HttpGet("{sourceLevel}/{sourceLevelId}",Name = nameof(LookUpCompaniesAsync))]
     public async Task<IActionResult> LookUpCompaniesAsync()
     {
         var organisationId = Request.HttpContext.User.GetOrganizationId();
