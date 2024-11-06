@@ -69,7 +69,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return NoContent();
     }
     
-    [HttpPost("{sourceLevelId}/{companyId}", Name = nameof(UploadCompanyLogoAsync))] 
+    [HttpPost("{sourceLevelId}", Name = nameof(UploadCompanyLogoAsync))] 
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator, SourceLevel.Company])]
     public async Task<IActionResult> UploadCompanyLogoAsync([FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId, [FromForm] UploadCompanyLogoCommand command)
     {
@@ -79,7 +79,8 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
     
-    [HttpGet("{sourceLevel}/{sourceLevelId}",Name = nameof(LookUpCompaniesAsync))]
+    [HttpGet("{sourceLevelId}",Name = nameof(LookUpCompaniesAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
     public async Task<IActionResult> LookUpCompaniesAsync()
     {
         var organisationId = Request.HttpContext.User.GetOrganizationId();
