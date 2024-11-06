@@ -24,7 +24,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Company])]
     [HttpGet("{sourceLevelId}/{companyId}", Name = nameof(GetCompanyById))]
-    public async Task<IActionResult> GetCompanyById([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId)
+    public async Task<IActionResult> GetCompanyById([FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId)
     {
         var query = new GetCompanyQuery(companyId);
         var response = await _mediator.Send(query);
@@ -50,12 +50,12 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Created();
     }
     
-    [HttpPatch("{sourceLevelId}/{companyId}", Name = nameof(PatchCompanyAsync))] 
+    [HttpPatch("{sourceLevelId}", Name = nameof(PatchCompanyAsync))] 
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
-    public async Task<IActionResult> PatchCompanyAsync([FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId, [FromBody] JsonPatchDocument<CompanyUpdateRequest> patchRequest)
+    public async Task<IActionResult> PatchCompanyAsync([FromRoute] ulong sourceLevelId,[FromBody] JsonPatchDocument<CompanyUpdateRequest> patchRequest)
     {
         var command = new PatchCompanyCommand(patchRequest);
-        command.Id = companyId;
+        command.Id = sourceLevelId;
         await _mediator.Send(command);
         return Created();
     }
