@@ -30,7 +30,7 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
     {
         var command = new CreateDepartmentCommand(request);
         command.CompanyId = sourceLevelId;
-        await _mediator.Send(request);
+        await _mediator.Send(command);
         return Created();
     }
 
