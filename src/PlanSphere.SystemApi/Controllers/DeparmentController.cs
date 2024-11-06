@@ -8,6 +8,7 @@ using PlanSphere.Core.Features.Departments.Commands.DeleteDepartment;
 using PlanSphere.Core.Features.Departments.Commands.PatchDepartments;
 using PlanSphere.Core.Features.Departments.Commands.UpdateDepartments;
 using PlanSphere.Core.Features.Departments.Queries.GetDepartment;
+using PlanSphere.Core.Features.Departments.Queries.ListDepartments;
 using PlanSphere.Core.Features.Departments.Request;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -54,7 +55,7 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         var command = new PatchDepartmentCommand(patchRequest);
         command.DepartmentId = sourceLevelId;
         await _mediator.Send(command);
-        return Created();
+        return NoContent();
     }
 
     [HttpPut("{sourceLevelId}", Name = nameof(UpdateDepartmentAsync))]
@@ -67,6 +68,15 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         };
         await _mediator.Send(command);
         return NoContent();
+    }
+
+    [HttpGet("{sourceLevelId}", Name = nameof(ListDepartmentsAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Department])]
+    public async Task<IActionResult> ListDepartmentsAsync([FromRoute] ulong sourceLevelId, [FromQuery] ListDepartmentQuery query)
+    {
+        query.CompanyId = sourceLevelId;
+        var respone = await _mediator.Send(query);
+        return Ok(respone);
     }
 
 
