@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Departments.Commands.CreateDepartment;
 using PlanSphere.Core.Features.Departments.Queries.GetDepartment;
+using PlanSphere.Core.Features.Departments.Request;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
 
@@ -23,12 +24,13 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         return Ok(response);
     }
 
-    [HttpPost("{sourceLevel}/{sourceLevelId}",Name = nameof(CreateDepartmentAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> CreateDepartmentAsync([FromRoute] ulong companyId,[FromBody] CreateDepartmentCommand command)
+    [HttpPost("{sourceLevelId}",Name = nameof(CreateDepartmentAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
+    public async Task<IActionResult> CreateDepartmentAsync([FromRoute] ulong sourceLevelId,[FromBody] DepartmentRequest request)
     {
-        command.CompanyId = companyId;
-        await _mediator.Send(command);
+        var command = new CreateDepartmentCommand(request);
+        command.CompanyId = sourceLevelId;
+        await _mediator.Send(request);
         return Created();
     }
 

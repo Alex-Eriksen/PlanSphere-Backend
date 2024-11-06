@@ -1,8 +1,9 @@
-﻿using PlanSphere.Core.Features.Address.Requests;
+﻿using MediatR;
+using PlanSphere.Core.Features.Address.Requests;
 
 namespace PlanSphere.Core.Features.Departments.Request;
 
-public class DepartmentRequest
+public class DepartmentRequest : IRequest 
 {
     public string DepartmentName { get; set; }
     public string Description { get; set; }
