@@ -2,10 +2,12 @@
 using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Address.Requests;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
+using PlanSphere.Core.Features.Users.Commands.PatchUser;
 using PlanSphere.Core.Features.Users.Queries.GetUserDetails;
 using PlanSphere.Core.Features.Users.Requests;
 using PlanSphere.SystemApi.Action_Filters;
@@ -65,6 +67,16 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         return Ok(response);
     }
 
+    [HttpPatch("{userId?}", Name = nameof(PatchUserAsync))]
+    [TypeFilter(typeof(UserActionFilter))]
+    public async Task<IActionResult> PatchUserAsync([FromRoute] ulong? userId, [FromBody] JsonPatchDocument<UserPatchRequest> request)
+    {
+        var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
+        var command = new PatchUserCommand(selectedUserId, request);
+        await _mediator.Send(command);
+        return NoContent();
+    }
+    
     [Authorize]
     [HttpGet(Name = nameof(Test))]
     public async Task<IActionResult> Test()
