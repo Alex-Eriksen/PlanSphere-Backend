@@ -6,6 +6,6 @@ public class DeleteDepartmentCommandValidator : AbstractValidator<DeleteDepartme
 {
     public DeleteDepartmentCommandValidator()
     {
-        RuleFor(x => x.Id).NotNull();
+        RuleFor(x => x.departmentId).NotNull();
     }
 }

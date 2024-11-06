@@ -18,8 +18,8 @@ public class DeleteDepartmentCommandHandler(
     public async Task Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
     {
         _logger.BeginScope("Deleting Department");
-        _logger.LogInformation("Deleting Department with id [{id}]", request.Id);
-        await _departmentRepository.DeleteAsync(request.Id, cancellationToken);
-        _logger.LogInformation("Deleted Department with id [{id}]!", request.Id);
+        _logger.LogInformation("Deleting Department with id [{id}]", request.departmentId);
+        await _departmentRepository.DeleteAsync(request.departmentId, cancellationToken);
+        _logger.LogInformation("Deleted Department with id [{id}]!", request.departmentId);
     }
 }
