@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Departments.Commands.CreateDepartment;
+using PlanSphere.Core.Features.Departments.Commands.DeleteDepartment;
 using PlanSphere.Core.Features.Departments.Queries.GetDepartment;
 using PlanSphere.Core.Features.Departments.Request;
 using PlanSphere.SystemApi.Action_Filters;
@@ -32,6 +33,15 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         command.CompanyId = sourceLevelId;
         await _mediator.Send(command);
         return Created();
+    }
+
+    [HttpDelete("{sourceLevelId}/{departmentId}", Name = nameof(DeleteDepartmentAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
+    public async Task<IActionResult> DeleteDepartmentAsync([FromRoute] ulong sourceLevelId, [FromRoute] ulong departmentId)
+    {
+        var command = new DeleteDepartmentCommand(departmentId);
+        await _mediator.Send(command);
+        return NoContent();
     }
 
 }
