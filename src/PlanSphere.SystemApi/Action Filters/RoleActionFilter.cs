@@ -65,7 +65,7 @@ public class RoleActionFilter(
                     authorized = true;
                     break;
                 case SourceLevel.Department:
-                    if (role.OrganisationRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.Organisation.Companies.Any(y => y.Id == sourceLevelId)) != null)
+                    if (role.OrganisationRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.Organisation.Companies.SelectMany(x => x.Departments).Any(y => y.Id == sourceLevelId)) != null)
                     {
                         authorized = true;
                         break;
@@ -83,12 +83,12 @@ public class RoleActionFilter(
                     authorized = true;
                     break;
                 case SourceLevel.Team:
-                    if (role.OrganisationRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.Organisation.Companies.Any(y => y.Id == sourceLevelId)) != null)
+                    if (role.OrganisationRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.Organisation.Companies.SelectMany(x => x.Departments).SelectMany(z => z.Teams).Any(y => y.Id == sourceLevelId)) != null)
                     {
                         authorized = true;
                         break;
                     }
-                    if (role.CompanyRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.Company.Departments.Any(y => y.Id == sourceLevelId)) != null)
+                    if (role.CompanyRoleRights.SingleOrDefault(x => x.Right.AsEnum == requiredRight && x.Company.Departments.SelectMany(z => z.Teams).Any(y => y.Id == sourceLevelId)) != null)
                     {
                         authorized = true;
                         break;
@@ -141,7 +141,7 @@ public class RoleActionFilter(
                     authorized = true;
                     break;
                 case SourceLevel.Department:
-                    if (role.OrganisationRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.Organisation.Companies.Any(y => y.Id == sourceLevelId)))
+                    if (role.OrganisationRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.Organisation.Companies.SelectMany(x => x.Departments).Any(y => y.Id == sourceLevelId)))
                     {
                         authorized = true;
                         break;
@@ -159,12 +159,12 @@ public class RoleActionFilter(
                     authorized = true;
                     break;
                 case SourceLevel.Team:
-                    if (role.OrganisationRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.Organisation.Companies.Any(y => y.Id == sourceLevelId)))
+                    if (role.OrganisationRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.Organisation.Companies.SelectMany(x => x.Departments).SelectMany(z => z.Teams).Any(y => y.Id == sourceLevelId)))
                     {
                         authorized = true;
                         break;
                     }
-                    if (role.CompanyRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.Company.Departments.Any(y => y.Id == sourceLevelId)))
+                    if (role.CompanyRoleRights.Any(x => x.Right.AsEnum <= requiredRight && x.Company.Departments.SelectMany(z => z.Teams).Any(y => y.Id == sourceLevelId)))
                     {
                         authorized = true;
                         break;
