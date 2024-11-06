@@ -8,5 +8,5 @@ namespace PlanSphere.Core.Features.Departments.Commands.PatchDepartments;
 public record PatchDepartmentCommand(JsonPatchDocument<DepartmentUpdateRequest> PatchDocument) : IRequest
 {
     [JsonIgnore]
-    public ulong departmentId { get; set; }
+    public ulong DepartmentId { get; set; }
 }

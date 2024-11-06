@@ -22,9 +22,9 @@ public class PatchDepartmentCommandHandler(
     public async Task Handle(PatchDepartmentCommand command, CancellationToken cancellationToken)
     {
         _logger.BeginScope("Fetching department");
-        _logger.LogInformation("Fetching department with id: [{departmentId}]", command.departmentId);
-        var department = await _departmentRepository.GetByIdAsync(command.departmentId, cancellationToken);
-        _logger.LogInformation("Fetched department with id: [{departmentId}]", command.departmentId);
+        _logger.LogInformation("Fetching department with id: [{departmentId}]", command.DepartmentId);
+        var department = await _departmentRepository.GetByIdAsync(command.DepartmentId, cancellationToken);
+        _logger.LogInformation("Fetched department with id: [{departmentId}]", command.DepartmentId);
 
         var departmentPatchRequest = _mapper.Map<DepartmentUpdateRequest>(department);
 
@@ -32,8 +32,8 @@ public class PatchDepartmentCommandHandler(
 
         department = _mapper.Map(departmentPatchRequest, department);
         
-        _logger.LogInformation("Patching Department with id: [{departmentId}]", command.departmentId);
-        await _departmentRepository.UpdateAsync(command.departmentId, department, cancellationToken);
-        _logger.LogInformation("Patched Department with id: [{departmentId}]", command.departmentId);
+        _logger.LogInformation("Patching Department with id: [{departmentId}]", command.DepartmentId);
+        await _departmentRepository.UpdateAsync(command.DepartmentId, department, cancellationToken);
+        _logger.LogInformation("Patched Department with id: [{departmentId}]", command.DepartmentId);
     }
 }

@@ -52,7 +52,7 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
     public async Task<IActionResult> PatchDepartmentAsync([FromRoute] ulong sourceLevelId, [FromBody] JsonPatchDocument<DepartmentUpdateRequest> patchRequest)
     {
         var command = new PatchDepartmentCommand(patchRequest);
-        command.departmentId = sourceLevelId;
+        command.DepartmentId = sourceLevelId;
         await _mediator.Send(command);
         return Created();
     }
@@ -63,7 +63,7 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
     {
         var command = new UpdateDepartmentCommand(request)
         {
-            departmentId = sourceLevelId
+            DepartmentId = sourceLevelId
         };
         await _mediator.Send(command);
         return NoContent();

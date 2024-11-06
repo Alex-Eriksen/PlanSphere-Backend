@@ -11,7 +11,7 @@ public class PatchDepartmentCommandValidator : AbstractValidator<PatchDepartment
     {
         RuleFor(x => x.PatchDocument)
             .NotNull();
-        RuleFor(x => x.departmentId)
+        RuleFor(x => x.DepartmentId)
             .NotNull();
 
         RuleForEach(x => x.PatchDocument.Operations)
