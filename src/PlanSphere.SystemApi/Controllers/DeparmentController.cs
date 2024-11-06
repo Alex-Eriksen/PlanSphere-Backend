@@ -1,9 +1,12 @@
 ﻿using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Departments.Commands.CreateDepartment;
 using PlanSphere.Core.Features.Departments.Commands.DeleteDepartment;
+using PlanSphere.Core.Features.Departments.Commands.PatchDepartments;
+using PlanSphere.Core.Features.Departments.Commands.UpdateDepartments;
 using PlanSphere.Core.Features.Departments.Queries.GetDepartment;
 using PlanSphere.Core.Features.Departments.Request;
 using PlanSphere.SystemApi.Action_Filters;
@@ -43,5 +46,29 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         await _mediator.Send(command);
         return NoContent();
     }
+
+    [HttpPatch("{sourceLevelId}", Name = nameof(PatchDepartmentAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Department])]
+    public async Task<IActionResult> PatchDepartmentAsync([FromRoute] ulong sourceLevelId, [FromBody] JsonPatchDocument<DepartmentUpdateRequest> patchRequest)
+    {
+        var command = new PatchDepartmentCommand(patchRequest);
+        command.DepartmentId = sourceLevelId;
+        await _mediator.Send(command);
+        return Created();
+    }
+
+    [HttpPut("{sourceLevelId}", Name = nameof(UpdateDepartmentAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Department])]
+    public async Task<IActionResult> UpdateDepartmentAsync([FromRoute] ulong sourceLevelId, [FromBody] DepartmentUpdateRequest request)
+    {
+        var command = new UpdateDepartmentCommand(request)
+        {
+            DepartmentId = sourceLevelId
+        };
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+
 
 }
