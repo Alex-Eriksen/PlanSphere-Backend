@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Domain.Entities.EmbeddedEntities;
+using Microsoft.AspNetCore.Mvc.Filters;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Interfaces.Repositories;
 using PlanSphere.SystemApi.Extensions;
@@ -34,12 +35,8 @@ public class UserActionFilter(
 
         var user = await _userRepository.GetByIdAsync(activatingUserId, CancellationToken.None);
         
-        // user must have manage users for the user they are trying to access
-        // We must then determine if the activated user belongs to something that the user also does.
+        if (!user.Roles.Select(x => x.Role).Any(role => role.OrganisationRoleRights.Any(x => x.OrganisationId == context.HttpContext.User.GetOrganizationId() && x.Right.AsEnum == Right.ManageUsers))) throw new UnauthorizedAccessException("You are unauthorized!");
         
-        foreach (var role in user.Roles.Select(x => x.Role))
-        {
-            
-        }
+        await next();
     }
 }

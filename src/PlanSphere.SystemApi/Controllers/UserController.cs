@@ -55,18 +55,12 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         return Created();
     }
 
-    [HttpGet("{sourceLevel}/{sourceLevelId}/{userId?}", Name = nameof(GetUserDetailsAsync))]
+    [HttpGet("{userId?}", Name = nameof(GetUserDetailsAsync))]
     [TypeFilter(typeof(UserActionFilter))]
-    // User must have ManageUser to access users that is not their own.
-    // User 
-    public async Task<IActionResult> GetUserDetailsAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong? userId)
+    public async Task<IActionResult> GetUserDetailsAsync([FromRoute] ulong? userId)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
-        var query = new GetUserDetailsQuery(selectedUserId)
-        {
-            SourceLevel = sourceLevel,
-            SourceLevelId = sourceLevelId
-        };
+        var query = new GetUserDetailsQuery(selectedUserId);
         var response = await _mediator.Send(query);
         return Ok(response);
     }
