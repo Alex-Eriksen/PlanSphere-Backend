@@ -20,5 +20,10 @@ public class DepartmentProfile : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Request.Description))
             .ForMember(dest => dest.Building, opt => opt.MapFrom(src => src.Request.Building))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address));
+        CreateMap<DepartmentUpdateRequest, Department>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+            .ForMember(dest => dest.Building, opt => opt.MapFrom(src => src.Building))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
     }
 }
