@@ -27,7 +27,7 @@ public class GetZipCodeLookUpsQueryHandler(
         var zipcodes = await _zipCodeRepository.GetZipCodeLookUpsAsync(cancellationToken);
         _logger.LogInformation("Fetched all zipcodes in the database");
 
-        var zipcodeDTOs = zipcodes.Select(x => _mapper.Map<ZipCodeLookUpDTO>(x)).ToList();
+        var zipcodeDTOs = _mapper.Map<List<ZipCodeLookUpDTO>>(zipcodes);
         return zipcodeDTOs;
     }
 }

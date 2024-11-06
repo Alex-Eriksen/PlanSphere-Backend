@@ -12,19 +12,20 @@ public class OrganisationProfile : Profile
     public OrganisationProfile()
     {
         CreateMap<CreateOrganisationCommand, Organisation>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.OrganisationName))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Request.Name))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address));
 
         CreateMap<UpdateOrganisationCommand, Organisation>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.OrganisationUpdateRequest.Name));
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.OrganisationRequest.Name));
+        
 
-        CreateMap<OrganisationUpdateRequest, Organisation>()
+        CreateMap<OrganisationRequest, Organisation>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.Settings, opt => opt.MapFrom(src => src.Settings));
         
-        CreateMap<Organisation, OrganisationUpdateRequest>()
+        CreateMap<Organisation, OrganisationRequest>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))

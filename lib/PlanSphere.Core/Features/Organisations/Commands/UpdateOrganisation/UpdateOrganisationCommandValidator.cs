@@ -5,12 +5,12 @@ namespace PlanSphere.Core.Features.Organisations.Commands.UpdateOrganisation;
 
 public class UpdateOrganisationCommandValidator : AbstractValidator<UpdateOrganisationCommand> 
 {
-    private readonly OrganisationUpdateRequestValidator _validator;
-    public UpdateOrganisationCommandValidator(OrganisationUpdateRequestValidator validator)
+    private readonly OrganisationRequestValidator _validator;
+    public UpdateOrganisationCommandValidator(OrganisationRequestValidator validator)
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
 
         RuleFor(x => x.OrganisationId).NotNull();
-        RuleFor(x => x.OrganisationUpdateRequest).SetValidator(_validator);
+        //RuleFor(x => x.OrganisationRequest).SetValidator(_validator);
     }
 }

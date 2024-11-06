@@ -11,7 +11,7 @@ public class PatchOrganisationCommandValidator : AbstractValidator<PatchOrganisa
     {
         RuleFor(x => x.PatchDocument)
             .NotNull();
-        RuleFor(x => x.Id)
+        RuleFor(x => x.OrganisationId)
             .NotNull();
 
         RuleForEach(x => x.PatchDocument.Operations)

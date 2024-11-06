@@ -32,81 +32,96 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
         return Ok(response);
     }
     
-    [HttpGet("{organisationId?}", Name = nameof(GetOrganisationByIdAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    public async Task<IActionResult> GetOrganisationByIdAsync([FromRoute] ulong? organisationId)
+    [HttpGet("{sourceLevel}/{sourceLevelId?}", Name = nameof(GetOrganisationByIdAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
+    public async Task<IActionResult> GetOrganisationByIdAsync([FromRoute] SourceLevel sourceLevel, ulong? sourceLevelId)
     {
-        if (organisationId == null)
+        if (sourceLevelId == null)
         {
-            organisationId = Request.HttpContext.User.GetOrganizationId();
+            sourceLevelId = Request.HttpContext.User.GetOrganizationId();
         }
-        var query = new GetOrganisationQuery(organisationId.Value);
+        
+        var query = new GetOrganisationQuery(sourceLevelId.Value);
+        query.SourceLevelId = sourceLevelId.Value;
+        query.SourceLevel = sourceLevel;
+        
         var response = await _mediator.Send(query);
         return Ok(response);
     }
     
-    [HttpGet("{organisationId?}", Name = nameof(GetOrganisationDetailsByIdAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    public async Task<IActionResult> GetOrganisationDetailsByIdAsync([FromRoute] ulong? organisationId)
+    [HttpGet("{sourceLevel}/{sourceLevelId?}", Name = nameof(GetOrganisationDetailsByIdAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
+    public async Task<IActionResult> GetOrganisationDetailsByIdAsync([FromRoute] SourceLevel sourceLevel, ulong? sourceLevelId)
     {
-        if (organisationId == null)
+        if (sourceLevelId == null)
         {
-            organisationId = Request.HttpContext.User.GetOrganizationId();
+            sourceLevelId = Request.HttpContext.User.GetOrganizationId();
         }
-        var query = new GetOrganisationDetailsQuery(organisationId.Value);
+        var query = new GetOrganisationDetailsQuery(sourceLevelId.Value);
+        query.SourceLevelId = sourceLevelId.Value;
+        query.SourceLevel = sourceLevel;
         var response = await _mediator.Send(query);
         return Ok(response);
     }
 
-    [HttpGet(Name = nameof(ListOrganisationsAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    public async Task<IActionResult> ListOrganisationsAsync([FromQuery] ListOrganisationsQuery query)
+    [HttpGet("{sourceLevel}/{sourceLevelId}", Name = nameof(ListOrganisationsAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
+    public async Task<IActionResult> ListOrganisationsAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, [FromQuery] ListOrganisationsQuery query)
     {
+        query.SourceLevel = sourceLevel;
+        query.SourceLevelId = sourceLevelId;
         var response = await _mediator.Send(query);
         return Ok(response);
     }
     
     [HttpPost(Name = nameof(CreateOrganisationAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
-    public async Task<IActionResult> CreateOrganisationAsync([FromBody] CreateOrganisationCommand command)
+    [TypeFilter(typeof(SystemAdministratorFilter))]
+    public async Task<IActionResult> CreateOrganisationAsync([FromBody] OrganisationRequest request)
     {
+        var command = new CreateOrganisationCommand(request);
         await _mediator.Send(command);
         return Created();
     }
 
-    [HttpPut(Name = nameof(UpdateOrganisationAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> UpdateOrganisationAsync([FromBody] UpdateOrganisationCommand command)
+    [HttpPut("{sourceLevel}/{sourceLevelId}/{organisationId}",Name = nameof(UpdateOrganisationAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
+    public async Task<IActionResult> UpdateOrganisationAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, ulong? organisationId, [FromBody] OrganisationRequest request)
     {
-        command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
+        var command = new UpdateOrganisationCommand(request)
+        {
+            SourceLevel = sourceLevel,
+            SourceLevelId = sourceLevelId,
+            OrganisationId = organisationId.Value
+        };
+
+        if (command.OrganisationId == null)
+        {
+            command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
+        }
         await _mediator.Send(command);
         return Ok();
     }
 
     [HttpDelete("{organisationId?}", Name = nameof(DeleteOrganisationAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator, SourceLevel.Organisation])]
     public async Task<IActionResult> DeleteOrganisationAsync([FromRoute] ulong? organisationId)
     {
-        if (organisationId == null)
-        {
-            organisationId = Request.HttpContext.User.GetOrganizationId();
-        }
-        var command = new DeleteOrganisationCommand(organisationId.Value);
+        var selectedId = organisationId ?? Request.HttpContext.User.GetOrganizationId();
+        
+        var command = new DeleteOrganisationCommand(selectedId);
+        
         await _mediator.Send(command);
         return NoContent();
     }
 
-    [HttpPatch("{organisationId?}", Name = nameof(PatchOrganisationAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> PatchOrganisationAsync([FromRoute] ulong? organisationId, [FromBody] JsonPatchDocument<OrganisationUpdateRequest> patchRequest)
+    [HttpPatch("{sourceLevelId}/{organisationId?}", Name = nameof(PatchOrganisationAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
+    public async Task<IActionResult> PatchOrganisationAsync([FromRoute] ulong sourceLevelId, ulong? organisationId, [FromBody] JsonPatchDocument<OrganisationRequest> patchRequest)
     {
-        if (organisationId == null)
-        {
-            organisationId = Request.HttpContext.User.GetOrganizationId();
-        }
-        var command = new PatchOrganisationCommand(patchRequest);
-        command.Id = organisationId.Value;
+        var selectedId = organisationId ?? Request.HttpContext.User.GetOrganizationId();
+
+        var command = new PatchOrganisationCommand(patchRequest, selectedId);
         await _mediator.Send(command);
-        return Created();
+        return NoContent();
     }
 }

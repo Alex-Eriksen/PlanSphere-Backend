@@ -23,19 +23,19 @@ public class PatchOrganisationCommandHandler(
     public async Task Handle(PatchOrganisationCommand command, CancellationToken cancellationToken)
     {
         _logger.BeginScope("Trying to patch organisation with [PatchOrganisationCommandHandler], first getting the organisation then patching");
-        _logger.LogInformation("Fetching organisation with id: [{organisationId}]", command.Id);
-        var organisation = await _organisationRepository.GetByIdAsync(command.Id, cancellationToken);
-        _logger.LogInformation("Fetched organisation with id: [{organisationId}]", command.Id);
+        _logger.LogInformation("Fetching organisation with id: [{organisationId}]", command.OrganisationId);
+        var organisation = await _organisationRepository.GetByIdAsync(command.OrganisationId, cancellationToken);
+        _logger.LogInformation("Fetched organisation with id: [{organisationId}]", command.OrganisationId);
         
-        _logger.LogInformation("Mapping organisation with id: [{organisationId}]", command.Id);
-        var organisationPatchRequest = _mapper.Map<OrganisationUpdateRequest>(organisation);
+        _logger.LogInformation("Mapping organisation with id: [{organisationId}]", command.OrganisationId);
+        var organisationPatchRequest = _mapper.Map<OrganisationRequest>(organisation);
         
         command.PatchDocument.ApplyTo(organisationPatchRequest);
         
         organisation = _mapper.Map(organisationPatchRequest, organisation);
         
-        _logger.LogInformation("Patching organisation with id: [{organisationId}]", command.Id);
-        await _organisationRepository.UpdateAsync(command.Id, organisation, cancellationToken);
-        _logger.LogInformation("Patched organisation with id: [{organisationId}]", command.Id);
+        _logger.LogInformation("Patching organisation with id: [{organisationId}]", command.OrganisationId);
+        await _organisationRepository.UpdateAsync(command.OrganisationId, organisation, cancellationToken);
+        _logger.LogInformation("Patched organisation with id: [{organisationId}]", command.OrganisationId);
     }
 }
