@@ -38,7 +38,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     {
         if (organisationId == null)
         {
-            return BadRequest("OrganisationId is null nd it cannot be");
+            organisationId = Request.HttpContext.User.GetOrganizationId();
         }
         var query = new GetOrganisationQuery(organisationId.Value);
         var response = await _mediator.Send(query);
@@ -51,7 +51,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     {
         if (organisationId == null)
         {
-            return BadRequest("OrganisationId is null nd it cannot be");
+            organisationId = Request.HttpContext.User.GetOrganizationId();
         }
         var query = new GetOrganisationDetailsQuery(organisationId.Value);
         var response = await _mediator.Send(query);
@@ -89,7 +89,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     {
         if (organisationId == null)
         {
-            return BadRequest("OrganisationId is null nd it cannot be");
+            organisationId = Request.HttpContext.User.GetOrganizationId();
         }
         var command = new DeleteOrganisationCommand(organisationId.Value);
         await _mediator.Send(command);
@@ -102,7 +102,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     {
         if (organisationId == null)
         {
-            return BadRequest("OrganisationId is null and it cannot be");
+            organisationId = Request.HttpContext.User.GetOrganizationId();
         }
         var command = new PatchOrganisationCommand(patchRequest);
         command.Id = organisationId.Value;
