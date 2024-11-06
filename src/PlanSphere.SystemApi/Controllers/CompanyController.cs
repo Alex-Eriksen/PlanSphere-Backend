@@ -40,9 +40,9 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
     
-    [HttpPost(Name = nameof(CreateCompanyAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> CreateCompanyAsync([FromBody] CreateCompanyCommand command)
+    [HttpPost("{sourceLevelId}", Name = nameof(CreateCompanyAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
+    public async Task<IActionResult> CreateCompanyAsync([FromRoute] string sourceLevelId, [FromBody] CreateCompanyCommand command)
     {
         command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
         await _mediator.Send(command);
@@ -79,7 +79,6 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     }
     
     [HttpGet(Name = nameof(LookUpCompaniesAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
     public async Task<IActionResult> LookUpCompaniesAsync()
     {
         var organisationId = Request.HttpContext.User.GetOrganizationId();

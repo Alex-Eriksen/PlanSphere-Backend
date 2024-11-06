@@ -12,6 +12,7 @@ namespace PlanSphere.SystemApi.Action_Filters;
 public class RoleActionFilter(
     IUserRepository userRepository,
     Right requiredRight,
+    SourceLevel? targetedLayer = null,
     bool isSpecific = false
 ) : ActionFilterAttribute
 {
@@ -22,7 +23,7 @@ public class RoleActionFilter(
         var user = await _userRepository.GetByIdAsync(context.HttpContext.User.GetUserId(), CancellationToken.None);
         var userRoles = user.Roles.Select(x => x.Role).ToList();
         var sourceLevelId = context.HttpContext.GetSourceLevelId();
-        var sourceLevel = context.HttpContext.GetSourceLevel();
+        var sourceLevel = targetedLayer ?? context.HttpContext.GetSourceLevel();
 
         var authorized = false;
 
