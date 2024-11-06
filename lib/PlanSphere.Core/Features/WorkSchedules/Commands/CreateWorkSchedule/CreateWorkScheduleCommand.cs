@@ -1,10 +1,9 @@
 ﻿using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Newtonsoft.Json;
-using PlanSphere.Core.Enums;
-using PlanSphere.Core.Features.WorkSchedule.Request;
+using PlanSphere.Core.Features.WorkSchedules.Request;
 
-namespace PlanSphere.Core.Features.WorkSchedule.Commands.CreateWorkSchedule;
+namespace PlanSphere.Core.Features.WorkSchedules.Commands;
 
 public record CreateWorkScheduleCommand (WorkScheduleRequest Request) : IRequest
 {

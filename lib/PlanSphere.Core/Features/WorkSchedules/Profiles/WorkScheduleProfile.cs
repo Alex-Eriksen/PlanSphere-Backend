@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using PlanSphere.Core.Features.WorkSchedule.Commands.CreateWorkSchedule;
-using PlanSphere.Core.Features.WorkSchedule.Request;
+using PlanSphere.Core.Features.WorkSchedules.Request;
 
-namespace PlanSphere.Core.Features.WorkSchedule.Profiles;
+namespace PlanSphere.Core.Features.WorkSchedules.Profiles;
 
 public class WorkScheduleProfile : Profile
 {

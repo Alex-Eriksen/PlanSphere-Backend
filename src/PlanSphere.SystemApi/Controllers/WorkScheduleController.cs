@@ -2,8 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
-using PlanSphere.Core.Features.WorkSchedule.Commands.CreateWorkSchedule;
-using PlanSphere.Core.Features.WorkSchedule.Request;
+using PlanSphere.Core.Features.WorkSchedules.Commands;
 using PlanSphere.SystemApi.Controllers.Base;
 
 namespace PlanSphere.SystemApi.Controllers;

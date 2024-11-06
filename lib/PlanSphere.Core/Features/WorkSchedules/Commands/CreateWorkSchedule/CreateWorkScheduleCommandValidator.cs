@@ -1,7 +1,6 @@
-﻿using System.Data;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace PlanSphere.Core.Features.WorkSchedule.Commands.CreateWorkSchedule;
+namespace PlanSphere.Core.Features.WorkSchedules.Commands.CreateWorkSchedule;
 
 public class CreateWorkScheduleCommandValidator : AbstractValidator<CreateWorkScheduleCommand>
 {

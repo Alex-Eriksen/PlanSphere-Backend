@@ -24,4 +24,12 @@ public static class HttpContextExtensions
 
         return sourceLevel;
     }
+
+    public static ulong GetUserId(this HttpContext context)
+    {
+        context.Request.RouteValues.TryGetValue(PermissionFilterConstants.UserIdKey, out var userIdValue);
+        ulong.TryParse(userIdValue?.ToString(), out var userId);
+
+        return userId;
+    }
 }
