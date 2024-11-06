@@ -15,7 +15,7 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    [HttpGet("{departmentId}", Name = nameof(GetDepartmentId))]
+    [HttpGet("{departmentId}/{sourceLevel}/{sourceLevelId}", Name = nameof(GetDepartmentId))]
     public async Task<IActionResult> GetDepartmentId([FromRoute] ulong departmentId)
     {
         var query = new GetDepartmentQuery(departmentId);
