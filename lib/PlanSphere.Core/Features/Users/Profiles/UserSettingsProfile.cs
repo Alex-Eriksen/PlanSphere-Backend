@@ -14,6 +14,11 @@ public class UserSettingsProfile : Profile
             .ForMember(dest => dest.IsPhoneNumberPrivate, opt => opt.MapFrom(src => src.IsPhoneNumberPrivate))
             .ForMember(dest => dest.IsAddressPrivate, opt => opt.MapFrom(src => src.IsAddressPrivate))
             .ForMember(dest => dest.InheritWorkSchedule, opt => opt.MapFrom(src => src.InheritWorkSchedule))
+            .ForPath(dest => dest.WorkSchedule.ParentId, opt =>
+            {
+                opt.Condition(src => src.Source.InheritWorkSchedule);
+                opt.MapFrom(src => src.InheritedWorkScheduleId);
+            })
             .ForMember(dest => dest.AutoCheckInOut, opt => opt.MapFrom(src => src.AutoCheckInOut))
             .ForMember(dest => dest.AutoCheckOutDisabled, opt => opt.MapFrom(src => src.AutoCheckOutDisabled));
     }
