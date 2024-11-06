@@ -46,7 +46,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
     
     [HttpGet("{organisationId?}", Name = nameof(GetOrganisationDetailsByIdAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
     public async Task<IActionResult> GetOrganisationDetailsByIdAsync([FromRoute] ulong? organisationId)
     {
         if (organisationId == null)
@@ -97,7 +97,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpPatch("{organisationId?}", Name = nameof(PatchOrganisationAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
     public async Task<IActionResult> PatchOrganisationAsync([FromRoute] ulong? organisationId, [FromBody] JsonPatchDocument<OrganisationUpdateRequest> patchRequest)
     {
         if (organisationId == null)
