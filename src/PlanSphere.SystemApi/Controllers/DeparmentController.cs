@@ -22,8 +22,8 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         var response = await _mediator.Send(query);
         return Ok(response);
     }
-    
-    [HttpPost(Name = nameof(CreateDepartmentAsync))]
+
+    [HttpPost("{sourceLevel}/{sourceLevelId}",Name = nameof(CreateDepartmentAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
     public async Task<IActionResult> CreateDepartmentAsync([FromRoute] ulong companyId,[FromBody] CreateDepartmentCommand command)
     {
