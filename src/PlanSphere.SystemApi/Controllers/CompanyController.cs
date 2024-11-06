@@ -41,7 +41,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     }
     
     [HttpPost("{sourceLevelId}", Name = nameof(CreateCompanyAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
     public async Task<IActionResult> CreateCompanyAsync([FromRoute] ulong sourceLevelId,[FromBody] CompanyRequest request)
     {
         var command = new CreateCompanyCommand(request);
@@ -60,7 +60,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Created();
     }
     
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
     [HttpDelete("{sourceLevelId}/{companyId}", Name = nameof(DeleteCompanyAsync))] 
     public async Task<IActionResult> DeleteCompanyAsync([FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId)
     {
