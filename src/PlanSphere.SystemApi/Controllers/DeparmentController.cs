@@ -49,8 +49,7 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
 
     [HttpPatch("{sourceLevelId}", Name = nameof(PatchDepartmentAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Department])]
-    public async Task<IActionResult> PatchDepartmentAsync([FromRoute] ulong sourceLevelId,
-        [FromBody] JsonPatchDocument<DepartmentUpdateRequest> patchRequest)
+    public async Task<IActionResult> PatchDepartmentAsync([FromRoute] ulong sourceLevelId, [FromBody] JsonPatchDocument<DepartmentUpdateRequest> patchRequest)
     {
         var command = new PatchDepartmentCommand(patchRequest);
         command.departmentId = sourceLevelId;
