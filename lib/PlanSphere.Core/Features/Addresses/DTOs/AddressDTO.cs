@@ -1,6 +1,6 @@
 ﻿using PlanSphere.Core.Abstract;
 
-namespace PlanSphere.Core.Features.Address.DTOs;
+namespace PlanSphere.Core.Features.Addresses.DTOs;
 
 public class AddressDTO : BaseDTO
 {

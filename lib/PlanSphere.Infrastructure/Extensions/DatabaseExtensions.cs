@@ -10,12 +10,14 @@ public static class DatabaseExtensions
     {
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IOrganisationRepository, OrganisationRepository>();
         services.AddScoped<IJobTitleRepository, JobTitleRepository>();
         services.AddScoped<ICompanyRepository, CompanyRepository>();
         services.AddScoped<IWorkScheduleRepository, WorkScheduleRepository>();
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         services.AddScoped<ICountryRepository, CountryRepository>();
         services.AddScoped<IOrganisationRepository, OrganisationRepository>();
+        services.AddScoped<IZipCodeRepository, ZipCodeRepository>();
         return services;
     }
 }

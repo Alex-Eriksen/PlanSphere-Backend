@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using PlanSphere.Core.Features.Address.Requests;
+using PlanSphere.Core.Features.Addresses.Requests;
 
-namespace PlanSphere.Core.Features.Address.Profiles;
+namespace PlanSphere.Core.Features.Addresses.Profiles;
 
-public class AddressProfile : Profile
+public class AddressRequestProfile : Profile
 {
-    public AddressProfile()
+    public AddressRequestProfile()
     {
-        CreateMap<AddressRequest, Domain.Entities.Address>()
+        CreateMap<Domain.Entities.Address, AddressRequest>()
             .ForMember(dest => dest.StreetName, opt => opt.MapFrom(src => src.StreetName))
             .ForMember(dest => dest.HouseNumber, opt => opt.MapFrom(src => src.HouseNumber))
             .ForMember(dest => dest.Floor, opt => opt.MapFrom(src => src.Floor))

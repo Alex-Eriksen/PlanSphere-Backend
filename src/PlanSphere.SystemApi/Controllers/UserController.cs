@@ -2,9 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PlanSphere.Core.Features.Address.Requests;
+using PlanSphere.Core.Features.Addresses.Requests;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
-using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Requests;
 using PlanSphere.SystemApi.Controllers.Base;
 using PlanSphere.SystemApi.Extensions;

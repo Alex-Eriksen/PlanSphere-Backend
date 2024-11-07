@@ -1864,7 +1864,7 @@ namespace PlanSphere.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Entities.Organisation", "Organisation")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("OrganisationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2041,6 +2041,8 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.Navigation("Settings")
                         .IsRequired();
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>

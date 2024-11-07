@@ -172,7 +172,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(ClaimsConstants.UserId, user.Id.ToString()),
-            new(ClaimsConstants.OrganizationId, user.OrganisationId.ToString()),
+            new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
             new(ClaimsConstants.LastName, user.LastName)
@@ -191,7 +191,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(ClaimsConstants.UserId, user.Id.ToString()),
-            new(ClaimsConstants.OrganizationId, user.OrganisationId.ToString()),
+            new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
             new(ClaimsConstants.LastName, user.LastName)
