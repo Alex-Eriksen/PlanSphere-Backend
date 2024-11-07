@@ -8,7 +8,7 @@ public class UserSettingsPatchRequest
     public bool IsAddressPrivate { get; set; }
     
     public bool InheritWorkSchedule { get; set; }
-    public bool InheritedWorkScheduleId { get; set; }
+    public ulong InheritedWorkScheduleId { get; set; }
     
     public bool AutoCheckInOut { get; set; }
     public bool AutoCheckOutDisabled { get; set; }

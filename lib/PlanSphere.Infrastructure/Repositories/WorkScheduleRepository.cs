@@ -6,20 +6,35 @@ using PlanSphere.Core.Interfaces.Repositories;
 
 namespace PlanSphere.Infrastructure.Repositories;
 
-public class WorkScheduleRepository(IPlanSphereDatabaseContext context, ILogger<WorkScheduleRepository> logger) : IWorkScheduleRepository
+public class WorkScheduleRepository(IPlanSphereDatabaseContext dbContext, ILogger<WorkScheduleRepository> logger) : IWorkScheduleRepository
 {
-    private readonly IPlanSphereDatabaseContext _context = context ?? throw new ArgumentNullException(nameof(context));
+    private readonly IPlanSphereDatabaseContext _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     private readonly ILogger<WorkScheduleRepository> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    
     public async Task<WorkSchedule> CreateAsync(WorkSchedule request, CancellationToken cancellationToken)
     {
-        _context.WorkSchedules.Add(request);
-        await _context.SaveChangesAsync(cancellationToken);
+        _dbContext.WorkSchedules.Add(request);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return request;
     }
 
-    public Task<WorkSchedule> GetByIdAsync(ulong id, CancellationToken cancellationToken)
+    public async Task<WorkSchedule> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var workSchedule = await _dbContext.WorkSchedules
+            .Include(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.WorkScheduleShifts)
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (workSchedule == null)
+        {
+            _logger.LogInformation("Work schedule with id: [{id}] does not exist!", id);
+            throw new KeyNotFoundException($"Work schedule with id: [{id}] does not exist!");
+        }
+
+        return workSchedule;
     }
 
     public Task<WorkSchedule> UpdateAsync(ulong id, WorkSchedule request, CancellationToken cancellationToken)
@@ -39,6 +54,6 @@ public class WorkScheduleRepository(IPlanSphereDatabaseContext context, ILogger<
 
     public IQueryable<WorkSchedule> GetQueryable()
     {
-        return _context.WorkSchedules.AsNoTracking().AsQueryable();
+        return _dbContext.WorkSchedules.AsNoTracking().AsQueryable();
     }
 }

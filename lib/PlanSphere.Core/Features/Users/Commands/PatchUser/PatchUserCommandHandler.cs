@@ -30,6 +30,12 @@ public class PatchUserCommandHandler(
         request.Request.ApplyTo(mappedUser);
         user = _mapper.Map(mappedUser, user);
 
+        if (user.Settings.InheritWorkSchedule == false)
+        {
+            user.Settings.WorkSchedule.Parent = null;
+            user.Settings.WorkSchedule.ParentId = null;
+        }
+
         _logger.LogInformation("Updating user.");
         await _userRepository.UpdateAsync(request.UserId, user, cancellationToken);
         _logger.LogInformation("Updated user.");

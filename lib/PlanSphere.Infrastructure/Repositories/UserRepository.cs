@@ -28,8 +28,11 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
     public async Task<User> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
-            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Address)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Right)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
