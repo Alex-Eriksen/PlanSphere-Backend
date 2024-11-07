@@ -23,5 +23,9 @@ public class OrganisationProfile : Profile
         CreateMap<OrganisationSettingsRequest, OrganisationSettings>()
             .ForMember(dest => dest.DefaultRoleId, opt => opt.MapFrom(src => src.DefaultRoleId))
             .ForMember(dest => dest.DefaultWorkScheduleId, opt => opt.MapFrom(src => src.DefualtWorkScheduleId));
+        
+        CreateMap<OrganisationSettings, OrganisationSettingsRequest>()
+            .ForMember(dest => dest.DefaultRoleId, opt => opt.MapFrom(src => src.DefaultRoleId))
+            .ForMember(dest => dest.DefualtWorkScheduleId, opt => opt.MapFrom(src => src.DefaultWorkScheduleId));
     }
 }

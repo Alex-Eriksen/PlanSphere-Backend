@@ -20,7 +20,7 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
 
     public async Task<Organisation> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
-        var organisation = await _context.Organisations.Include(x => x.Address).SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var organisation = await _context.Organisations.Include(x => x.Address).Include(x => x.Settings).SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (organisation == null)
         {
             _logger.LogInformation("Could not find Organisation with id: [{organisationId}]. Organisation doesn't exist!", id);
