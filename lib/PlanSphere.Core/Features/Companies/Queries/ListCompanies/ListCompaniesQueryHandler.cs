@@ -20,7 +20,7 @@ public class ListCompaniesQueryHandler(
 ) : IRequestHandler<ListCompaniesQuery, IPaginatedResponse<CompanyDTO>>
 {
     private readonly ICompanyRepository _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-    private readonly ILogger<ListCompaniesQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
+    private readonly ILogger<ListCompaniesQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IPaginationService _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
     
     public async Task<IPaginatedResponse<CompanyDTO>> Handle(ListCompaniesQuery request, CancellationToken cancellationToken)
@@ -58,7 +58,7 @@ public class ListCompaniesQueryHandler(
         {
             CompanySortBy.Name => query.OrderByExpression(x => x.Name, request.SortDescending),
             CompanySortBy.Address => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending)
-                .ThenByExpression(x => x.Address.HouseNumber, request.SortDescending),
+                .ThenByExpression(x => x.Address.HouseNumber, request.SortDescending)
         };
     }
 }

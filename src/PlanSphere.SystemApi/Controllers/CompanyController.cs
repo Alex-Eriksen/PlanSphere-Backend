@@ -57,7 +57,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         var command = new PatchCompanyCommand(patchRequest);
         command.Id = sourceLevelId;
         await _mediator.Send(command);
-        return Created();
+        return NoContent();
     }
     
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
