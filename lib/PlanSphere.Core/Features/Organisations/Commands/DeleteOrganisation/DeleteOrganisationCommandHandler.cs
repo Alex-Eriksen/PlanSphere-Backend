@@ -15,7 +15,7 @@ public class DeleteOrganisationCommandHandler(
     private readonly ILogger<DeleteOrganisationCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     public async Task Handle(DeleteOrganisationCommand request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Starting to delete organistion with DeleteOrganisationCommandHandler with id: [{organisationId}]",request.OrganisationId);
+        _logger.BeginScope("Starting to delete organisation with DeleteOrganisationCommandHandler with id: [{organisationId}]",request.OrganisationId);
         _logger.LogInformation("Deleting organisation with id: [{id}]", request.OrganisationId);
         await _organisationRepository.DeleteAsync(request.OrganisationId, cancellationToken);
         _logger.LogInformation("Deleted organisation with id: [{id}]", request.OrganisationId);

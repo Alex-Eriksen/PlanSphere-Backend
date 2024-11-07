@@ -10,8 +10,14 @@ public class OrganisationRequestValidator : AbstractValidator<OrganisationReques
 {
     public OrganisationRequestValidator()
     {
-        RuleFor(x => x.Name).NotNull();
-        RuleFor(x => x.Address).NotNull();
-        RuleFor(x => x.Settings).NotNull();
+        RuleFor(x => x.Name)
+            .NotNull()
+            .NotEmpty();
+        
+        RuleFor(x => x.Address)
+            .NotNull();
+        
+        RuleFor(x => x.Settings)
+            .NotNull();
     }
 }

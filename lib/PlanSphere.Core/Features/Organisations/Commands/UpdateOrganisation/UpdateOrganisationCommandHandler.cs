@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
@@ -21,15 +20,15 @@ public class UpdateOrganisationCommandHandler(
     
     public async Task Handle(UpdateOrganisationCommand command, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Updating organistion with UpdateOrganisationCommandHandler with id: [{organisationId}]",command.OrganisationId);
-        _logger.LogInformation("Fetching organisation with id: [{organisationId}]", command.OrganisationId);
-        var organisation = await _organisationRepository.GetByIdAsync(command.OrganisationId, cancellationToken);
-        _logger.LogInformation("Fetched organisation with id: [{organisationId}]", command.OrganisationId);
+        _logger.BeginScope("Updating organisation with UpdateOrganisationCommandHandler with id: [{organisationId}]",command.SourceLevelId);
+        _logger.LogInformation("Fetching organisation with id: [{SourceLevelId}]", command.SourceLevelId);
+        var organisation = await _organisationRepository.GetByIdAsync(command.SourceLevelId, cancellationToken);
+        _logger.LogInformation("Fetched organisation with id: [{SourceLevelId}]", command.SourceLevelId);
         
-        var mappedOrganisation = _mapper.Map(command, organisation);
+        var mappedOrganisation = _mapper.Map(command.OrganisationRequest, organisation);
         
-        _logger.LogInformation("Updating organisation with id: [{organisationId}]", command.OrganisationId);
-        await _organisationRepository.UpdateAsync(command.OrganisationId, mappedOrganisation, cancellationToken);
-        _logger.LogInformation("Updated organisation with id: [{organisationId}]", command.OrganisationId);
+        _logger.LogInformation("Updating organisation with id: [{SourceLevelId}]", command.SourceLevelId);
+        await _organisationRepository.UpdateAsync(command.SourceLevelId, mappedOrganisation, cancellationToken);
+        _logger.LogInformation("Updated organisation with id: [{SourceLevelId}]", command.SourceLevelId);
     }
 }

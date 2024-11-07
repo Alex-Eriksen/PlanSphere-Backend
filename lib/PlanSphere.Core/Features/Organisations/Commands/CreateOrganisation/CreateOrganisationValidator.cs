@@ -7,9 +7,11 @@ public class CreateOrganisationValidator : AbstractValidator<CreateOrganisationC
 {
     public CreateOrganisationValidator()
     {
-        RuleFor(command => command.Request.Name).NotEmpty().WithMessage("Name cannot be empty");
-        RuleFor(command => command.Request.Name).MaximumLength(FieldLengthConstants.Short);
+        RuleFor(command => command.Request.Name)
+            .NotEmpty()
+            .MaximumLength(FieldLengthConstants.Short);
         
-        RuleFor(command => command.Request.Address).NotEmpty().WithMessage("Address cannot be empty");
+        RuleFor(command => command.Request.Address)
+            .NotEmpty();
     }
 }

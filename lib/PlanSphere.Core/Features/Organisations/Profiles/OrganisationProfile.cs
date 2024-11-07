@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
-using PlanSphere.Core.Features.Organisations.Commands.PatchOrganisation;
-using PlanSphere.Core.Features.Organisations.Commands.UpdateOrganisation;
 using PlanSphere.Core.Features.Organisations.Requests;
 
 namespace PlanSphere.Core.Features.Organisations.Profiles;
@@ -11,14 +8,6 @@ public class OrganisationProfile : Profile
 {
     public OrganisationProfile()
     {
-        CreateMap<CreateOrganisationCommand, Organisation>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Request.Name))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address));
-
-        CreateMap<UpdateOrganisationCommand, Organisation>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.OrganisationRequest.Name));
-        
-
         CreateMap<OrganisationRequest, Organisation>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
@@ -34,7 +23,5 @@ public class OrganisationProfile : Profile
         CreateMap<OrganisationSettingsRequest, OrganisationSettings>()
             .ForMember(dest => dest.DefaultRoleId, opt => opt.MapFrom(src => src.DefaultRoleId))
             .ForMember(dest => dest.DefaultWorkScheduleId, opt => opt.MapFrom(src => src.DefualtWorkScheduleId));
-
-
     }
 }

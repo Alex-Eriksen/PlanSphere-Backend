@@ -41,9 +41,10 @@ public class ListOrganisationsQueryHandler(
 
     private IQueryable<Organisation> SearchQuery(string? search, IQueryable<Organisation> query)
     {
-        var filteredSearch = search?.Trim().ToLower();
-        if (!string.IsNullOrWhiteSpace(filteredSearch))
+        if (!string.IsNullOrWhiteSpace(search))
         {
+            var filteredSearch = search?.Trim().ToLower();
+
             query = query.Where(x => x.Name.ToLower().Contains(filteredSearch));
         }
 

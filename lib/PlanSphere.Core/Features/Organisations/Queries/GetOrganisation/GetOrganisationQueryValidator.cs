@@ -6,7 +6,7 @@ public class GetOrganisationQueryValidator : AbstractValidator<GetOrganisationQu
 {
     public GetOrganisationQueryValidator()
     {
-        RuleFor(x => x.Id)
+        RuleFor(x => x.SourceLevelId)
             .NotNull();
     }
 }

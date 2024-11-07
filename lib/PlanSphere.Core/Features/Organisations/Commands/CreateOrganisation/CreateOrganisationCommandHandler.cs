@@ -20,13 +20,13 @@ public class CreateOrganisationCommandHandler(
     
     public async Task Handle(CreateOrganisationCommand command, CancellationToken cancellationToken) 
     {
-       _logger.BeginScope("Starting to create an organistion on [{sourceLevel}] with CreateOrganisationCommandHandler with name: [{organisationName}] with id: [{sourceLevalId}]", command.SourceLevel, command.Request.Name, command.SourceLevelId);
-       _logger.LogInformation("Creating organisation on [{sourceLevel}] with name: [{organisationName}] with id: [{sourceLevalId}]", command.SourceLevel, command.Request.Name, command.SourceLevelId);
+       _logger.BeginScope("Starting to create an organisation  with CreateOrganisationCommandHandler with name: [{organisationName}]",  command.Request.Name);
+       _logger.LogInformation("Creating organisation with name: [{organisationName}]", command.Request.Name);
         
-       var organisation = _mapper.Map<Organisation>(command);
+       var organisation = _mapper.Map<Organisation>(command.Request);
         
        await _organisationRepository.CreateAsync(organisation, cancellationToken);
        
-       _logger.LogInformation("Organisation created successfully on [{sourceLevel}] with name: [{organisationName}] with id: [{sourceLevalId}]", command.SourceLevel, command.Request.Name, command.SourceLevelId); 
+       _logger.LogInformation("Organisation created successfully with name: [{organisationName}]", command.Request.Name); 
     }
 }
