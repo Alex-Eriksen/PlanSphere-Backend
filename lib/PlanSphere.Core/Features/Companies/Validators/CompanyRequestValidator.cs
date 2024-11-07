@@ -8,7 +8,7 @@ public class CompanyRequestValidator : AbstractValidator<CompanyRequest>
 {
     public CompanyRequestValidator()
     {
-        RuleFor(x => x.CompanyName).NotNull();
+        RuleFor(x => x.Name).NotNull();
         RuleFor(x => x.CVR).NotNull();
         RuleFor(x => x.CVR).NotNull();
     }
