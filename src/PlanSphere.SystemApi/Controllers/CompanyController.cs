@@ -35,7 +35,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Company])]
     public async Task<IActionResult> ListCompaniesAsync([FromRoute] ulong sourceLevelId,[FromQuery] ListCompaniesQuery query)
     {
-        query.OrganisationId = Request.HttpContext.User.GetOrganizationId();
+        query.OrganisationId = Request.HttpContext.User.GetOrganisationId();
         var response = await _mediator.Send(query);
         return Ok(response);
     }
@@ -45,7 +45,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     public async Task<IActionResult> CreateCompanyAsync([FromRoute] ulong sourceLevelId,[FromBody] CompanyRequest request)
     {
         var command = new CreateCompanyCommand(request);
-        command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
+        command.OrganisationId = Request.HttpContext.User.GetOrganisationId();
         await _mediator.Send(command);
         return Created();
     }
@@ -73,7 +73,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator, SourceLevel.Company])]
     public async Task<IActionResult> UploadCompanyLogoAsync([FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId, [FromForm] UploadCompanyLogoCommand command)
     {
-        command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
+        command.OrganisationId = Request.HttpContext.User.GetOrganisationId();
         command.CompanyId = companyId;
         var response = await _mediator.Send(command);
         return Ok(response);
@@ -83,7 +83,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
     public async Task<IActionResult> LookUpCompaniesAsync()
     {
-        var organisationId = Request.HttpContext.User.GetOrganizationId();
+        var organisationId = Request.HttpContext.User.GetOrganisationId();
         var userId = Request.HttpContext.User.GetUserId();
         var query = new LookUpCompaniesQuery(organisationId, userId);
         var response = await _mediator.Send(query);

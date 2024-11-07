@@ -84,7 +84,7 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
     public async Task<IActionResult> ListRolesAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromQuery] ListRolesQuery query)
     {
-        var organisationId = Request.HttpContext.User.GetOrganizationId();
+        var organisationId = Request.HttpContext.User.GetOrganisationId();
         query.OrganisationId = organisationId;
         query.SourceLevelId = sourceLevelId;
         query.SourceLevel = sourceLevel;

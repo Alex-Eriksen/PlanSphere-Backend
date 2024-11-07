@@ -38,7 +38,7 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
     {
         query.SourceLevel = sourceLevel;
         query.SourceLevelId = sourceLevelId;
-        query.OrganisationId = _claims.GetOrganizationId();
+        query.OrganisationId = _claims.GetOrganisationId();
         var response = await _mediator.Send(query);
         return Ok(response);
     }

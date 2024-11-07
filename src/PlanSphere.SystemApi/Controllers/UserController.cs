@@ -25,7 +25,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserCommand command)
     {
         command.UserId = _claims.GetUserId();
-        command.OrganisationId = _claims.GetOrganizationId();
+        command.OrganisationId = _claims.GetOrganisationId();
         await _mediator.Send(command);
         return Created();
     }
