@@ -13,21 +13,23 @@ GO
 SET IDENTITY_INSERT Rights ON;
 INSERT INTO Rights (Id, Name, Description)
 VALUES
-    (1, 'Administrator', 'Giver administrator rettighed.'),
-    (2, 'Edit', 'Giver redigerings rettighed.'),
-    (3, 'ManageTimes', N'Giver rettighed til at håndtere registrerede tider for andre brugere.'),
-    (4, 'ManageUsers', 'Giver rettighed til at oprette, redigere, og slette brugere.'),
-    (5, 'PureView', 'Giver rettighed til at se alt information uagtet om noget er skjult.'),
-    (6, 'View', 'Giver rettighed til at se.'),
-    (7, 'SetOwnWorkSchedule', N'Giver rettigheden til at sætte sit eget arbejdsskema.'),
-    (8, 'ManuallySetOwnWorkTime', N'Giver rettighed til at manuelt sætte arbejdstider.'),
-    (9, 'SetOwnJobTitle', N'Giver rettigheden til at sætte sin egne job titler.'),
-    (10, 'SetAutomaticCheckInOut', N'Giver rettighed til at tænde og slukke for automatisk tjek ind og ud.');
+    (10, 'Administrator', 'Giver administrator rettighed.'),
+    (20, 'Edit', 'Giver redigerings rettighed.'),
+    (30, 'ManageTimes', N'Giver rettighed til at håndtere registrerede tider for andre brugere.'),
+    (40, 'ManageUsers', 'Giver rettighed til at oprette, redigere, og slette brugere.'),
+    (50, 'PureView', 'Giver rettighed til at se alt information uagtet om noget er skjult.'),
+    (60, 'View', 'Giver rettighed til at se.'),
+    (70, 'SetOwnWorkSchedule', N'Giver rettigheden til at sætte sit eget arbejdsskema.'),
+    (80, 'ManuallySetOwnWorkTime', N'Giver rettighed til at manuelt sætte arbejdstider.'),
+    (90, 'SetOwnJobTitle', N'Giver rettigheden til at sætte sin egne job titler.'),
+    (100, 'SetAutomaticCheckInOut', N'Giver rettighed til at tænde og slukke for automatisk tjek ind og ud.');
 SET IDENTITY_INSERT Rights OFF;
 GO;
 
 INSERT INTO Roles (Name, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
-VALUES ('DefaultRole', CURRENT_TIMESTAMP, NULL, NULL, NULL);
+VALUES
+    ('DefaultRole', CURRENT_TIMESTAMP, NULL, NULL, NULL),
+    ('__System_Administrator__', CURRENT_TIMESTAMP, NULL, NULL, NULL);
 GO
 
 INSERT INTO WorkSchedules (IsDefaultWorkSchedule)

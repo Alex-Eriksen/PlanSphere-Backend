@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanSphere.Infrastructure.Contexts;
 
@@ -11,9 +12,11 @@ using PlanSphere.Infrastructure.Contexts;
 namespace PlanSphere.Infrastructure.Migrations
 {
     [DbContext(typeof(PlanSphereDatabaseContext))]
-    partial class PlanSphereDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241107102247_add_work_schedule_navigations")]
+    partial class add_work_schedule_navigations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

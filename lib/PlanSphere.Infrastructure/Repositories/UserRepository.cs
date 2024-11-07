@@ -71,7 +71,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
 
     public IQueryable<User> GetQueryable()
     {
-        throw new NotImplementedException();
+        return _dbContext.Users.AsNoTracking().AsQueryable();
     }
 
     public async Task<User> GetByIdentityIdAsync(string identityId, CancellationToken cancellationToken)

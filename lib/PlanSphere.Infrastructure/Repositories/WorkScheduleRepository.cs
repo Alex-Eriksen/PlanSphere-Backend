@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Core.Interfaces.Repositories;
@@ -38,6 +39,6 @@ public class WorkScheduleRepository(IPlanSphereDatabaseContext context, ILogger<
 
     public IQueryable<WorkSchedule> GetQueryable()
     {
-        throw new NotImplementedException();
+        return _context.WorkSchedules.AsNoTracking().AsQueryable();
     }
 }
