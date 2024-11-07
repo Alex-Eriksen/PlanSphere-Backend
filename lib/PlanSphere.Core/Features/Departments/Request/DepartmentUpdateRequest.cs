@@ -1,5 +1,4 @@
-﻿using PlanSphere.Core.Features.Address.Requests;
-using PlanSphere.Core.Interfaces;
+﻿using PlanSphere.Core.Features.Addresses.Requests;
 
 namespace PlanSphere.Core.Features.Departments.Request;
 

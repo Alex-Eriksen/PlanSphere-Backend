@@ -1,6 +1,5 @@
 ﻿using PlanSphere.Core.Abstract;
-using PlanSphere.Core.Features.Address.DTOs;
-using PlanSphere.Core.Interfaces;
+using PlanSphere.Core.Features.Addresses.DTOs;
 
 namespace PlanSphere.Core.Features.Departments.DTOs;
 
