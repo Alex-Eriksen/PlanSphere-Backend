@@ -22,18 +22,18 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    [HttpGet("{companyId}", Name = nameof(GetCompanyById))]
-    public async Task<IActionResult> GetCompanyById([FromRoute] ulong companyId)
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Company])]
+    [HttpGet("{sourceLevelId}/{companyId}", Name = nameof(GetCompanyById))]
+    public async Task<IActionResult> GetCompanyById([FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId)
     {
         var query = new GetCompanyQuery(companyId);
         var response = await _mediator.Send(query);
         return Ok(response);
     }
     
-    [HttpGet(Name = nameof(ListCompaniesAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    public async Task<IActionResult> ListCompaniesAsync([FromQuery] ListCompaniesQuery query)
+    [HttpGet("{sourceLevelId}",Name = nameof(ListCompaniesAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Company])]
+    public async Task<IActionResult> ListCompaniesAsync([FromRoute] ulong sourceLevelId,[FromQuery] ListCompaniesQuery query)
     {
         query.OrganisationId = Request.HttpContext.User.GetOrganizationId();
         var response = await _mediator.Send(query);
@@ -41,36 +41,37 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
     }
     
     [HttpPost("{sourceLevelId}", Name = nameof(CreateCompanyAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
-    public async Task<IActionResult> CreateCompanyAsync([FromRoute] string sourceLevelId, [FromBody] CreateCompanyCommand command)
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
+    public async Task<IActionResult> CreateCompanyAsync([FromRoute] ulong sourceLevelId,[FromBody] CompanyRequest request)
     {
+        var command = new CreateCompanyCommand(request);
         command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
         await _mediator.Send(command);
         return Created();
     }
     
-    [HttpPatch("{companyId}", Name = nameof(PatchCompanyAsync))] 
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    public async Task<IActionResult> PatchCompanyAsync([FromRoute] ulong companyId, [FromBody] JsonPatchDocument<CompanyUpdateRequest> patchRequest)
+    [HttpPatch("{sourceLevelId}", Name = nameof(PatchCompanyAsync))] 
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
+    public async Task<IActionResult> PatchCompanyAsync([FromRoute] ulong sourceLevelId,[FromBody] JsonPatchDocument<CompanyUpdateRequest> patchRequest)
     {
         var command = new PatchCompanyCommand(patchRequest);
-        command.Id = companyId;
+        command.Id = sourceLevelId;
         await _mediator.Send(command);
-        return Created();
+        return NoContent();
     }
     
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit])]
-    [HttpDelete("{companyId}", Name = nameof(DeleteCompanyAsync))] 
-    public async Task<IActionResult> DeleteCompanyAsync([FromRoute] ulong companyId)
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
+    [HttpDelete("{sourceLevelId}/{companyId}", Name = nameof(DeleteCompanyAsync))] 
+    public async Task<IActionResult> DeleteCompanyAsync([FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId)
     {
         var command = new DeleteCompanyCommand(companyId);
         await _mediator.Send(command);
         return NoContent();
     }
     
-    [HttpPost("{companyId}", Name = nameof(UploadCompanyLogoAsync))] 
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
-    public async Task<IActionResult> UploadCompanyLogoAsync([FromRoute] ulong companyId, [FromForm] UploadCompanyLogoCommand command)
+    [HttpPost("{sourceLevelId}", Name = nameof(UploadCompanyLogoAsync))] 
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator, SourceLevel.Company])]
+    public async Task<IActionResult> UploadCompanyLogoAsync([FromRoute] ulong sourceLevelId,[FromRoute] ulong companyId, [FromForm] UploadCompanyLogoCommand command)
     {
         command.OrganisationId = Request.HttpContext.User.GetOrganizationId();
         command.CompanyId = companyId;
@@ -78,7 +79,8 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
     
-    [HttpGet(Name = nameof(LookUpCompaniesAsync))]
+    [HttpGet("{sourceLevelId}",Name = nameof(LookUpCompaniesAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
     public async Task<IActionResult> LookUpCompaniesAsync()
     {
         var organisationId = Request.HttpContext.User.GetOrganizationId();
