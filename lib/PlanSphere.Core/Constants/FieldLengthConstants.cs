@@ -1,4 +1,4 @@
-namespace PlanSphere.Core.Constants;
+﻿namespace PlanSphere.Core.Constants;
 
 public static class FieldLengthConstants
 {

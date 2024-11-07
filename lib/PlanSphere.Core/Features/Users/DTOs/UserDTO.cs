@@ -1,6 +1,6 @@
 ﻿using PlanSphere.Core.Abstract;
 using PlanSphere.Core.Common.DTOs;
-using PlanSphere.Core.Features.Address.DTOs;
+using PlanSphere.Core.Features.Addresses.DTOs;
 
 namespace PlanSphere.Core.Features.Users.DTOs;
 

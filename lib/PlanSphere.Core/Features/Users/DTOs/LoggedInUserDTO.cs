@@ -4,6 +4,7 @@ namespace PlanSphere.Core.Features.Users.DTOs;
 
 public class LoggedInUserDTO
 {
+    public ulong OrganisationId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }

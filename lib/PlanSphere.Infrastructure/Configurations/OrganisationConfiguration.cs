@@ -12,7 +12,7 @@ public class OrganisationConfiguration : IEntityTypeConfiguration<Organisation>
 
         builder.Property(e => e.Id)
             .ValueGeneratedOnAdd();
-
+        
         builder.HasOne(e => e.Address)
             .WithOne()
             .HasForeignKey<Organisation>(e => e.AddressId)

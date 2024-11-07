@@ -7,7 +7,7 @@ public static class ClaimsExtensions
 {
     public static ulong GetOrganizationId(this ClaimsPrincipal context)
     {
-        var organizationIdClaim = context.FindFirst(ClaimsConstants.OrganizationId)?.Value;
+        var organizationIdClaim = context.FindFirst(ClaimsConstants.OrganisationId)?.Value;
         ulong.TryParse(organizationIdClaim, out var organizationId);
 
         return organizationId;

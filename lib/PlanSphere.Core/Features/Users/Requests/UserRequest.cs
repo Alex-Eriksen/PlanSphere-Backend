@@ -1,4 +1,4 @@
-﻿using PlanSphere.Core.Features.Address.Requests;
+﻿using PlanSphere.Core.Features.Addresses.Requests;
 
 namespace PlanSphere.Core.Features.Users.Requests;
 

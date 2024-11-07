@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using PlanSphere.Core.Features.Address.Requests;
 using PlanSphere.Core.Features.Users.Requests;
 
 namespace PlanSphere.Core.Features.Users.Validators;

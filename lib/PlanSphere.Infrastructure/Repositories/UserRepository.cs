@@ -38,8 +38,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Right)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Right)
-            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies)
-            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Teams)
             .AsSplitQuery()
             .AsNoTracking()
@@ -179,7 +179,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(ClaimsConstants.UserId, user.Id.ToString()),
-            new(ClaimsConstants.OrganizationId, user.OrganisationId.ToString()),
+            new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
             new(ClaimsConstants.LastName, user.LastName)
@@ -198,7 +198,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(ClaimsConstants.UserId, user.Id.ToString()),
-            new(ClaimsConstants.OrganizationId, user.OrganisationId.ToString()),
+            new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
             new(ClaimsConstants.LastName, user.LastName)
