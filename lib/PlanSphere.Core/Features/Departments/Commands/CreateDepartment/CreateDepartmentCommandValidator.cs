@@ -7,8 +7,12 @@ public class CreateDepartmentCommandValidator : AbstractValidator<CreateDepartme
 {
     public CreateDepartmentCommandValidator()
     {
-        RuleFor(x => x.Request.DepartmentName)
+        RuleFor(x => x.Request.Name)
             .NotEmpty()
+            .MaximumLength(FieldLengthConstants.Short);
+        RuleFor(x => x.Request.Description)
+            .MaximumLength(FieldLengthConstants.Long);
+        RuleFor(x => x.Request.Building)
             .MaximumLength(FieldLengthConstants.Short);
 
     }
