@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Features.Addresses.Requests;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
+using PlanSphere.Core.Features.Users.Queries.ListUsers;
 using PlanSphere.Core.Features.Users.Requests;
 using PlanSphere.SystemApi.Controllers.Base;
 using PlanSphere.SystemApi.Extensions;
@@ -22,6 +23,13 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         command.OrganisationId = _claims.GetOrganizationId();
         await _mediator.Send(command);
         return Created();
+    }
+
+    [HttpGet(Name = nameof(ListUsersAsync))]
+    public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query)
+    {
+        var response = await _mediator.Send(query);
+        return Ok(response);
     }
     
     [HttpPost(Name = nameof(CreateUserDevelopmentAsync))]
