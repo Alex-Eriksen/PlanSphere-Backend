@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.EmbeddedEntities;
 using Microsoft.AspNetCore.Http;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Exceptions;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
@@ -26,7 +27,7 @@ public class RoleFilter(IUserRepository userRepository) : IRoleFilter
 
         if (!authorized)
         {
-            throw new ForbiddenAccessException("You are not authorized to perform this action!");
+            throw new ForbiddenAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
         }
     }
     
