@@ -29,7 +29,7 @@ public class LookUpWorkSchedulesQueryHandler(
     {
         _logger.BeginScope("Look up work schedules");
         _logger.LogInformation("Retrieving work schedule available for user with id: [{userId}]", request.UserId);
-        var query = userRepository.GetQueryable().AsSplitQuery().Where(x => x.Id == request.UserId);
+        var query = userRepository.GetQueryableWithRights().Where(x => x.Id == request.UserId);
         var workScheduleLookUpDtos = await GetAccessibleWorkSchedulesAsync(query, cancellationToken);
         _logger.LogInformation("Retrieved work schedule available for user with id: [{userId}]", request.UserId);
 
@@ -42,7 +42,7 @@ public class LookUpWorkSchedulesQueryHandler(
 
         var userRoles = await userQuery.SelectMany(x => x.Roles).ToListAsync(cancellationToken);
         
-        var workScheduleQuery = _workScheduleRepository.GetQueryable().AsSplitQuery();
+        var workScheduleQuery = _workScheduleRepository.GetWorkScheduleWithSources();
 
         var accessibleWorkSchedules = new List<WorkScheduleLookUpDTO>();
 
