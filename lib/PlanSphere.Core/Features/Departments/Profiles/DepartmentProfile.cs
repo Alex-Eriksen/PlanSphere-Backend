@@ -10,13 +10,13 @@ public class DepartmentProfile : Profile
     public DepartmentProfile()
     {
         CreateMap<DepartmentRequest, Department>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DepartmentName))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.Building, opt => opt.MapFrom(src => src.Building))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
         CreateMap<CreateDepartmentCommand, Department>()
             .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.CompanyId))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Request.DepartmentName))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Request.Name))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Request.Description))
             .ForMember(dest => dest.Building, opt => opt.MapFrom(src => src.Request.Building))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address));
