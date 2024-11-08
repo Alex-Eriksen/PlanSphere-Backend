@@ -17,7 +17,7 @@ public class UserSettingsProfile : Profile
             .ForPath(dest => dest.WorkSchedule.ParentId, opt =>
             {
                 opt.Condition(src => src.Source.InheritWorkSchedule);
-                opt.Condition(src => src.Source.InheritedWorkScheduleId != null);
+                opt.Condition(src => src.Source.InheritedWorkScheduleId != 0);
                 opt.MapFrom(src => src.InheritedWorkScheduleId);
             })
             .ForMember(dest => dest.AutoCheckInOut, opt => opt.MapFrom(src => src.AutoCheckInOut))
