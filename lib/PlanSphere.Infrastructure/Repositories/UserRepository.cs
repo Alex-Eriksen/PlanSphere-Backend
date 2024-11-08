@@ -61,9 +61,18 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         return request;
     }
 
-    public Task<User> DeleteAsync(ulong id, CancellationToken cancellationToken)
+    public async Task<User> DeleteAsync(ulong id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+        if (user == null)
+        {
+            _logger.LogInformation("User with id: [{id}] does not exist", id);
+            throw new KeyNotFoundException($"User with id: [{id}] does not exist");
+        }
+
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return user;
     }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken)

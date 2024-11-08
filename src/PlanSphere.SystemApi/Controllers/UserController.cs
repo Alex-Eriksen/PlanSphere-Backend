@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
@@ -7,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Addresses.Requests;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
+using PlanSphere.Core.Features.Users.Commands.DeleteUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.PatchUser;
 using PlanSphere.Core.Features.Users.Queries.GetUserDetails;
+using PlanSphere.Core.Features.Users.Queries.GetUser;
 using PlanSphere.Core.Features.Users.Queries.ListUsers;
 using PlanSphere.Core.Features.Users.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
@@ -35,6 +35,14 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     [HttpGet(Name = nameof(ListUsersAsync))]
     public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query)
     {
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
+
+    [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
+    public async Task<IActionResult> GetUserByIdAsync([FromRoute] ulong userId)
+    {
+        var query = new GetUserQuery(userId);
         var response = await _mediator.Send(query);
         return Ok(response);
     }
@@ -85,11 +93,12 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         await _mediator.Send(command);
         return NoContent();
     }
-    
-    [Authorize]
-    [HttpGet(Name = nameof(Test))]
-    public async Task<IActionResult> Test()
+
+    [HttpDelete("{userId}", Name = nameof(DeleteUserAsync))]
+    public async Task<IActionResult> DeleteUserAsync([FromRoute] ulong userId)
     {
+        var command = new DeleteUserCommand(userId);
+        await _mediator.Send(command);
         return NoContent();
     }
 }
