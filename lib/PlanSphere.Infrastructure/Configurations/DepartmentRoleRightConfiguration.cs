@@ -14,7 +14,7 @@ public class DepartmentRoleRightConfiguration : IEntityTypeConfiguration<Departm
             .ValueGeneratedOnAdd();
 
         builder.HasOne(e => e.Department)
-            .WithMany()
+            .WithMany(e => e.DepartmentRoleRights)
             .HasForeignKey(e => e.DepartmentId)
             .OnDelete(DeleteBehavior.Cascade);
 

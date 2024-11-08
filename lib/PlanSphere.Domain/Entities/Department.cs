@@ -19,7 +19,9 @@ public class Department : BaseEntity, IAuditableEntity
     public ulong SettingsId { get; set; }
     public virtual DepartmentSettings Settings { get; set; }
 
-    public List<Team> Teams { get; set; } = new List<Team>();
+    public virtual List<Team> Teams { get; set; } = new List<Team>();
+
+    public virtual List<DepartmentRoleRight> DepartmentRoleRights { get; set; } = new List<DepartmentRoleRight>();
     
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }
