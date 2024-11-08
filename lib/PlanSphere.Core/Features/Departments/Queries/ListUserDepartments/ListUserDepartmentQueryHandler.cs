@@ -11,6 +11,7 @@ using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
 using PlanSphere.Core.Interfaces.Services;
 using Serilog;
+using Right = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Features.Departments.Queries.ListUserDepartments;
 
@@ -32,9 +33,36 @@ public class ListUserDepartmentQueryHandler(
         _logger.BeginScope("Fetching Departments");
         _logger.LogInformation("Fetching departments from user with id: [{userId}]", request.UserId);
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
-        var query = _departmentRepository.GetQueryable();
-        var departmentIds = user.Roles.Select(mpanies.SelectMany(x => x.Departments).Select(x => x.Id).ToList());
-        departmentIds.AddRange(user.);
+        var userRoles = user.Roles.Select(x => x.Role);
+        
+        var departmentIds = userRoles
+            .SelectMany(x => x.OrganisationRoleRights)
+            .Where(x => x.Right.AsEnum <= Right.View)
+            .Select(x => x.Organisation)
+            .SelectMany(x => x.Companies)
+            .SelectMany(x => x.Departments)
+            .Select(x => x.Id)
+            .ToList();
+        
+        departmentIds.AddRange(userRoles
+            .SelectMany(x => x.CompanyRoleRights)
+            .Where(x => x.Right.AsEnum <= Right.View)
+            .Select(x => x.Company)
+            .SelectMany(x => x.Departments)
+            .Select(x => x.Id)
+            .ToList()
+        );
+        
+        departmentIds.AddRange(userRoles
+            .SelectMany(x => x.DepartmentRoleRights)
+            .Where(x => x.Right.AsEnum <= Right.View)
+            .Select(x => x.Department.Id)
+            .ToList()
+        );
+
+        departmentIds = departmentIds.Distinct().ToList();
+        
+        var query = _departmentRepository.GetQueryable().Where(x => departmentIds.Contains(x.Id));
         _logger.LogInformation("Fetched departments from company with id: [{userId}]", request.UserId);
 
         query = SearchQuery(request, query);

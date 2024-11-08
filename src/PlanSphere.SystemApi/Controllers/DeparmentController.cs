@@ -9,9 +9,11 @@ using PlanSphere.Core.Features.Departments.Commands.PatchDepartments;
 using PlanSphere.Core.Features.Departments.Commands.UpdateDepartments;
 using PlanSphere.Core.Features.Departments.Queries.GetDepartment;
 using PlanSphere.Core.Features.Departments.Queries.ListDepartments;
+using PlanSphere.Core.Features.Departments.Queries.ListUserDepartments;
 using PlanSphere.Core.Features.Departments.Request;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
+using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
@@ -29,9 +31,9 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         return Ok(response);
     }
 
-    [HttpPost("{sourceLevelId}",Name = nameof(CreateDepartmentAsync))]
+    [HttpPost("{sourceLevelId}", Name = nameof(CreateDepartmentAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Company])]
-    public async Task<IActionResult> CreateDepartmentAsync([FromRoute] ulong sourceLevelId,[FromBody] DepartmentRequest request)
+    public async Task<IActionResult> CreateDepartmentAsync([FromRoute] ulong sourceLevelId, [FromBody] DepartmentRequest request)
     {
         var command = new CreateDepartmentCommand(request);
         command.CompanyId = sourceLevelId;
@@ -78,11 +80,13 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         var respone = await _mediator.Send(query);
         return Ok(respone);
     }
-    
-    //[HttpGet("{sourceLevelId}/{userId}", Name = nameof(ListUserDepartmentsAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Company])]
-    //public async Task<IActionResult> ListUserDepartmentsAsync([])
 
-
-
+    [HttpGet("{sourceLevelId}/{userId}", Name = nameof(ListUserDepartmentsAsync))]
+    // [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Company])]
+    public async Task<IActionResult> ListUserDepartmentsAsync([FromQuery] ListUserDepartmentQuery query)
+    {
+        query.UserId = Request.HttpContext.User.GetUserId();
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
 }
