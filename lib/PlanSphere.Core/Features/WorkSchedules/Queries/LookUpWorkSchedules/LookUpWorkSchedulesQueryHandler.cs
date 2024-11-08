@@ -29,21 +29,11 @@ public class LookUpWorkSchedulesQueryHandler(
     {
         _logger.BeginScope("Look up work schedules");
         _logger.LogInformation("Retrieving work schedule available for user with id: [{userId}]", request.UserId);
-        var query = GetQuery(request.UserId);
+        var query = userRepository.GetQueryable().AsSplitQuery().Where(x => x.Id == request.UserId);
         var workScheduleLookUpDtos = await GetAccessibleWorkSchedulesAsync(query, cancellationToken);
         _logger.LogInformation("Retrieved work schedule available for user with id: [{userId}]", request.UserId);
 
         return workScheduleLookUpDtos;
-    }
-
-    private IQueryable<User> GetQuery(ulong userId)
-    {
-        var query = _userRepository.GetQueryable().Where(x => x.Id == userId);
-        query = query.Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Right);
-        query = query.Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Right);
-        query = query.Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Right);
-        query = query.Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Right);
-        return query.AsSplitQuery();
     }
 
     private async Task<List<WorkScheduleLookUpDTO>> GetAccessibleWorkSchedulesAsync(IQueryable<User> userQuery, CancellationToken cancellationToken)
@@ -53,10 +43,6 @@ public class LookUpWorkSchedulesQueryHandler(
         var userRoles = await userQuery.SelectMany(x => x.Roles).ToListAsync(cancellationToken);
         
         var workScheduleQuery = _workScheduleRepository.GetQueryable().AsSplitQuery();
-        workScheduleQuery = workScheduleQuery.Include(x => x.OrganisationSettings).ThenInclude(x => x.Organisation);
-        workScheduleQuery = workScheduleQuery.Include(x => x.CompanySettings).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation);
-        workScheduleQuery = workScheduleQuery.Include(x => x.DepartmentSettings).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation);
-        workScheduleQuery = workScheduleQuery.Include(x => x.TeamSettings).ThenInclude(x => x.Team).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation);
 
         var accessibleWorkSchedules = new List<WorkScheduleLookUpDTO>();
 

@@ -56,6 +56,12 @@ public class WorkScheduleRepository(IPlanSphereDatabaseContext dbContext, ILogge
 
     public IQueryable<WorkSchedule> GetQueryable()
     {
-        return _dbContext.WorkSchedules.AsNoTracking().AsQueryable();
+        return _dbContext.WorkSchedules
+            .Include(x => x.OrganisationSettings).ThenInclude(x => x.Organisation)
+            .Include(x => x.CompanySettings).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .Include(x => x.DepartmentSettings).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .Include(x => x.TeamSettings).ThenInclude(x => x.Team).ThenInclude(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
+            .AsNoTracking()
+            .AsQueryable();
     }
 }

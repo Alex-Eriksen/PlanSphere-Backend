@@ -73,7 +73,13 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
 
     public IQueryable<User> GetQueryable()
     {
-        return _dbContext.Users.AsNoTracking().AsQueryable();
+        return _dbContext.Users
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Right)
+            .AsNoTracking()
+            .AsQueryable();
     }
 
     public async Task<User> GetByIdentityIdAsync(string identityId, CancellationToken cancellationToken)
