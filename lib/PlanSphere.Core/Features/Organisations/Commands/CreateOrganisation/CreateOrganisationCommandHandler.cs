@@ -17,13 +17,33 @@ public class CreateOrganisationCommandHandler(
     private readonly IOrganisationRepository _organisationRepository = organisationRepository ?? throw new ArgumentNullException(nameof(organisationRepository));
     private readonly ILogger<CreateOrganisationCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-    
+
     public async Task Handle(CreateOrganisationCommand command, CancellationToken cancellationToken) 
     {
        _logger.BeginScope("Starting to create an organisation  with CreateOrganisationCommandHandler with name: [{organisationName}]",  command.Request.Name);
        _logger.LogInformation("Creating organisation with name: [{organisationName}]", command.Request.Name);
         
        var organisation = _mapper.Map<Organisation>(command.Request);
+       
+       organisation.Settings = new OrganisationSettings
+       {
+           DefaultWorkSchedule = new WorkSchedule
+           {
+               IsDefaultWorkSchedule = true
+           },
+           DefaultRole = new Role
+           {
+               Name = organisation.Name + "-default-role",
+               OrganisationRoleRights =
+               [
+                   new OrganisationRoleRight()
+                   {
+                       RightId = 60,
+                       Organisation = organisation
+                   }
+               ]
+           }
+       };
         
        await _organisationRepository.CreateAsync(organisation, cancellationToken);
        
