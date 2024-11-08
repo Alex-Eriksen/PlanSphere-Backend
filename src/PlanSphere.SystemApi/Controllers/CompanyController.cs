@@ -10,6 +10,7 @@ using PlanSphere.Core.Features.Companies.Commands.PatchCompany;
 using PlanSphere.Core.Features.Companies.Commands.UploadCompanyLogo;
 using PlanSphere.Core.Features.Companies.Queries.GetCompany;
 using PlanSphere.Core.Features.Companies.Queries.ListCompanies;
+using PlanSphere.Core.Features.Companies.Queries.ListUserCompanies;
 using PlanSphere.Core.Features.Companies.Queries.LookUp;
 using PlanSphere.Core.Features.Companies.Request;
 using PlanSphere.SystemApi.Action_Filters;
@@ -86,6 +87,14 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         var organisationId = Request.HttpContext.User.GetOrganisationId();
         var userId = Request.HttpContext.User.GetUserId();
         var query = new LookUpCompaniesQuery(organisationId, userId);
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
+
+    [HttpGet(Name = nameof(ListUserCompaniesAsync))]
+    public async Task<IActionResult> ListUserCompaniesAsync([FromQuery] ListUserCompaniesQuery query)
+    {
+        query.UserId = Request.HttpContext.User.GetUserId();
         var response = await _mediator.Send(query);
         return Ok(response);
     }
