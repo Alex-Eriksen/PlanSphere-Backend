@@ -23,6 +23,11 @@ public class RoleFilter(IUserRepository userRepository) : IRoleFilter
 
         var authorized = false;
 
+        if (userRoles.Select(x => x.Name).Contains(PermissionFilterConstants.SystemAdministratorKey))
+        {
+            return;
+        }
+        
         authorized = isSpecific ? AuthorizedSpecific(userRoles, sourceLevel, sourceLevelId, authorized, requiredRight) : Authorized(userRoles, sourceLevel, sourceLevelId, authorized, requiredRight);
 
         if (!authorized)
