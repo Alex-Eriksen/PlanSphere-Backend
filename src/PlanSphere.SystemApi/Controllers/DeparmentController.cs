@@ -71,7 +71,7 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
     }
 
     [HttpGet("{sourceLevelId}", Name = nameof(ListDepartmentsAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Department])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Company])]
     public async Task<IActionResult> ListDepartmentsAsync([FromRoute] ulong sourceLevelId, [FromQuery] ListDepartmentQuery query)
     {
         query.CompanyId = sourceLevelId;

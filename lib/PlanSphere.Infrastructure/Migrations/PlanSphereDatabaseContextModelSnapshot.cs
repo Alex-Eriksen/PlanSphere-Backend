@@ -239,9 +239,11 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("CompanyId");
 
-                    b.HasIndex("DefaultRoleId");
+                    b.HasIndex("DefaultRoleId")
+                        .IsUnique();
 
-                    b.HasIndex("DefaultWorkScheduleId");
+                    b.HasIndex("DefaultWorkScheduleId")
+                        .IsUnique();
 
                     b.ToTable("CompanySettings");
                 });
@@ -433,9 +435,11 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("DepartmentId");
 
-                    b.HasIndex("DefaultRoleId");
+                    b.HasIndex("DefaultRoleId")
+                        .IsUnique();
 
-                    b.HasIndex("DefaultWorkScheduleId");
+                    b.HasIndex("DefaultWorkScheduleId")
+                        .IsUnique();
 
                     b.ToTable("DepartmentSettings");
                 });
@@ -597,9 +601,11 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("OrganisationId");
 
-                    b.HasIndex("DefaultRoleId");
+                    b.HasIndex("DefaultRoleId")
+                        .IsUnique();
 
-                    b.HasIndex("DefaultWorkScheduleId");
+                    b.HasIndex("DefaultWorkScheduleId")
+                        .IsUnique();
 
                     b.ToTable("OrganisationSettings");
                 });
@@ -871,9 +877,11 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("TeamId");
 
-                    b.HasIndex("DefaultRoleId");
+                    b.HasIndex("DefaultRoleId")
+                        .IsUnique();
 
-                    b.HasIndex("DefaultWorkScheduleId");
+                    b.HasIndex("DefaultWorkScheduleId")
+                        .IsUnique();
 
                     b.ToTable("TeamSettings");
                 });
@@ -1344,14 +1352,14 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Role", "DefaultRole")
-                        .WithMany()
-                        .HasForeignKey("DefaultRoleId")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CompanySettings", "DefaultRoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.WorkSchedule", "DefaultWorkSchedule")
-                        .WithMany()
-                        .HasForeignKey("DefaultWorkScheduleId")
+                        .WithOne("CompanySettings")
+                        .HasForeignKey("Domain.Entities.CompanySettings", "DefaultWorkScheduleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1501,14 +1509,14 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.DepartmentSettings", b =>
                 {
                     b.HasOne("Domain.Entities.Role", "DefaultRole")
-                        .WithMany()
-                        .HasForeignKey("DefaultRoleId")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.DepartmentSettings", "DefaultRoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.WorkSchedule", "DefaultWorkSchedule")
-                        .WithMany()
-                        .HasForeignKey("DefaultWorkScheduleId")
+                        .WithOne("DepartmentSettings")
+                        .HasForeignKey("Domain.Entities.DepartmentSettings", "DefaultWorkScheduleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1635,14 +1643,14 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.OrganisationSettings", b =>
                 {
                     b.HasOne("Domain.Entities.Role", "DefaultRole")
-                        .WithMany()
-                        .HasForeignKey("DefaultRoleId")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.OrganisationSettings", "DefaultRoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.WorkSchedule", "DefaultWorkSchedule")
-                        .WithMany()
-                        .HasForeignKey("DefaultWorkScheduleId")
+                        .WithOne("OrganisationSettings")
+                        .HasForeignKey("Domain.Entities.OrganisationSettings", "DefaultWorkScheduleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1826,14 +1834,14 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.TeamSettings", b =>
                 {
                     b.HasOne("Domain.Entities.Role", "DefaultRole")
-                        .WithMany()
-                        .HasForeignKey("DefaultRoleId")
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.TeamSettings", "DefaultRoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.WorkSchedule", "DefaultWorkSchedule")
-                        .WithMany()
-                        .HasForeignKey("DefaultWorkScheduleId")
+                        .WithOne("TeamSettings")
+                        .HasForeignKey("Domain.Entities.TeamSettings", "DefaultWorkScheduleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1911,7 +1919,7 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.WorkSchedule", "WorkSchedule")
-                        .WithOne()
+                        .WithOne("UserSettings")
                         .HasForeignKey("Domain.Entities.UserSettings", "WorkScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1924,7 +1932,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.WorkSchedule", b =>
                 {
                     b.HasOne("Domain.Entities.WorkSchedule", "Parent")
-                        .WithMany()
+                        .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -2088,6 +2096,18 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.WorkSchedule", b =>
                 {
+                    b.Navigation("Children");
+
+                    b.Navigation("CompanySettings");
+
+                    b.Navigation("DepartmentSettings");
+
+                    b.Navigation("OrganisationSettings");
+
+                    b.Navigation("TeamSettings");
+
+                    b.Navigation("UserSettings");
+
                     b.Navigation("WorkScheduleShifts");
                 });
 #pragma warning restore 612, 618

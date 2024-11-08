@@ -16,7 +16,7 @@ public class UserSettingsConfiguration : IEntityTypeConfiguration<UserSettings>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.WorkSchedule)
-            .WithOne()
+            .WithOne(e => e.UserSettings)
             .HasForeignKey<UserSettings>(e => e.WorkScheduleId)
             .OnDelete(DeleteBehavior.Cascade);
     }

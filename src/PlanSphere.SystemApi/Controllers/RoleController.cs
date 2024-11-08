@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Rights.Queries.LookUp;
 using PlanSphere.Core.Features.Roles.Commands.CreateRole;
 using PlanSphere.Core.Features.Roles.Commands.DeleteRole;
@@ -14,7 +15,6 @@ using PlanSphere.Core.Features.Roles.Queries.ListRoles;
 using PlanSphere.Core.Features.Roles.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
@@ -84,7 +84,7 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
     public async Task<IActionResult> ListRolesAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromQuery] ListRolesQuery query)
     {
-        var organisationId = Request.HttpContext.User.GetOrganizationId();
+        var organisationId = Request.HttpContext.User.GetOrganisationId();
         query.OrganisationId = organisationId;
         query.SourceLevelId = sourceLevelId;
         query.SourceLevel = sourceLevel;

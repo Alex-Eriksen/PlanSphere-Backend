@@ -3,12 +3,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Constants;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.RefreshToken;
 using PlanSphere.Core.Features.Users.Commands.RevokeRefreshToken;
 using PlanSphere.Core.Features.Users.Queries.GetLoggedInUser;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 

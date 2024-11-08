@@ -4,6 +4,7 @@ using PlanSphere.Core.Features.Users.Commands.CreateUser;
 using PlanSphere.Core.Features.Users.DTOs;
 using PlanSphere.Core.Features.Users.Queries.ListUsers;
 using PlanSphere.Core.Features.Users.Requests;
+using PlanSphere.Core.Features.Users.Requests;
 
 namespace PlanSphere.Core.Features.Users.Profiles;
 
@@ -35,5 +36,13 @@ public class UserProfile : Profile
             })
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
+        CreateMap<UserPatchRequest, User>()
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+            .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday))
+            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+            .ForMember(dest => dest.Settings, opt => opt.MapFrom(src => src.Settings));
     }
 }

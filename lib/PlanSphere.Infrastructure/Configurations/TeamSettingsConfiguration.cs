@@ -16,13 +16,13 @@ public class TeamSettingsConfiguration : IEntityTypeConfiguration<TeamSettings>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.DefaultRole)
-            .WithMany()
-            .HasForeignKey(e => e.DefaultRoleId)
+            .WithOne()
+            .HasForeignKey<TeamSettings>(e => e.DefaultRoleId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(e => e.DefaultWorkSchedule)
-            .WithMany()
-            .HasForeignKey(e => e.DefaultWorkScheduleId)
+            .WithOne(e => e.TeamSettings)
+            .HasForeignKey<TeamSettings>(e => e.DefaultWorkScheduleId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
