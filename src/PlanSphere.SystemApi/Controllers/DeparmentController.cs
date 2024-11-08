@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Departments.Commands.CreateDepartment;
 using PlanSphere.Core.Features.Departments.Commands.DeleteDepartment;
 using PlanSphere.Core.Features.Departments.Commands.PatchDepartments;
@@ -13,7 +14,6 @@ using PlanSphere.Core.Features.Departments.Queries.ListUserDepartments;
 using PlanSphere.Core.Features.Departments.Request;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
