@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.JobTitles.Commands.CreateJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.DeleteJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.ToggleJobTitleInheritance;
@@ -13,7 +14,6 @@ using PlanSphere.Core.Features.JobTitles.Queries.ListJobTitles;
 using PlanSphere.Core.Features.JobTitles.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
@@ -38,7 +38,7 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
     {
         query.SourceLevel = sourceLevel;
         query.SourceLevelId = sourceLevelId;
-        query.OrganisationId = _claims.GetOrganizationId();
+        query.OrganisationId = _claims.GetOrganisationId();
         var response = await _mediator.Send(query);
         return Ok(response);
     }

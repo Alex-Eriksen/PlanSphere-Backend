@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using PlanSphere.Core.Constants;
 
-namespace PlanSphere.SystemApi.Extensions;
+namespace PlanSphere.Core.Extensions.HttpContextExtensions;
 
 public static class ClaimsExtensions
 {
-    public static ulong GetOrganizationId(this ClaimsPrincipal context)
+    public static ulong GetOrganisationId(this ClaimsPrincipal context)
     {
         var organizationIdClaim = context.FindFirst(ClaimsConstants.OrganisationId)?.Value;
         ulong.TryParse(organizationIdClaim, out var organizationId);

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Exceptions;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Interfaces.Repositories;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Action_Filters;
 
@@ -23,7 +23,7 @@ public class SystemAdministratorFilter(
         
         if (!isSystemAdmin)
         {
-            throw new ForbiddenAccessException("You are unauthorized!");
+            throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
         }
 
         await next();

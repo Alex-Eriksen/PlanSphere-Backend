@@ -14,7 +14,7 @@ public class WorkScheduleConfiguration : IEntityTypeConfiguration<WorkSchedule>
             .ValueGeneratedOnAdd();
 
         builder.HasOne(e => e.Parent)
-            .WithMany()
+            .WithMany(e => e.Children)
             .HasForeignKey(e => e.ParentId)
             .OnDelete(DeleteBehavior.NoAction);
     }

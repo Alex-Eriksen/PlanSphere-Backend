@@ -14,6 +14,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using PlanSphere.Core.Extensions.APIExtensions;
 using PlanSphere.Core.Extensions.DIExtensions;
+using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Core.Interfaces.Services;
 using PlanSphere.Core.Services;
@@ -47,6 +48,7 @@ public static class Extensions
         builder.Services.AddSingleton<ISystemClock, SystemClock>();
         builder.Services.AddRepositories();
         builder.Services.AddServices();
+        builder.Services.AddLateFilters();
         builder.Services.AddScoped<IPlanSphereDatabaseContext, PlanSphereDatabaseContext>();
         if (withControllers)
         {

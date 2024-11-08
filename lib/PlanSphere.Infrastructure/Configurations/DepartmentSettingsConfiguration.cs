@@ -16,13 +16,13 @@ public class DepartmentSettingsConfiguration : IEntityTypeConfiguration<Departme
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.DefaultRole)
-            .WithMany()
-            .HasForeignKey(e => e.DefaultRoleId)
+            .WithOne()
+            .HasForeignKey<DepartmentSettings>(e => e.DefaultRoleId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(e => e.DefaultWorkSchedule)
-            .WithMany()
-            .HasForeignKey(e => e.DefaultWorkScheduleId)
+            .WithOne(e => e.DepartmentSettings)
+            .HasForeignKey<DepartmentSettings>(e => e.DefaultWorkScheduleId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

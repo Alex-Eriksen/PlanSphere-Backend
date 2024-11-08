@@ -16,13 +16,13 @@ public class OrganisationSettingsConfiguration : IEntityTypeConfiguration<Organi
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.DefaultRole)
-            .WithMany()
-            .HasForeignKey(e => e.DefaultRoleId)
+            .WithOne()
+            .HasForeignKey<OrganisationSettings>(e => e.DefaultRoleId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(e => e.DefaultWorkSchedule)
-            .WithMany()
-            .HasForeignKey(e => e.DefaultWorkScheduleId)
+            .WithOne(e => e.OrganisationSettings)
+            .HasForeignKey<OrganisationSettings>(e => e.DefaultWorkScheduleId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

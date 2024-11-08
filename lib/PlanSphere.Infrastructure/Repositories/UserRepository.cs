@@ -28,7 +28,11 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
     public async Task<User> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
-            .Include(x => x.Settings)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.WorkSchedule).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Address)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Right)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
@@ -38,7 +42,6 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Teams)
             .AsSplitQuery()
-            .AsNoTracking()
             .SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
         
         if (user == null)
@@ -50,9 +53,12 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         return user;
     }
 
-    public Task<User> UpdateAsync(ulong id, User request, CancellationToken cancellationToken)
+    public async Task<User> UpdateAsync(ulong id, User request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _dbContext.Users.Update(request);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return request;
     }
 
     public Task<User> DeleteAsync(ulong id, CancellationToken cancellationToken)
@@ -67,7 +73,21 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
 
     public IQueryable<User> GetQueryable()
     {
-        throw new NotImplementedException();
+        return _dbContext.Users
+            .AsNoTracking()
+            .AsQueryable();
+    }
+
+    public IQueryable<User> GetQueryableWithRights()
+    {
+        return _dbContext.Users
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Right)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .AsQueryable();
     }
 
     public async Task<User> GetByIdentityIdAsync(string identityId, CancellationToken cancellationToken)

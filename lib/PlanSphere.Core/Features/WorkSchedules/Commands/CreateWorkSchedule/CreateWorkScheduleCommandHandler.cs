@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
 
-namespace PlanSphere.Core.Features.WorkSchedule.Commands.CreateWorkSchedule;
+namespace PlanSphere.Core.Features.WorkSchedules.Commands.CreateWorkSchedule;
 
 [HandlerType(HandlerType.SystemApi)]
 public class CreateWorkScheduleCommandHandler(

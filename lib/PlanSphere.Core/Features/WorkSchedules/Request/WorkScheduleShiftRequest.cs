@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.EmbeddedEntities;
 
-namespace PlanSphere.Core.Features.WorkSchedule.Request;
+namespace PlanSphere.Core.Features.WorkSchedules.Request;
 
 public class WorkScheduleShiftRequest
 {

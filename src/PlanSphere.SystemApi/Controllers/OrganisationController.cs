@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Organisations.Queries.LookUp;
 using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.DeleteOrganisation;
@@ -13,7 +14,6 @@ using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 using PlanSphere.Core.Features.Organisations.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
@@ -35,7 +35,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
     public async Task<IActionResult> GetOrganisationByIdAsync([FromRoute] ulong? sourceLevelId)
     {
-        var selectedId = sourceLevelId ?? Request.HttpContext.User.GetOrganizationId();
+        var selectedId = sourceLevelId ?? Request.HttpContext.User.GetOrganisationId();
         
         var query = new GetOrganisationQuery(selectedId);
         var response = await _mediator.Send(query);
@@ -63,7 +63,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
     public async Task<IActionResult> UpdateOrganisationAsync([FromRoute] ulong? sourceLevelId, [FromBody] OrganisationRequest request)
     {
-        var command = new UpdateOrganisationCommand(request, sourceLevelId ?? Request.HttpContext.User.GetOrganizationId());
+        var command = new UpdateOrganisationCommand(request, sourceLevelId ?? Request.HttpContext.User.GetOrganisationId());
         await _mediator.Send(command);
         return NoContent();
     }
@@ -81,7 +81,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
     public async Task<IActionResult> PatchOrganisationAsync([FromRoute] ulong? sourceLevelId, [FromBody] JsonPatchDocument<OrganisationRequest> patchRequest)
     {
-        var selectedId = sourceLevelId ?? Request.HttpContext.User.GetOrganizationId();
+        var selectedId = sourceLevelId ?? Request.HttpContext.User.GetOrganisationId();
         var command = new PatchOrganisationCommand(patchRequest, selectedId);
         await _mediator.Send(command);
         return NoContent();
