@@ -81,8 +81,7 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
         return Ok(respone);
     }
 
-    [HttpGet("{sourceLevelId}/{userId}", Name = nameof(ListUserDepartmentsAsync))]
-    // [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Company])]
+    [HttpGet(Name = nameof(ListUserDepartmentsAsync))]
     public async Task<IActionResult> ListUserDepartmentsAsync([FromQuery] ListUserDepartmentQuery query)
     {
         query.UserId = Request.HttpContext.User.GetUserId();

@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
@@ -10,7 +9,6 @@ using PlanSphere.Core.Features.Departments.DTOs;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Repositories;
 using PlanSphere.Core.Interfaces.Services;
-using Serilog;
 using Right = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Features.Departments.Queries.ListUserDepartments;
@@ -81,7 +79,6 @@ public class ListUserDepartmentQueryHandler(
             var search = request.Search.ToLower().Trim();
             query = query.Where(d => d.Name.ToLower().Contains(search) ||
                                      (d.Address.StreetName.ToLower() + " " + d.Address.HouseNumber.ToLower()).Contains(search));
-
         }
 
         return query;
