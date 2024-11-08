@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Organisations.Queries.LookUp;
 using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.DeleteOrganisation;
@@ -13,7 +14,6 @@ using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 using PlanSphere.Core.Features.Organisations.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 

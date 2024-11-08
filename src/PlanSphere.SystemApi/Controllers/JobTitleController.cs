@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.JobTitles.Commands.CreateJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.DeleteJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.ToggleJobTitleInheritance;
@@ -13,7 +14,6 @@ using PlanSphere.Core.Features.JobTitles.Queries.ListJobTitles;
 using PlanSphere.Core.Features.JobTitles.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 

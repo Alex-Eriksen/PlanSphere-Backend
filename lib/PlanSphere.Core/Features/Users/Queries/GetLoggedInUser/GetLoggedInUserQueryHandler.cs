@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.Users.DTOs;
 using PlanSphere.Core.Interfaces.Repositories;
@@ -30,7 +31,7 @@ public class GetLoggedInUserQueryHandler(
         if (request.ClaimedUserId != user.Id)
         {
             _logger.LogInformation("You are not authorized to view this data!");
-            throw new UnauthorizedAccessException("You are not authorized to view this data!");
+            throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
         }
         
         var loggedInUserDto = _mapper.Map<LoggedInUserDTO>(user);

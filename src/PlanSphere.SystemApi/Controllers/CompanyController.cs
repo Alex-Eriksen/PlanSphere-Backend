@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Companies.Commands.CreateCompany;
 using PlanSphere.Core.Features.Companies.Commands.DeleteCompany;
 using PlanSphere.Core.Features.Companies.Commands.PatchCompany;
@@ -13,7 +14,6 @@ using PlanSphere.Core.Features.Companies.Queries.LookUp;
 using PlanSphere.Core.Features.Companies.Request;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
     

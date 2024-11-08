@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using PlanSphere.Core.Constants;
 
-namespace PlanSphere.SystemApi.Extensions;
+namespace PlanSphere.Core.Extensions.HttpContextExtensions;
 
 public static class ClaimsExtensions
 {

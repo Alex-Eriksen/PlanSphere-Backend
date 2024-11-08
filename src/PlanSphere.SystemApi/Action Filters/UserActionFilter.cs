@@ -1,8 +1,8 @@
 ﻿using Domain.Entities.EmbeddedEntities;
 using Microsoft.AspNetCore.Mvc.Filters;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Interfaces.Repositories;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Action_Filters;
 
@@ -34,8 +34,11 @@ public class UserActionFilter(
         }
 
         var user = await _userRepository.GetByIdAsync(activatingUserId, CancellationToken.None);
-        
-        if (!user.Roles.Select(x => x.Role).Any(role => role.OrganisationRoleRights.Any(x => x.OrganisationId == context.HttpContext.User.GetOrganisationId() && x.Right.AsEnum == Right.ManageUsers))) throw new UnauthorizedAccessException("You are unauthorized!");
+
+        if (!user.Roles.Select(x => x.Role).Any(role => role.OrganisationRoleRights.Any(x => x.OrganisationId == context.HttpContext.User.GetOrganisationId() && x.Right.AsEnum == Right.ManageUsers)))
+        {
+            throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
+        }
         
         await next();
     }

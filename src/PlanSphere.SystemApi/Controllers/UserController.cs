@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Addresses.Requests;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
@@ -12,7 +13,6 @@ using PlanSphere.Core.Features.Users.Queries.GetUserDetails;
 using PlanSphere.Core.Features.Users.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 

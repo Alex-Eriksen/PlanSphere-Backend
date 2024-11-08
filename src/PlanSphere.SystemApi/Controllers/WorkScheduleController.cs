@@ -2,30 +2,27 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry.Metrics;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
+using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.WorkSchedules.Commands;
+using PlanSphere.Core.Features.WorkSchedules.Commands.UpdateWorkSchedule;
 using PlanSphere.Core.Features.WorkSchedules.Queries.GetWorkScheduleById;
 using PlanSphere.Core.Features.WorkSchedules.Queries.LookUpWorkSchedules;
+using PlanSphere.Core.Features.WorkSchedules.Request;
+using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
+using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
-using PlanSphere.SystemApi.Extensions;
 
 namespace PlanSphere.SystemApi.Controllers;
 
 [Authorize]
-public class WorkScheduleController(IMediator mediator) : ApiControllerBase(mediator)
+public class WorkScheduleController(IMediator mediator, IWorkScheduleFilter workScheduleFilter, IRoleFilter roleFilter) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-    
-
-    [HttpPost("{organisationId}", Name = nameof(CreateWorkScheduleAsync))]
-    public async Task<IActionResult> CreateWorkScheduleAsync([FromRoute] ulong organisationId, SourceLevel sourceLevel, ulong sourceLevelId, [FromBody] CreateWorkScheduleCommand command)
-    {
-        command.OrganisationId = organisationId;
-        command.SourceLevel = sourceLevel;
-        command.SourceLevelId = sourceLevelId;
-        await _mediator.Send(command);
-        return NoContent();
-    }
+    private readonly IWorkScheduleFilter _workScheduleFilter = workScheduleFilter ?? throw new ArgumentNullException(nameof(workScheduleFilter));
+    private readonly IRoleFilter _roleFilter = roleFilter ?? throw new ArgumentNullException(nameof(roleFilter));
 
     /// <summary>
     /// Used for getting the available work schedules for a user.
@@ -48,6 +45,23 @@ public class WorkScheduleController(IMediator mediator) : ApiControllerBase(medi
         var query = new GetWorkScheduleByIdQuery(workScheduleId);
         var response = await _mediator.Send(query);
         return Ok(response);
+    }
+
+    [HttpPut("{sourceLevel}/{sourceLevelId}/{workScheduleId?}", Name = nameof(UpdateWorkScheduleAsync))]
+    public async Task<IActionResult> UpdateWorkScheduleAsync(SourceLevel sourceLevel, ulong sourceLevelId, ulong? workScheduleId, WorkScheduleRequest request)
+    {
+        if (workScheduleId == null && !await _workScheduleFilter.IsAllowedToChangeOwnWorkScheduleAsync(Request.HttpContext.User.GetUserId()))
+        {
+            throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
+        }
+        else if(workScheduleId != null)
+        {
+            await _roleFilter.CheckIsAuthorizedSourceLevelAsync(Request.HttpContext, Right.Edit);
+        }
+
+        var command = new UpdateWorkScheduleCommand(workScheduleId, Request.HttpContext.User.GetUserId(), request);
+        await _mediator.Send(command);
+        return NoContent();
     }
 }
     

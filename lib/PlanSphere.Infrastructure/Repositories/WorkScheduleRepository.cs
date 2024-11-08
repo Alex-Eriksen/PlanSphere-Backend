@@ -25,7 +25,7 @@ public class WorkScheduleRepository(IPlanSphereDatabaseContext dbContext, ILogge
             .Include(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
-            .Include(x => x.WorkScheduleShifts)
+            .Include(x => x.WorkScheduleShifts.OrderBy(x => x.Day))
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (workSchedule == null)
@@ -37,9 +37,11 @@ public class WorkScheduleRepository(IPlanSphereDatabaseContext dbContext, ILogge
         return workSchedule;
     }
 
-    public Task<WorkSchedule> UpdateAsync(ulong id, WorkSchedule request, CancellationToken cancellationToken)
+    public async Task<WorkSchedule> UpdateAsync(ulong id, WorkSchedule request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _dbContext.WorkSchedules.Update(request);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return request;
     }
 
     public Task<WorkSchedule> DeleteAsync(ulong id, CancellationToken cancellationToken)
