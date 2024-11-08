@@ -1482,7 +1482,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.DepartmentRoleRight", b =>
                 {
                     b.HasOne("Domain.Entities.Department", "Department")
-                        .WithMany()
+                        .WithMany("DepartmentRoleRights")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2020,6 +2020,8 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Department", b =>
                 {
+                    b.Navigation("DepartmentRoleRights");
+
                     b.Navigation("Settings")
                         .IsRequired();
 
