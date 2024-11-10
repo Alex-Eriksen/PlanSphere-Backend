@@ -18,8 +18,8 @@ public class DeleteTeamCommandHandler(
     public async Task Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
     {
         _logger.BeginScope("Deleting Team");
-        _logger.LogInformation("Deleting Team with [{id}]", request.teamId);
-        await _teamRepository.DeleteAsync(request.teamId, cancellationToken);
-        _logger.LogInformation("Deleted Team with id [{id}]", request.teamId);
+        _logger.LogInformation("Deleting Team with [{id}]", request.TeamId);
+        await _teamRepository.DeleteAsync(request.TeamId, cancellationToken);
+        _logger.LogInformation("Deleted Team with id [{id}]", request.TeamId);
     }
 }

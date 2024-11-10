@@ -22,8 +22,8 @@ public class GetTeamQueryHandler(
     public async Task<TeamDTO> Handle(GetTeamQuery request, CancellationToken cancellationToken)
     {
         logger.BeginScope("Fetching Team");
-        logger.LogInformation("Fetching Team with id: [{Id}]", request.teamId);
-        var team = await _teamRepository.GetByIdAsync(request.teamId, cancellationToken);
+        logger.LogInformation("Fetching Team with id: [{Id}]", request.TeamId);
+        var team = await _teamRepository.GetByIdAsync(request.TeamId, cancellationToken);
 
         var mappedTeam = _mapper.Map<TeamDTO>(team);
         return mappedTeam;

@@ -6,6 +6,6 @@ public class DeleteTeamCommandValidator : AbstractValidator<DeleteTeamCommand>
 {
     public DeleteTeamCommandValidator()
     {
-        RuleFor(x => x.teamId).NotNull();
+        RuleFor(x => x.TeamId).NotNull();
     }
 }

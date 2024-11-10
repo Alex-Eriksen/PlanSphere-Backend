@@ -6,7 +6,7 @@ public class GetTeamQueryValidator : AbstractValidator<GetTeamQuery>
 {
     public GetTeamQueryValidator()
     {
-        RuleFor(x => x.teamId)
+        RuleFor(x => x.TeamId)
             .NotNull();
     }
 }

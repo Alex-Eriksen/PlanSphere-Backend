@@ -2,5 +2,5 @@
 
 namespace PlanSphere.Core.Features.Teams.Commands.DeleteTeam;
 
-public record DeleteTeamCommand(ulong teamId) : IRequest;
+public record DeleteTeamCommand(ulong TeamId) : IRequest;
     

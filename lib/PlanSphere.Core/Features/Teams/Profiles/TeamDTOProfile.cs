@@ -12,6 +12,7 @@ public class TeamDTOProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.Identifier))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+            .ForMember(dest => dest.SettingsDTO, opt => opt.MapFrom(src => src.Settings));
     }
 }
