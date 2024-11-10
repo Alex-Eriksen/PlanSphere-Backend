@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using PlanSphere.Core.Features.Departments.Commands.CreateDepartment;
 using PlanSphere.Core.Features.Departments.DTOs;
 
 namespace PlanSphere.Core.Features.Departments.Profiles;
