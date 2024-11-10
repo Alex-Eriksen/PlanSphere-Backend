@@ -11,9 +11,11 @@ public class TeamRepository(IPlanSphereDatabaseContext context, ILogger<TeamRepo
     private readonly IPlanSphereDatabaseContext _context = context ?? throw new ArgumentNullException(nameof(context));
     private readonly ILogger<TeamRepository> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-    public Task<Team> CreateAsync(Team request, CancellationToken cancellationToken)
+    public async Task<Team> CreateAsync(Team request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.Teams.Add(request);
+        await _context.SaveChangesAsync(cancellationToken);
+        return request;
     }
 
     public async Task<Team> GetByIdAsync(ulong id, CancellationToken cancellationToken)
