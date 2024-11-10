@@ -17,7 +17,6 @@ public class Team : BaseEntity, IAuditableEntity
     
     public ulong SettingsId { get; set; }
     public virtual TeamSettings Settings { get; set; }
-    
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }
     public User? CreatedByUser { get; set; }
