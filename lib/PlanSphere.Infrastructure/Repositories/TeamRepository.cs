@@ -57,6 +57,10 @@ public class TeamRepository(IPlanSphereDatabaseContext context, ILogger<TeamRepo
 
     public IQueryable<Team> GetQueryable()
     {
-        throw new NotImplementedException();
+        return _context.Teams
+            .Include(x => x.Address).ThenInclude(x => x.ZipCode).ThenInclude(x => x.Country)
+            .Include(x => x.Settings)
+            .AsNoTracking()
+            .AsQueryable();
     }
 }
