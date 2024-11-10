@@ -15,8 +15,8 @@ public class TeamController (IMediator mediator) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Team])]
-    [HttpGet("{teamId}/{sourceLevelId}", Name = nameof(GetTeamById))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
+    [HttpGet("{teamId}/{sourceLevel}/{sourceLevelId}", Name = nameof(GetTeamById))]
     public async Task<IActionResult> GetTeamById([FromRoute] ulong teamId)
     {
         var query = new GetTeamQuery(teamId);

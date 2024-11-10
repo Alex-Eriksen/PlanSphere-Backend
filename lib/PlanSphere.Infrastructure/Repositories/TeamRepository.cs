@@ -18,7 +18,11 @@ public class TeamRepository(IPlanSphereDatabaseContext context, ILogger<TeamRepo
 
     public async Task<Team> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
-        var team = await _context.Teams.Include(x => x.Address).SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var team = await _context.Teams
+            .Include(x => x.Address)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultRole)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule)
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (team == null)
         {
             _logger.LogInformation("Could not find the team with id: [{teamId}]. Team doesn't exist", id);
