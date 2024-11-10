@@ -52,5 +52,6 @@
     
     <ItemGroup>
       <Folder Include="Features\Countries\Request\" />
+      <Folder Include="Features\Teams\Request\" />
     </ItemGroup>
 </Project>
