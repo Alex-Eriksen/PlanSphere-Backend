@@ -1,5 +1,9 @@
+using Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
@@ -10,20 +14,42 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using PlanSphere.Core.Extensions.APIExtensions;
 using PlanSphere.Core.Extensions.DIExtensions;
+using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
+using PlanSphere.Core.Interfaces.Database;
+using PlanSphere.Core.Interfaces.Services;
+using PlanSphere.Core.Services;
+using PlanSphere.Infrastructure.Contexts;
+using PlanSphere.Infrastructure.Extensions;
 
 namespace PlanSphere.ServiceDefaults;
 
 public static class Extensions
 {
-    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder, bool withControllers = false)
+    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder,  bool isDevelopment, bool withControllers = false)
     {
         builder.ConfigureOpenTelemetry();
 
         builder.AddDefaultHealthChecks();
-        // builder.AddMySQLDBConnection();
-        builder.Services.AddDataProtection();
+        builder.Services.AddDbContext<PlanSphereDatabaseContext>(options =>
+        {
+            options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
+                    optionsBuilder => optionsBuilder.EnableRetryOnFailure());
+
+            if (!isDevelopment) return;
+            options.EnableSensitiveDataLogging();
+            options.EnableDetailedErrors();
+        });
+
+        builder.AddIdentityUser();
+        
+        builder.Services.AddDataProtection(opt => opt.ApplicationDiscriminator = "plansphere");
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<ISystemClock, SystemClock>();
+        builder.Services.AddRepositories();
+        builder.Services.AddServices();
+        builder.Services.AddLateFilters();
+        builder.Services.AddScoped<IPlanSphereDatabaseContext, PlanSphereDatabaseContext>();
         if (withControllers)
         {
             builder.SetupControllers();
@@ -133,5 +159,32 @@ public static class Extensions
         }
 
         return app;
+    }
+    
+    private static IHostApplicationBuilder AddIdentityUser(this IHostApplicationBuilder builder)
+    {
+
+        builder.Services.AddDbContext<IdentityDatabaseContext>(options =>
+        {
+            options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("IdentityConnection"),
+                    optionsBuilder => optionsBuilder.EnableRetryOnFailure())
+                .EnableDetailedErrors();
+        });
+        
+        builder.Services.AddIdentityCore<ApplicationUser>()
+            .AddEntityFrameworkStores<IdentityDatabaseContext>()
+            .AddApiEndpoints()
+            .AddSignInManager()
+            .AddDefaultTokenProviders();
+
+        return builder;
+    }
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IPaginationService, PaginationService>();
+
+        return services;
     }
 }

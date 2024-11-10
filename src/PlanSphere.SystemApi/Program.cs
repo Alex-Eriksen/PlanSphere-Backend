@@ -1,70 +1,69 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Extensions.APIExtensions;
+using PlanSphere.Core.Extensions.DIExtensions;
+using PlanSphere.Core.Interfaces;
+using PlanSphere.Core.Utilities.Helpers.JWT;
 using PlanSphere.ServiceDefaults;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults(withControllers: true);
-// builder.AddMySQLDBConnection();
+builder.AddFileStorage();
+
+Console.WriteLine($"Booting up in: {builder.Environment.EnvironmentName} mode.");
+builder.AddServiceDefaults(builder.Environment.IsDevelopment(), withControllers: true);
+builder.Services.AddSingleton<IJwtHelper, JwtHelper>();
 
 builder.Services.AddAuthorization(options =>
 {
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
-        .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme,
-            JwtBearerDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme)
-        .Build();
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .Build(); 
 });
-
-builder.Services.AddSystemApiApplicationCore();
-
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: Configurations.PlanSphereCors,
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins(["http://localhost:4200"])
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
+
+builder.Services.AddSystemApiApplicationCore();
 try
 {
     var app = builder.Build();
 
-    if (!app.Environment.IsProduction())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            c.RoutePrefix = string.Empty;
-        });
-    }
-
     app.UseHttpsRedirection();
 
+    app.UseRouting();
+
+    app.UseCors(Configurations.PlanSphereCors);
+
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty;
+    });
+    
+    app.UseAuthentication();
     app.UseAuthorization();
 
+    app.MapControllers();
     app.MapDefaultEndpoints();
-
+    app.Map("/", async context => { await context.Response.WriteAsync("Welcome to PlanSphere System API."); });
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller}/{action=Index}/{id?}"
     );
-    
-    app.UseCors(Configurations.PlanSphereCors);
-    
-    app.Map("/", async context => { await context.Response.WriteAsync("Welcome to PlanSphere System API."); });
-
     app.Run();
 }
 catch (Exception exception)

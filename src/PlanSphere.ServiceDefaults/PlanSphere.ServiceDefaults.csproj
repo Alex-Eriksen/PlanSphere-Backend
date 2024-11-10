@@ -17,10 +17,12 @@
         <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.7.1"/>
         <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.7.1"/>
         <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.7.0"/>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\lib\PlanSphere.Core\PlanSphere.Core.csproj" />
+      <ProjectReference Include="..\..\lib\PlanSphere.Infrastructure\PlanSphere.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
