@@ -9,6 +9,7 @@ using PlanSphere.Core.Features.Users.Commands.CreateUser;
 using PlanSphere.Core.Features.Users.Commands.DeleteUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.PatchUser;
+using PlanSphere.Core.Features.Users.Commands.UpdateUser;
 using PlanSphere.Core.Features.Users.Queries.GetUserDetails;
 using PlanSphere.Core.Features.Users.Queries.GetUser;
 using PlanSphere.Core.Features.Users.Queries.ListUsers;
@@ -24,10 +25,15 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext?.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
     
     [HttpPost(Name = nameof(CreateUserAsync))]
-    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserCommand command)
+    public async Task<IActionResult> CreateUserAsync([FromBody] UserRequest request)
     {
-        command.UserId = _claims.GetUserId();
-        command.OrganisationId = _claims.GetOrganisationId();
+        var command = new CreateUserCommand(request, false)
+        {
+            OrganisationId = 1,
+            UserId = 0
+        };
+        // command.UserId = _claims.GetUserId();
+        // command.OrganisationId = _claims.GetOrganisationId();
         await _mediator.Send(command);
         return Created();
     }
@@ -75,7 +81,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     }
 
     [HttpGet("{userId?}", Name = nameof(GetUserDetailsAsync))]
-    [TypeFilter(typeof(UserActionFilter))]
+    //[TypeFilter(typeof(UserActionFilter))]
     public async Task<IActionResult> GetUserDetailsAsync([FromRoute] ulong? userId)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
@@ -85,7 +91,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     }
 
     [HttpPatch("{userId?}", Name = nameof(PatchUserAsync))]
-    [TypeFilter(typeof(UserActionFilter))]
+    //[TypeFilter(typeof(UserActionFilter))]
     public async Task<IActionResult> PatchUserAsync([FromRoute] ulong? userId, [FromBody] JsonPatchDocument<UserPatchRequest> request)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
@@ -93,8 +99,19 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         await _mediator.Send(command);
         return NoContent();
     }
+    
+    [HttpPut("{userId?}", Name = nameof(UpdateUserAsync))]
+    //[TypeFilter(typeof(UserActionFilter))]
+    public async Task<IActionResult> UpdateUserAsync([FromRoute] ulong? userId, [FromBody] UserPatchRequest request)
+    {
+        var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
+        var command = new UpdateUserCommand(selectedUserId, request);
+        await _mediator.Send(command);
+        return Ok(command);
+    }
 
     [HttpDelete("{userId}", Name = nameof(DeleteUserAsync))]
+    //[TypeFilter(typeof(UserActionFilter))]
     public async Task<IActionResult> DeleteUserAsync([FromRoute] ulong userId)
     {
         var command = new DeleteUserCommand(userId);

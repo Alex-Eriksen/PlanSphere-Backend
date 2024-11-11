@@ -8,5 +8,6 @@ public enum UserSortBy
     Address,
     PhoneNumber,
     Email,
-    CreatedAt
+    CreatedAt,
+    CreatedBy
 }

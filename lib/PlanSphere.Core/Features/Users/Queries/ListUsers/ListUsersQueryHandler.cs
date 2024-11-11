@@ -60,6 +60,7 @@ public class ListUsersQueryHandler(
             UserSortBy.PhoneNumber => query.OrderByExpression(u => u.PhoneNumber, request.SortDescending),
             UserSortBy.Email => query.OrderByExpression(u => u.Email, request.SortDescending),
             UserSortBy.CreatedAt => query.OrderByExpression(u => u.CreatedAt, request.SortDescending),
+            UserSortBy.CreatedBy => query.OrderByExpression(u => u.CreatedBy, request.SortDescending)
         };
     }
 }

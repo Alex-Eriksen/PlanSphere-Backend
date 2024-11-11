@@ -1,0 +1,38 @@
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Enums;
+using PlanSphere.Core.Features.Users.Commands.PatchUser;
+using PlanSphere.Core.Features.Users.Requests;
+using PlanSphere.Core.Interfaces.Repositories;
+
+namespace PlanSphere.Core.Features.Users.Commands.UpdateUser;
+
+[HandlerType(HandlerType.SystemApi)]
+public class UpdateUserCommandHandler(
+    ILogger<UpdateUserCommandHandler> logger,
+    IUserRepository userRepository,
+    IMapper mapper
+) : IRequestHandler<UpdateUserCommand>
+{
+    private readonly ILogger<UpdateUserCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+    private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+
+    public async Task Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+    {
+        _logger.BeginScope("Update user");
+        _logger.LogInformation("Retrieving user with id: [{userId}]", command.Id);
+        var user = await _userRepository.GetByIdAsync(command.Id, cancellationToken);
+        _logger.LogInformation("Retrieved user with id: [{userId}]", command.Id);
+
+        var mappedUser = _mapper.Map(command.Request, user);
+
+        _logger.LogInformation("Updating user.");
+        _logger.LogInformation("[{phonenumber}]", mappedUser.PhoneNumber);
+        await _userRepository.UpdateAsync(command.Id, mappedUser, cancellationToken);
+        _logger.LogInformation("Updated user.");
+    }
+    
+}

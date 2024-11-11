@@ -1,0 +1,53 @@
+﻿using FluentValidation;
+using PlanSphere.Core.Features.Users.Validators;
+
+namespace PlanSphere.Core.Features.Users.Commands.UpdateUser;
+
+public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
+{
+    private readonly UserRequestValidator _validator;
+
+    public UpdateUserCommandValidator(UserRequestValidator validator)
+    {
+        _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+
+        RuleFor(x => x.Id)
+            .NotNull();
+
+        RuleFor(x => x.Request.FirstName)
+            .NotNull();
+        
+        RuleFor(x => x.Request.LastName)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Email)
+            .NotNull();
+        
+        RuleFor(x => x.Request.PhoneNumber)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Settings.IsBirthdayPrivate)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Settings.IsEmailPrivate)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Settings.IsPhoneNumberPrivate)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Settings.IsAddressPrivate)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Settings.InheritWorkSchedule)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Settings.InheritedWorkScheduleId)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Settings.AutoCheckInOut)
+            .NotNull();
+        
+        RuleFor(x => x.Request.Settings.AutoCheckOutDisabled)
+            .NotNull();
+    }
+}

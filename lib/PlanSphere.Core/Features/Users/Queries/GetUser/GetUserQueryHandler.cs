@@ -13,13 +13,13 @@ public class GetUserQueryHandler (
     IUserRepository userRepository,
     ILogger<GetUserQueryHandler> logger,
     IMapper mapper
-) : IRequestHandler<GetUserQuery, UserListDTO>
+) : IRequestHandler<GetUserQuery, UserDTO>
 {
     private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
     private readonly ILogger<GetUserQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
-    public async Task<UserListDTO> Handle(GetUserQuery request, CancellationToken cancellationToken)
+    public async Task<UserDTO> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         _logger.BeginScope("Starting to Get user with [GetUserQueryHandler]");
         _logger.LogInformation("Fetching user with id: [{UserId}]", request.UserId);
@@ -27,7 +27,7 @@ public class GetUserQueryHandler (
         _logger.LogInformation("Fetched user with id: [{userId}]", request.UserId);
         
         _logger.LogInformation("Mapping user with id: [{userId}]", request.UserId);
-        var mappedUser = _mapper.Map<UserListDTO>(user);
+        var mappedUser = _mapper.Map<UserDTO>(user);
 
         return mappedUser;
     }

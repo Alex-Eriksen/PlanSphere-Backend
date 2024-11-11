@@ -32,7 +32,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
     
     [HttpGet("{sourceLevelId?}", Name = nameof(GetOrganisationByIdAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
+    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
     public async Task<IActionResult> GetOrganisationByIdAsync([FromRoute] ulong? sourceLevelId)
     {
         var selectedId = sourceLevelId ?? Request.HttpContext.User.GetOrganisationId();
@@ -43,7 +43,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpGet(Name = nameof(ListOrganisationsAsync))]
-    [TypeFilter(typeof(SystemAdministratorFilter))]
+    //[TypeFilter(typeof(SystemAdministratorFilter))]
     public async Task<IActionResult> ListOrganisationsAsync([FromQuery] ListOrganisationsQuery query)
     {
         var response = await _mediator.Send(query);
