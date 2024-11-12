@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
+using Right = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Features.Teams.Commands.CreateTeam;
 
@@ -24,6 +25,30 @@ public class CreateTeamCommandHandler(
         _logger.BeginScope("Creating Team");
         _logger.LogInformation("Creating Team on department with id [{departmentId}]", command.DepartmentId);
         var team = _mapper.Map<Team>(command);
+
+        team.Settings = new TeamSettings()
+        {
+            DefaultWorkSchedule = new WorkSchedule
+            {
+                IsDefaultWorkSchedule = true
+            },
+            DefaultRole = new Role
+            {
+                Name = team.Name + "-default-role",
+                TeamRoleRights =
+                [
+                    new TeamRoleRight
+                    {
+                        RightId = (ulong)Right.View,
+                        Team = team
+                    }
+                ],
+                TeamRole = new TeamRole
+                {
+                    Team = team
+                }
+            }
+        };
 
         var createdTeam = await _teamRepository.CreateAsync(team, cancellationToken);
         _logger.LogInformation("Created team on department with new id [{teamId}] on department with id [{departmentId}]",command.DepartmentId, createdTeam.Id);
