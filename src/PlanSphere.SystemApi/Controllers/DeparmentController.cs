@@ -11,6 +11,7 @@ using PlanSphere.Core.Features.Departments.Commands.UpdateDepartments;
 using PlanSphere.Core.Features.Departments.Queries.GetDepartment;
 using PlanSphere.Core.Features.Departments.Queries.ListDepartments;
 using PlanSphere.Core.Features.Departments.Queries.ListUserDepartments;
+using PlanSphere.Core.Features.Departments.Queries.LookUp;
 using PlanSphere.Core.Features.Departments.Request;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -85,6 +86,14 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
     public async Task<IActionResult> ListUserDepartmentsAsync([FromQuery] ListUserDepartmentQuery query)
     {
         query.UserId = Request.HttpContext.User.GetUserId();
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
+
+    [HttpGet(Name = nameof(LookUpDepartmentsAsync))]
+    public async Task<IActionResult> LookUpDepartmentsAsync()
+    {
+        var query = new LookUpDepartmentsQuery(Request.HttpContext.User.GetUserId());
         var response = await _mediator.Send(query);
         return Ok(response);
     }

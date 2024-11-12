@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
+using Right = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Features.Departments.Commands.CreateDepartment;
 
@@ -38,10 +39,14 @@ public class CreateDepartmentCommandHandler(
                 [
                     new DepartmentRoleRight()
                     {
-                        RightId = 60,
+                        RightId = (ulong) Right.View,
                         Department = department
                     }
-                ]
+                ],
+                DepartmentRole = new DepartmentRole
+                {
+                    Department = department
+                }
             }
         };
 

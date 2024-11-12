@@ -45,13 +45,15 @@ public class LookUpCompaniesQueryHandler(
                 break;
             }
             
-            companiesToAdd = companies.Where(x => 
+            companiesToAdd.AddRange(companies.Where(x => 
                 role.CompanyRoleRights
                     .Where(z => z.Right.AsEnum <= Right.View)
                     .Select(y => y.CompanyId)
                     .Contains(x.Id)
-                ).ToList();
+                ).ToList());
         }
+
+        companiesToAdd = companiesToAdd.Distinct().ToList();
         
         var companyLookUpDtos = _mapper.Map<List<CompanyLookUpDTO>>(companiesToAdd);
 

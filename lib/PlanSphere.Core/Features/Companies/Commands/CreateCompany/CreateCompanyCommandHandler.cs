@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
+using Right = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Features.Companies.Commands.CreateCompany;
 
@@ -38,10 +39,14 @@ public class CreateCompanyCommandHandler(
                 [
                     new CompanyRoleRight
                     {
-                        RightId = 60,
+                        RightId = (ulong) Right.View,
                         Company = company
                     }
-                ]
+                ],
+                CompanyRole = new CompanyRole
+                {
+                    Company = company
+                }
             }
         };
 
