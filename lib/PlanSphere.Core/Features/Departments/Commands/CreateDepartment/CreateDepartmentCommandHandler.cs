@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
+using Right = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Features.Departments.Commands.CreateDepartment;
 
@@ -24,6 +25,30 @@ public class CreateDepartmentCommandHandler(
         _logger.BeginScope("Creating Department");
         _logger.LogInformation("Creating department on company with id: [{companyId}]", command.CompanyId);
         var department = _mapper.Map<Department>(command);
+        
+        department.Settings = new DepartmentSettings
+        {
+            DefaultWorkSchedule = new WorkSchedule
+            {
+                IsDefaultWorkSchedule = true
+            },
+            DefaultRole = new Role
+            {
+                Name = department.Name + "-default-role",
+                DepartmentRoleRights = 
+                [
+                    new DepartmentRoleRight()
+                    {
+                        RightId = (ulong) Right.View,
+                        Department = department
+                    }
+                ],
+                DepartmentRole = new DepartmentRole
+                {
+                    Department = department
+                }
+            }
+        };
 
         var createdDepartment = await _departmentRepository.CreateAsync(department, cancellationToken);
         _logger.LogInformation("Created department company with new id: [{departmentId}] on company with id: [{companyId}]", command.CompanyId, createdDepartment.Id);

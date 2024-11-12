@@ -17,7 +17,7 @@ namespace PlanSphere.Core.Features.Companies.Profiles
                 .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.ContactName))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
                 .ForMember(dest => dest.ContactPhoneNumber, opt => opt.MapFrom(src => src.ContactPhoneNumber));
-                
+
 
             CreateMap<CompanyUpdateRequest, Company>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -27,7 +27,8 @@ namespace PlanSphere.Core.Features.Companies.Profiles
                 .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.ContactName))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
                 .ForMember(dest => dest.ContactPhoneNumber, opt => opt.MapFrom(src => src.ContactPhoneNumber))
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForPath(dest => dest.Settings.InheritDefaultWorkSchedule, opt => opt.MapFrom(src => src.InheritDefaultWorkSchedule));
 
             CreateMap<CreateCompanyCommand, Company>()
                 .ForMember(dest => dest.OrganisationId, opt => opt.MapFrom(src => src.OrganisationId))

@@ -30,6 +30,16 @@ public class PatchCompanyCommandHandler(
         command.PatchDocument.ApplyTo(companyPatchRequest);
         
         company = _mapper.Map(companyPatchRequest, company);
+
+        if (company.Settings.InheritDefaultWorkSchedule)
+        {
+            company.Settings.DefaultWorkSchedule.ParentId = company.Organisation.Settings.DefaultWorkScheduleId;
+        }
+        else
+        {
+            company.Settings.DefaultWorkSchedule.Parent = null;
+            company.Settings.DefaultWorkSchedule.ParentId = null;
+        }
         
         _logger.LogInformation("Patching Company with id: [{companyId}]", command.Id);
         await _companyRepository.UpdateAsync(command.Id, company, cancellationToken);

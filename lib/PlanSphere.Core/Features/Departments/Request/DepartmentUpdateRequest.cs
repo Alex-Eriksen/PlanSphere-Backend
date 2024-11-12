@@ -8,4 +8,5 @@ public class DepartmentUpdateRequest
     public string Description { get; set; }
     public string Building { get; set; }
     public AddressRequest Address { get; set; }
+    public bool? InheritDefaultWorkSchedule { get; set; }
 }

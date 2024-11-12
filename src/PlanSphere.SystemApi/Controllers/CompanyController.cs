@@ -80,8 +80,7 @@ public class CompanyController(IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
     
-    [HttpGet("{sourceLevelId}",Name = nameof(LookUpCompaniesAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
+    [HttpGet(Name = nameof(LookUpCompaniesAsync))]
     public async Task<IActionResult> LookUpCompaniesAsync()
     {
         var organisationId = Request.HttpContext.User.GetOrganisationId();

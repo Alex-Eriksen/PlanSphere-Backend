@@ -13,6 +13,7 @@ public class CompanyDTO : BaseDTO, IContactable
     public string? ContactEmail { get; set; }
     public string? ContactPhoneNumber { get; set; }
     public AddressDTO Address { get; set; }
+    public CompanySettingsDTO Settings { get; set; }
     public string? CareOf { get; set; }
     public DateTime CreatedAt { get; set; }
     public string CreatedBy { get; set; }
