@@ -41,7 +41,11 @@ public class CreateCompanyCommandHandler(
                         RightId = 60,
                         Company = company
                     }
-                ]
+                ],
+                CompanyRole = new CompanyRole
+                {
+                    Company = company
+                }
             }
         };
 

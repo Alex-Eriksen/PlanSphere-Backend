@@ -41,7 +41,11 @@ public class CreateDepartmentCommandHandler(
                         RightId = 60,
                         Department = department
                     }
-                ]
+                ],
+                DepartmentRole = new DepartmentRole
+                {
+                    Department = department
+                }
             }
         };
 

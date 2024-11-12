@@ -41,7 +41,11 @@ public class CreateOrganisationCommandHandler(
                        RightId = 60,
                        Organisation = organisation
                    }
-               ]
+               ],
+               OrganisationRole = new OrganisationRole
+               {
+                   Organisation = organisation
+               }
            }
        };
         
