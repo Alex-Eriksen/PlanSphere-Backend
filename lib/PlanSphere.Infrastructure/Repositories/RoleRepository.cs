@@ -101,7 +101,7 @@ public class RoleRepository(
             .AsNoTracking()
             .AsQueryable();
     }
-
+    
     public async Task<List<Right>> GetRightsAsync(CancellationToken cancellationToken)
     {
         return await _dbContext.Rights.ToListAsync(cancellationToken);
@@ -129,5 +129,61 @@ public class RoleRepository(
 
         await UpdateAsync(role.Id, role, cancellationToken);
         return role;
+    }
+
+    public IQueryable<Role> GetCompanyRoles(ulong companyId, ulong organisationId, IQueryable<Role> query)
+    {
+        return query.Where(x => (x.CompanyRole != null && x.CompanyRole.CompanyId == companyId) ||
+                                (x.OrganisationRole != null && x.OrganisationRole.IsInheritanceActive && x.OrganisationRole.OrganisationId == organisationId));
+    }
+
+    public IQueryable<Role> GetDepartmentRoles(ulong departmentId, IQueryable<Role> query)
+    {
+        var department = _dbContext.Departments
+            .Where(t => t.Id == departmentId)
+            .Select(t => new { t.CompanyId, t.Company.OrganisationId })
+            .FirstOrDefault();
+        
+        return query.Where(x =>
+            (x.DepartmentRole != null && x.DepartmentRole.DepartmentId == departmentId) ||
+            
+            (x.OrganisationRole != null &&
+             x.OrganisationRole.IsInheritanceActive &&
+             x.OrganisationRole.OrganisationId == department.OrganisationId &&
+             x.BlockedCompanies.All(cbr => cbr.CompanyId != department.CompanyId && cbr.RoleId != x.OrganisationRole.RoleId)) ||
+            
+            (x.CompanyRole != null &&
+             x.CompanyRole.IsInheritanceActive &&
+             x.BlockedCompanies.All(cbr => cbr.CompanyId != department.CompanyId && cbr.RoleId != x.CompanyRole.RoleId)));
+    }
+
+    public IQueryable<Role> GetTeamRoles(ulong teamId, IQueryable<Role> query)
+    {
+        var team = _dbContext.Teams
+            .Where(t => t.Id == teamId)
+            .Select(t => new { t.DepartmentId, t.Department.CompanyId, t.Department.Company.OrganisationId })
+            .FirstOrDefault();
+
+        return query.Where(x =>
+            (x.TeamRole != null && x.TeamRole.TeamId == teamId) ||
+
+            (x.OrganisationRole != null &&
+             x.OrganisationRole.IsInheritanceActive &&
+             x.OrganisationRole.OrganisationId == team.OrganisationId &&
+             x.BlockedCompanies.All(cbr =>
+                 cbr.CompanyId != team.CompanyId && cbr.RoleId != x.OrganisationRole.RoleId) &&
+             x.BlockedDepartments.All(dbr =>
+                 dbr.DepartmentId != team.DepartmentId && dbr.RoleId != x.OrganisationRole.RoleId)) ||
+
+            (x.CompanyRole != null &&
+             x.CompanyRole.IsInheritanceActive &&
+             x.BlockedCompanies.All(cbr => cbr.CompanyId != team.CompanyId && cbr.RoleId != x.CompanyRole.RoleId) &&
+             x.BlockedDepartments.All(dbr => dbr.DepartmentId != team.DepartmentId && dbr.RoleId != x.CompanyRole.RoleId)) ||
+
+            (x.DepartmentRole != null &&
+             x.DepartmentRole.IsInheritanceActive &&
+             x.BlockedCompanies.All(cbr => cbr.CompanyId != team.CompanyId && cbr.RoleId != x.DepartmentRole.RoleId) &&
+             x.BlockedDepartments.All(dbr => dbr.DepartmentId != team.DepartmentId && dbr.RoleId != x.DepartmentRole.RoleId)));
+
     }
 }

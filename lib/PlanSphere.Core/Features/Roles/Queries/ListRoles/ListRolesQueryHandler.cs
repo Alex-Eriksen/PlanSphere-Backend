@@ -53,18 +53,9 @@ public class ListRolesQueryHandler(
         query = request.SourceLevel switch
         {
             SourceLevel.Organisation => query.Where(x => x.OrganisationRole != null && x.OrganisationRole.OrganisationId == request.SourceLevelId), 
-            
-            SourceLevel.Company => query.Where(x => x.CompanyRole != null && x.CompanyRole.CompanyId == request.SourceLevelId ||
-                                                    x.OrganisationRole.OrganisationId == request.OrganisationId && x.OrganisationRole.IsInheritanceActive),
-            
-            SourceLevel.Department => query.Where(x => x.DepartmentRole != null && x.DepartmentRole.DepartmentId == request.SourceLevelId ||
-                                                       x.OrganisationRole != null && x.OrganisationRole.OrganisationId == request.OrganisationId && x.OrganisationRole.IsInheritanceActive ||
-                                                       x.CompanyRole != null && x.CompanyRole.Company.OrganisationId == request.OrganisationId && x.CompanyRole.IsInheritanceActive),
-            
-            SourceLevel.Team => query.Where(x => x.TeamRole != null && x.TeamRole.TeamId == request.SourceLevelId ||
-                                                 x.OrganisationRole != null && x.OrganisationRole.OrganisationId == request.OrganisationId && x.OrganisationRole.IsInheritanceActive ||
-                                                 x.CompanyRole != null && x.CompanyRole.Company.OrganisationId == request.OrganisationId && x.CompanyRole.IsInheritanceActive ||
-                                                 x.DepartmentRole != null && x.DepartmentRole.Department.Company.OrganisationId == request.OrganisationId && x.DepartmentRole.IsInheritanceActive),
+            SourceLevel.Company => _roleRepository.GetCompanyRoles(request.SourceLevelId, request.OrganisationId, query),
+            SourceLevel.Department => _roleRepository.GetDepartmentRoles(request.SourceLevelId, query),
+            SourceLevel.Team => _roleRepository.GetTeamRoles(request.SourceLevelId, query),
             _ => throw new ArgumentOutOfRangeException(nameof(SourceLevel), request.SourceLevel, null)
         };
         
