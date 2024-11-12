@@ -9,6 +9,7 @@ public class WorkScheduleShiftProfile : Profile
     public WorkScheduleShiftProfile()
     {
         CreateMap<WorkScheduleShiftRequest, WorkScheduleShift>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime))
             .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))
             .ForMember(dest => dest.Day, opt => opt.MapFrom(src => src.Day))
