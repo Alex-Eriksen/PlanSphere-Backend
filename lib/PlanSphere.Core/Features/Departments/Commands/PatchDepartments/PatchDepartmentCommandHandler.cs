@@ -31,6 +31,16 @@ public class PatchDepartmentCommandHandler(
         command.PatchDocument.ApplyTo(departmentPatchRequest);
 
         department = _mapper.Map(departmentPatchRequest, department);
+
+        if (department.Settings.InheritDefaultWorkSchedule)
+        {
+            department.Settings.DefaultWorkSchedule.ParentId = department.Company.Settings.DefaultWorkScheduleId;
+        }
+        else
+        {
+            department.Settings.DefaultWorkSchedule.Parent = null;
+            department.Settings.DefaultWorkSchedule.ParentId = null;
+        }
         
         _logger.LogInformation("Patching Department with id: [{departmentId}]", command.DepartmentId);
         await _departmentRepository.UpdateAsync(command.DepartmentId, department, cancellationToken);

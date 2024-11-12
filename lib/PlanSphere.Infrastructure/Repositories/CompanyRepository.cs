@@ -33,7 +33,14 @@ namespace PlanSphere.Infrastructure.Repositories
 
         public async Task<Company> GetByIdAsync(ulong id, CancellationToken cancellationToken)
         {
-            var company = await _context.Companies.Include(x => x.Address).SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+            var company = await _context.Companies
+                .Include(x => x.Address)
+                .Include(x => x.Organisation).ThenInclude(x => x.Settings)
+                .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+                .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.WorkScheduleShifts)
+                .Include(x => x.Settings).ThenInclude(x => x.DefaultRole)
+                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+            
             if (company == null)
             {
                 _logger.LogInformation("Could not find company with the id: [{companyId}]. Company doesn't exist!", id);
