@@ -95,7 +95,6 @@ public class DepartmentController(IMediator mediator) : ApiControllerBase(mediat
     {
         var query = new LookUpDepartmentsQuery(Request.HttpContext.User.GetUserId());
         var response = await _mediator.Send(query);
-        Response.Headers.ContentType = "application/json";
         return Ok(response);
     }
 }
