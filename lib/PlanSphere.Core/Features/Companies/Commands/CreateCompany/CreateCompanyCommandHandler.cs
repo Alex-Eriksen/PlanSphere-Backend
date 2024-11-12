@@ -25,6 +25,26 @@ public class CreateCompanyCommandHandler(
         _logger.LogInformation("Creating company on organisation with id: [{organisationId}]", command.OrganisationId);
         var company = _mapper.Map<Company>(command);
 
+        company.Settings = new CompanySettings
+        {
+            DefaultWorkSchedule = new WorkSchedule
+            {
+                IsDefaultWorkSchedule = true
+            },
+            DefaultRole = new Role
+            {
+                Name = company.Name + "-default-role",
+                CompanyRoleRights =
+                [
+                    new CompanyRoleRight
+                    {
+                        RightId = 60,
+                        Company = company
+                    }
+                ]
+            }
+        };
+
         var createdCompany = await _companyRepository.CreateAsync(company, cancellationToken);
         _logger.LogInformation("Created company with new id: [{companyId}] on organisation with id: [{organisationId}]", command.OrganisationId, createdCompany.Id);
     }

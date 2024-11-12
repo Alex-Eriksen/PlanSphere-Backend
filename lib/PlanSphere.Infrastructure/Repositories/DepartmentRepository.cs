@@ -19,7 +19,14 @@ public class DepartmentRepository(IPlanSphereDatabaseContext context, ILogger<De
 
     public async Task<Department> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
-        var department = await _context.Departments.Include(x => x.Address).SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var department = await _context.Departments
+            .Include(x => x.Address)
+            .Include(x => x.Company).ThenInclude(x => x.Settings)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.WorkScheduleShifts)
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+        
         if (department == null)
         {
             _logger.LogInformation("Could not find department with the id: [{departmentId}]. Department doesn't exist!", id);

@@ -10,5 +10,5 @@ public class DepartmentDTO : BaseDTO
     public string Description { get; set; }
     public string Building { get; set; }
     public AddressDTO Address { get; set; }
-    
+    public DepartmentSettingsDTO Settings { get; set; }
 }
