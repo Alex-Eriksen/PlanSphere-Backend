@@ -90,6 +90,66 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             .AsQueryable();
     }
 
+    public async Task<UserRole> AssignRoleAsync(ulong userId, ulong roleId, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users
+            .Include(x => x.Roles)
+            .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        
+        if (user == null)
+        {
+            _logger.LogInformation("Could not find user with id: [{userId}]. User doesn't exist!", userId);
+            throw new KeyNotFoundException($"Could not find user with id: [{userId}]. User doesn't exist!");
+        }
+
+        var roleAssignment = user.Roles.SingleOrDefault(x => x.RoleId == roleId && x.UserId == userId);
+        
+        if (roleAssignment != null)
+        {
+            user.Roles.Remove(roleAssignment);
+        }
+        else
+        {
+            roleAssignment = new UserRole { RoleId = roleId, UserId = userId };
+            user.Roles.Add(roleAssignment);
+        }
+        
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return roleAssignment;
+    }
+
+    public async Task<UserJobTitle> AssignJobTitleAsync(ulong userId, ulong jobTitleId, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users
+            .Include(x => x.JobTitles)
+            .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        
+        if (user == null)
+        {
+            _logger.LogInformation("Could not find user with id: [{userId}]. User doesn't exist!", userId);
+            throw new KeyNotFoundException($"Could not find user with id: [{userId}]. User doesn't exist!");
+        }
+
+        var jobTitleAssignment = user.JobTitles.SingleOrDefault(x => x.JobTitleId == jobTitleId && x.UserId == userId);
+        
+        if (jobTitleAssignment != null)
+        {
+            user.JobTitles.Remove(jobTitleAssignment);
+        }
+        else
+        {
+            jobTitleAssignment = new UserJobTitle { JobTitleId = jobTitleId, UserId = userId };
+            user.JobTitles.Add(jobTitleAssignment);
+        }
+        
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return jobTitleAssignment;
+    }
+
     public async Task<User> GetByIdentityIdAsync(string identityId, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
