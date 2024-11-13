@@ -3,5 +3,6 @@
 public enum TeamSortBy
 {
     Name,
-    Address
+    StreetName,
+    HouseNumber
 }
