@@ -16,6 +16,11 @@ public class TeamProfile : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Request.Description))
             .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.Request.Identifier))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address));
+        CreateMap<TeamPatchRequest, Team>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+            .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.Identifier))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
     }
     
 }
