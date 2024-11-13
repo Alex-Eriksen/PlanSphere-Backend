@@ -1,9 +1,11 @@
 ﻿using System.Security.Claims;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Constants;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
+using PlanSphere.Core.Features.Rights.Queries.GetSourceLevelRights;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.RefreshToken;
 using PlanSphere.Core.Features.Users.Commands.RevokeRefreshToken;
@@ -62,6 +64,15 @@ public class AuthenticationController(IMediator mediator, IHttpContextAccessor h
         var loggedInUserDto = await _mediator.Send(command);
         
         return Ok(loggedInUserDto);
+    }
+
+    [Authorize]
+    [HttpGet("{sourceLevel?}/{sourceLevelId?}", Name = nameof(GetSourceLevelRightsAsync))]
+    public async Task<IActionResult> GetSourceLevelRightsAsync(SourceLevel? sourceLevel = null, ulong? sourceLevelId = null)
+    {
+        var query = new GetSourceLevelRightsQuery(Request.HttpContext.User.GetUserId(), sourceLevel, sourceLevelId);
+        var response = await _mediator.Send(query);
+        return Ok(response);
     }
     
     private void SetTokenCookie(string token)

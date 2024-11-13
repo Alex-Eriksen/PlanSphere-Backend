@@ -11,17 +11,21 @@ public class TeamRepository(IPlanSphereDatabaseContext context, ILogger<TeamRepo
     private readonly IPlanSphereDatabaseContext _context = context ?? throw new ArgumentNullException(nameof(context));
     private readonly ILogger<TeamRepository> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-    public Task<Team> CreateAsync(Team request, CancellationToken cancellationToken)
+    public async Task<Team> CreateAsync(Team request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.Teams.Add(request);
+        await _context.SaveChangesAsync(cancellationToken);
+        return request;
     }
 
     public async Task<Team> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
         var team = await _context.Teams
             .Include(x => x.Address)
-            .Include(x => x.Settings).ThenInclude(x => x.DefaultRole)
-            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule)
+            .Include(x => x.Department).ThenInclude(x => x.Settings)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.WorkScheduleShifts)
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (team == null)
         {
@@ -32,9 +36,11 @@ public class TeamRepository(IPlanSphereDatabaseContext context, ILogger<TeamRepo
         return team;
     }
 
-    public Task<Team> UpdateAsync(ulong id, Team request, CancellationToken cancellationToken)
+    public async Task<Team> UpdateAsync(ulong id, Team request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.Teams.Update(request);
+        await _context.SaveChangesAsync(cancellationToken);
+        return request;
     }
 
     public async Task<Team> DeleteAsync(ulong id, CancellationToken cancellationToken)

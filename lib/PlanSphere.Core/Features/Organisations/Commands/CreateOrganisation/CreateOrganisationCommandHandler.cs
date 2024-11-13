@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
+using Right = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 [HandlerType(HandlerType.SystemApi)]
@@ -38,10 +39,14 @@ public class CreateOrganisationCommandHandler(
                [
                    new OrganisationRoleRight()
                    {
-                       RightId = 60,
+                       RightId = (ulong) Right.View,
                        Organisation = organisation
                    }
-               ]
+               ],
+               OrganisationRole = new OrganisationRole
+               {
+                   Organisation = organisation
+               }
            }
        };
         

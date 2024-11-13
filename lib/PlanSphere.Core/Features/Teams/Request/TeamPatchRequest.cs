@@ -1,12 +1,12 @@
 ﻿using PlanSphere.Core.Features.Addresses.Requests;
 
-namespace PlanSphere.Core.Features.Departments.Request;
+namespace PlanSphere.Core.Features.Teams.Request;
 
-public class DepartmentUpdateRequest
+public class TeamPatchRequest
 {
     public string Name { get; set; }
-    public string Description { get; set; }
-    public string Building { get; set; }
+    public string? Description { get; set; }
+    public string? Identifier { get; set; }
     public AddressRequest Address { get; set; }
     public bool? InheritDefaultWorkSchedule { get; set; }
 }

@@ -36,13 +36,15 @@ public class LookUpOrganisationsQueryHandler(
 
         foreach (var role in user.Roles.Select(x => x.Role))
         {
-            organisationsToAdd = organisations.Where(x =>
+            organisationsToAdd.AddRange(organisations.Where(x =>
                 role.OrganisationRoleRights
                     .Where(z => z.Right.AsEnum <= Right.View)
                     .Select(y => y.OrganisationId)
                     .Contains(x.Id)
-            ).ToList();
+            ).ToList());
         }
+
+        organisationsToAdd = organisationsToAdd.Distinct().ToList();
 
         var organisationLookUpDtos = _mapper.Map<List<OrganisationLookUpDTO>>(organisationsToAdd);
 

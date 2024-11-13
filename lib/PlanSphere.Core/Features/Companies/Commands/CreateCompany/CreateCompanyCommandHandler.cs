@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
+using Right = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Features.Companies.Commands.CreateCompany;
 
@@ -24,6 +25,30 @@ public class CreateCompanyCommandHandler(
         _logger.BeginScope("Creating company");
         _logger.LogInformation("Creating company on organisation with id: [{organisationId}]", command.OrganisationId);
         var company = _mapper.Map<Company>(command);
+
+        company.Settings = new CompanySettings
+        {
+            DefaultWorkSchedule = new WorkSchedule
+            {
+                IsDefaultWorkSchedule = true
+            },
+            DefaultRole = new Role
+            {
+                Name = company.Name + "-default-role",
+                CompanyRoleRights =
+                [
+                    new CompanyRoleRight
+                    {
+                        RightId = (ulong) Right.View,
+                        Company = company
+                    }
+                ],
+                CompanyRole = new CompanyRole
+                {
+                    Company = company
+                }
+            }
+        };
 
         var createdCompany = await _companyRepository.CreateAsync(company, cancellationToken);
         _logger.LogInformation("Created company with new id: [{companyId}] on organisation with id: [{organisationId}]", command.OrganisationId, createdCompany.Id);

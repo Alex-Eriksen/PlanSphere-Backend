@@ -13,6 +13,7 @@ public class DepartmentDTOProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.Building, opt => opt.MapFrom(src => src.Building))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+            .ForMember(dest => dest.Settings, opt => opt.MapFrom(src => src.Settings));
     }
 }

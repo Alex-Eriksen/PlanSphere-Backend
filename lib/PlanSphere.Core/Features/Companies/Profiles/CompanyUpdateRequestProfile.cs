@@ -15,6 +15,7 @@ public class CompanyUpdateRequestProfile : Profile
             .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.ContactName))
             .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
             .ForMember(dest => dest.ContactPhoneNumber, opt => opt.MapFrom(src => src.ContactPhoneNumber))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+            .ForPath(dest => dest.InheritDefaultWorkSchedule, opt => opt.MapFrom(src => src.Settings.InheritDefaultWorkSchedule));
     }
 }
