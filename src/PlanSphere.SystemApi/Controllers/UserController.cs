@@ -82,9 +82,9 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
         return NoContent();
     }
 
-    [HttpPost("{roleId}", Name = nameof(AssignRoleAsync))]
+    [HttpPost("{roleId}", Name = nameof(AssignRoleToSelfAsync))]
     [TypeFilter(typeof(UserActionFilter))]
-    public async Task<IActionResult> AssignRoleAsync(ulong roleId)
+    public async Task<IActionResult> AssignRoleToSelfAsync(ulong roleId)
     {
         await _roleFilter.CheckIsAllowedToSetOwnRolesAsync(Request.HttpContext);
         var command = new AssignRoleCommand(roleId, Request.HttpContext.User.GetUserId());
@@ -92,9 +92,9 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
         return NoContent();
     }
     
-    [HttpPost("{jobTitleId}", Name = nameof(AssignJobTitleAsync))]
+    [HttpPost("{jobTitleId}", Name = nameof(AssignJobTitleToSelfAsync))]
     [TypeFilter(typeof(UserActionFilter))]
-    public async Task<IActionResult> AssignJobTitleAsync(ulong jobTitleId)
+    public async Task<IActionResult> AssignJobTitleToSelfAsync(ulong jobTitleId)
     {
         await _roleFilter.CheckIsAllowedToSetOwnJobTitlesAsync(Request.HttpContext);
         var command = new AssignJobTitleCommand(jobTitleId, Request.HttpContext.User.GetUserId());
