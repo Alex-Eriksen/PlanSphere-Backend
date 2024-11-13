@@ -102,7 +102,7 @@ public class ListUserTeamQueryHandler(
         {
             TeamSortBy.Name => query.OrderByExpression(x => x.Name, request.SortDescending),
             TeamSortBy.StreetName => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending),
-            TeamSortBy.HouseNumber => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending)
+            TeamSortBy.HouseNumber => query.OrderByExpression(x => x.Address.HouseNumber, request.SortDescending)
         };
     }
 }

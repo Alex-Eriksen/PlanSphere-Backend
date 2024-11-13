@@ -58,7 +58,7 @@ public class ListCompaniesQueryHandler(
         {
             CompanySortBy.Name => query.OrderByExpression(x => x.Name, request.SortDescending),
             CompanySortBy.StreetName => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending),
-            CompanySortBy.HouseNumber => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending)
+            CompanySortBy.HouseNumber => query.OrderByExpression(x => x.Address.HouseNumber, request.SortDescending)
         };
     }
 }

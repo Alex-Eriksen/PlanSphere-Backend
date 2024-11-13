@@ -57,7 +57,7 @@ public class ListDepartmentQueryHandler (
         {
             DepartmentSortBy.Name => query.OrderByExpression(x => x.Name, request.SortDescending),
             DepartmentSortBy.StreetName => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending),
-            DepartmentSortBy.HouseNumber => query.OrderByExpression(x => x.Address.StreetName, request.SortDescending)
+            DepartmentSortBy.HouseNumber => query.OrderByExpression(x => x.Address.HouseNumber, request.SortDescending)
 
         };
     }
