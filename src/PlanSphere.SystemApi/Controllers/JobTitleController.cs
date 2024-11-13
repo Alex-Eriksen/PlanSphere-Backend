@@ -25,7 +25,7 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext?.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
     
-    [HttpGet("{jobTitleId}", Name = nameof(GetJobTitleAsync))]
+    [HttpGet("{sourceLevel}/{sourceLevelId}/{jobTitleId}", Name = nameof(GetJobTitleAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.PureView])]
     public async Task<IActionResult> GetJobTitleAsync([FromRoute] ulong jobTitleId)
     {
