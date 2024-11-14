@@ -31,8 +31,22 @@ public class CreateUserCommandHandler(
         var applicationUser = await CreateIdentityUser(command, cancellationToken);
         _logger.LogInformation("Created user identity");
         
-        await CreateUser(command, applicationUser.Id, cancellationToken);
+        var user = await CreateUser(command, applicationUser.Id, cancellationToken);
         _logger.LogInformation("Created a new user on organisation with id: [{organisationId}]", command.OrganisationId);
+        
+        _logger.LogInformation("Creating a new user with roles with id: [{userId}]", user.Id);
+        user.Roles.AddRange(
+            command.Request.RoleIds.Select(roleId => new UserRole
+            {
+                RoleId = roleId,
+                UserId = user.Id
+            })
+        );
+        _logger.LogInformation("Created a new user with roles with id: [{userId}]", user.Id);
+
+        _logger.LogInformation("Updating the user with roles with id: [{userId}]", user.Id);
+        await _userRepository.UpdateAsync(user.Id, user, cancellationToken);
+        _logger.LogInformation("Updated the user with roles with id: [{userId}]", user.Id);
     }
 
     private async Task<ApplicationUser> CreateIdentityUser(CreateUserCommand command, CancellationToken cancellationToken)
@@ -69,15 +83,13 @@ public class CreateUserCommandHandler(
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
             var encodedToken = HttpUtility.UrlEncode(token);
         }
-
         return applicationUser;
-
     }
 
-    private async Task CreateUser(CreateUserCommand command, string applicationUserId, CancellationToken cancellationToken)
+    private async Task<User> CreateUser(CreateUserCommand command, string applicationUserId, CancellationToken cancellationToken)
     {
         var newUser = _mapper.Map<CreateUserCommand, User>(command);
         newUser.IdentityUserId = applicationUserId;
-        await _userRepository.CreateAsync(newUser, cancellationToken);
+        return await _userRepository.CreateAsync(newUser, cancellationToken);
     }
 }

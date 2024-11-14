@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
@@ -24,16 +25,15 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext?.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
     
-    [HttpPost(Name = nameof(CreateUserAsync))]
-    public async Task<IActionResult> CreateUserAsync([FromBody] UserRequest request)
+    [HttpPost("{sourceLevel}/{sourceLevelId}",Name = nameof(CreateUserAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers, true])]
+    public async Task<IActionResult> CreateUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId,[FromBody] UserRequest request)
     {
         var command = new CreateUserCommand(request, false)
         {
             OrganisationId = 1,
             UserId = 0
         };
-        // command.UserId = _claims.GetUserId();
-        // command.OrganisationId = _claims.GetOrganisationId();
         await _mediator.Send(command);
         return Created();
     }
@@ -41,14 +41,6 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     [HttpGet(Name = nameof(ListUsersAsync))]
     public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query)
     {
-        var response = await _mediator.Send(query);
-        return Ok(response);
-    }
-
-    [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
-    public async Task<IActionResult> GetUserByIdAsync([FromRoute] ulong userId)
-    {
-        var query = new GetUserQuery(userId);
         var response = await _mediator.Send(query);
         return Ok(response);
     }
@@ -102,7 +94,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     
     [HttpPut("{userId?}", Name = nameof(UpdateUserAsync))]
     //[TypeFilter(typeof(UserActionFilter))]
-    public async Task<IActionResult> UpdateUserAsync([FromRoute] ulong? userId, [FromBody] UserPatchRequest request)
+    public async Task<IActionResult> UpdateUserAsync([FromRoute] ulong? userId, [FromBody] UserRequest request)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
         var command = new UpdateUserCommand(selectedUserId, request);

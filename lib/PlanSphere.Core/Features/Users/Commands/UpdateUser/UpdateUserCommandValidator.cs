@@ -25,29 +25,5 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
         
         RuleFor(x => x.Request.PhoneNumber)
             .NotNull();
-        
-        RuleFor(x => x.Request.Settings.IsBirthdayPrivate)
-            .NotNull();
-        
-        RuleFor(x => x.Request.Settings.IsEmailPrivate)
-            .NotNull();
-        
-        RuleFor(x => x.Request.Settings.IsPhoneNumberPrivate)
-            .NotNull();
-        
-        RuleFor(x => x.Request.Settings.IsAddressPrivate)
-            .NotNull();
-        
-        RuleFor(x => x.Request.Settings.InheritWorkSchedule)
-            .NotNull();
-        
-        RuleFor(x => x.Request.Settings.InheritedWorkScheduleId)
-            .NotNull();
-        
-        RuleFor(x => x.Request.Settings.AutoCheckInOut)
-            .NotNull();
-        
-        RuleFor(x => x.Request.Settings.AutoCheckOutDisabled)
-            .NotNull();
     }
 }

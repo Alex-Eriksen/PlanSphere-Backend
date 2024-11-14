@@ -2,6 +2,7 @@
 using Domain.Entities.EmbeddedEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PlanSphere.Core.Features.Roles.DTOs;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Core.Interfaces.Repositories;
 using Right = Domain.Entities.Right;
@@ -185,5 +186,10 @@ public class RoleRepository(
              x.BlockedCompanies.All(cbr => cbr.CompanyId != team.CompanyId && cbr.RoleId != x.DepartmentRole.RoleId) &&
              x.BlockedDepartments.All(dbr => dbr.DepartmentId != team.DepartmentId && dbr.RoleId != x.DepartmentRole.RoleId)));
 
+    }
+
+    public async Task<List<Role>> GetRolesLookUp(CancellationToken cancellationToken)
+    {
+        return await _dbContext.Roles.ToListAsync(cancellationToken);
     }
 }

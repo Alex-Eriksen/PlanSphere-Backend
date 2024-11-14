@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
@@ -27,10 +28,22 @@ public class UpdateUserCommandHandler(
         var user = await _userRepository.GetByIdAsync(command.Id, cancellationToken);
         _logger.LogInformation("Retrieved user with id: [{userId}]", command.Id);
 
+        _logger.LogInformation("Mapping user with id: [{userId}]", command.Id);
         var mappedUser = _mapper.Map(command.Request, user);
+        _logger.LogInformation("Mapped user with id: [{userId}]", command.Id);
 
+        _logger.LogInformation("Mapping roles with new roles on user with id: [{userId}]", command.Id);
+        var currentRoleIds = mappedUser.Roles.Select(r => r.RoleId).ToList();
+        var newRoleIds = command.Request.RoleIds;
+        mappedUser.Roles.RemoveAll(r => !newRoleIds.Contains(r.RoleId));
+        var rolesToAdd = newRoleIds
+            .Except(currentRoleIds)
+            .Select(roleId => new UserRole {RoleId = roleId, UserId = mappedUser.Id});
+        
+        mappedUser.Roles.AddRange(rolesToAdd);
+        _logger.LogInformation("Mapped roles with new roles on user with id: [{userId}] with roles: [{roles}]", command.Id, command.Request.RoleIds);
+        
         _logger.LogInformation("Updating user.");
-        _logger.LogInformation("[{phonenumber}]", mappedUser.PhoneNumber);
         await _userRepository.UpdateAsync(command.Id, mappedUser, cancellationToken);
         _logger.LogInformation("Updated user.");
     }
