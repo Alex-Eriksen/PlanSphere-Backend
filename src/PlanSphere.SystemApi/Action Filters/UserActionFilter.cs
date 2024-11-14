@@ -26,8 +26,8 @@ public class UserActionFilter(
         }
 
         var userId = context.HttpContext.User.GetUserId();
-
-        if (activatingUserId == userId)
+        
+        if (activatingUserId == userId || context.HttpContext.User.IsSystemAdministrator())
         {
             await next();
             return;

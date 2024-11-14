@@ -12,6 +12,11 @@ public class OrganisationConfiguration : IEntityTypeConfiguration<Organisation>
 
         builder.Property(e => e.Id)
             .ValueGeneratedOnAdd();
+
+        builder.HasOne(e => e.Owner)
+            .WithMany(e => e.OwnedOrganisations)
+            .HasForeignKey(e => e.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasOne(e => e.Address)
             .WithOne()

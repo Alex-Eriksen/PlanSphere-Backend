@@ -23,7 +23,7 @@ public class RoleFilter(IUserRepository userRepository) : IRoleFilter
 
         var authorized = false;
 
-        if (userRoles.Select(x => x.Name).Contains(PermissionFilterConstants.SystemAdministratorKey))
+        if (user.SystemAdministrator)
         {
             return;
         }

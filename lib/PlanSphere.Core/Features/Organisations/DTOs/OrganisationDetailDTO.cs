@@ -11,6 +11,7 @@ public class OrganisationDetailDTO : BaseDTO, IAuditableEntityDTO
     public string? LogoUrl { get; set; }
     public AddressDTO Address { get; set; }
     public OrganisationSettingsDTO Settings { get; set; }
+    public string Owner { get; set; }
     public DateTime CreatedAt { get; set; }
     public string? CreatedBy { get; set; }
     public DateTime? UpdatedAt { get; set; }

@@ -44,4 +44,12 @@ public static class ClaimsExtensions
 
         return lastName;
     }
+
+    public static bool IsSystemAdministrator(this ClaimsPrincipal context)
+    {
+        var systemAdministratorClaim = context.FindFirst(ClaimsConstants.SystemAdministrator)?.Value;
+        bool.TryParse(systemAdministratorClaim, out var systemAdministrator);
+
+        return systemAdministrator;
+    }
 }

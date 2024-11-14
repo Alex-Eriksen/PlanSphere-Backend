@@ -10,6 +10,7 @@ public class TeamSettingsDTOProfile : Profile
     {
         CreateMap<TeamSettings, TeamSettingsDTO>()
             .ForMember(dest => dest.DefaultRole, opt => opt.MapFrom(src => src.DefaultRole))
-            .ForMember(dest => dest.DefaultWorkSchedule, opt => opt.MapFrom(src => src.DefaultWorkSchedule));
+            .ForMember(dest => dest.DefaultWorkSchedule, opt => opt.MapFrom(src => src.DefaultWorkSchedule))
+            .ForMember(dest => dest.InheritDefaultWorkSchedule, opt => opt.MapFrom(src => src.InheritDefaultWorkSchedule));
     }
 }

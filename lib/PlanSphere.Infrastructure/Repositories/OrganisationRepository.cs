@@ -22,6 +22,7 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
     {
         var organisation = await _context.Organisations
             .Include(x => x.Address)
+            .Include(x => x.Owner)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultRole)
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);

@@ -195,7 +195,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
-            new(ClaimsConstants.LastName, user.LastName)
+            new(ClaimsConstants.LastName, user.LastName),
+            new(ClaimsConstants.SystemAdministrator, user.SystemAdministrator.ToString())
         };
 
         var accessToken = _jwtHelper.GenerateToken(claims, DateTime.UtcNow.AddMinutes(15));
@@ -214,7 +215,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
-            new(ClaimsConstants.LastName, user.LastName)
+            new(ClaimsConstants.LastName, user.LastName),
+            new(ClaimsConstants.SystemAdministrator, user.SystemAdministrator.ToString())
         };
 
         var accessToken = _jwtHelper.GenerateToken(claims, DateTime.UtcNow.AddMinutes(15));
