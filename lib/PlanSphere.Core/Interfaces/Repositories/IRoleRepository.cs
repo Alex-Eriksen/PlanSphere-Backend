@@ -7,7 +7,6 @@ public interface IRoleRepository : IRepository<Role>
 {
     Task<List<Right>> GetRightsAsync(CancellationToken cancellationToken);
     Task<Role> ToggleRoleInheritanceAsync(Role role, CancellationToken cancellationToken);
-    Task<List<Role>> GetRolesLookUp(CancellationToken cancellationToken);
     IQueryable<Role> GetCompanyRoles(ulong companyId, ulong organisationId, IQueryable<Role> query);
     IQueryable<Role> GetDepartmentRoles(ulong departmentId, IQueryable<Role> query);
     IQueryable<Role> GetTeamRoles(ulong teamId, IQueryable<Role> query);

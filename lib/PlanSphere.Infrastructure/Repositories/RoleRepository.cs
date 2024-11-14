@@ -187,9 +187,4 @@ public class RoleRepository(
              x.BlockedDepartments.All(dbr => dbr.DepartmentId != team.DepartmentId && dbr.RoleId != x.DepartmentRole.RoleId)));
 
     }
-
-    public async Task<List<Role>> GetRolesLookUp(CancellationToken cancellationToken)
-    {
-        return await _dbContext.Roles.ToListAsync(cancellationToken);
-    }
 }
