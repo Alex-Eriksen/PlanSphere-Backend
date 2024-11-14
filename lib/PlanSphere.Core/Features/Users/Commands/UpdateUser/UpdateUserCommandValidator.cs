@@ -11,7 +11,7 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
 
-        RuleFor(x => x.Id)
+        RuleFor(x => x.UserId)
             .NotNull();
 
         RuleFor(x => x.Request.FirstName)
