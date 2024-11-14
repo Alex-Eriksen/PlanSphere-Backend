@@ -13,6 +13,8 @@ public class WorkTimeLogConfiguration : IEntityTypeConfiguration<WorkTimeLog>
         builder.Property(e => e.Id)
             .ValueGeneratedOnAdd();
 
+        builder.Property(e => e.LogTime)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.HasOne(e => e.User)
             .WithMany()

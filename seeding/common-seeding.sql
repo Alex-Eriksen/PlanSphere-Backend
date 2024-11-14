@@ -33,7 +33,8 @@ VALUES
 GO
 
 INSERT INTO WorkSchedules (IsDefaultWorkSchedule)
-VALUES (1);
+VALUES (1), (1), (1), (1);
+
 GO
 
 INSERT INTO Addresses (ParentId, CountryId, StreetName, HouseNumber, PostalCode, Door, Floor)
@@ -44,23 +45,23 @@ INSERT INTO Organisations (Name, LogoUrl, AddressId, SettingsId, CreatedAt, Crea
 VALUES ('PlanSphere', NULL, IDENT_CURRENT('Addresses'), 1, CURRENT_TIMESTAMP, NULL, NULL, NULL);
 
 INSERT INTO OrganisationSettings (OrganisationId, DefaultRoleId, DefaultWorkScheduleId)
-VALUES (IDENT_CURRENT('Organisations'), IDENT_CURRENT('Roles'), IDENT_CURRENT('WorkSchedules'));
+VALUES (IDENT_CURRENT('Organisations'), IDENT_CURRENT('Roles'), 1);
 
 INSERT INTO Companies (Name, LogoUrl, VAT, OrganisationId, AddressId, SettingsId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
 VALUES ('TEC', NULL, NULL, IDENT_CURRENT('Organisations'), IDENT_CURRENT('Addresses'), 1, CURRENT_TIMESTAMP, NULL, NULL, NULL);
 
 INSERT INTO CompanySettings (CompanyId, DefaultRoleId, DefaultWorkScheduleId, InheritDefaultWorkSchedule)
-VALUES (IDENT_CURRENT('Companies'), IDENT_CURRENT('Roles'), IDENT_CURRENT('WorkSchedules'), 1);
+VALUES (IDENT_CURRENT('Companies'), IDENT_CURRENT('Roles'), 2, 1);
 
 INSERT INTO Departments (Name, Description, Building, LogoUrl, CompanyId, AddressId, InheritAddress, SettingsId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
 VALUES ('SKP', NULL, 'E', NULL, IDENT_CURRENT('Companies'), IDENT_CURRENT('Addresses'), 1, 1, CURRENT_TIMESTAMP, NULL, NULL, NULL);
 
 INSERT INTO DepartmentSettings (DepartmentId, DefaultRoleId, DefaultWorkScheduleId, InheritDefaultWorkSchedule)
-VALUES (IDENT_CURRENT('Departments'), IDENT_CURRENT('Roles'), IDENT_CURRENT('WorkSchedules'), 1);
+VALUES (IDENT_CURRENT('Departments'), IDENT_CURRENT('Roles'), 3, 1);
 
 INSERT INTO Teams (Name, Description, Identifier, DepartmentId, AddressId, InheritAddress, SettingsId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
 VALUES ('Christians Team', NULL, NULL, IDENT_CURRENT('Departments'), IDENT_CURRENT('Addresses'), 1, 1, CURRENT_TIMESTAMP, NULL, NULL, NULL);
 
 INSERT INTO TeamSettings (TeamId, DefaultRoleId, DefaultWorkScheduleId, InheritDefaultWorkSchedule)
-VALUES (IDENT_CURRENT('Teams'), IDENT_CURRENT('Roles'), IDENT_CURRENT('WorkSchedules'), 1);
+VALUES (IDENT_CURRENT('Teams'), IDENT_CURRENT('Roles'), 4, 1);
 GO;

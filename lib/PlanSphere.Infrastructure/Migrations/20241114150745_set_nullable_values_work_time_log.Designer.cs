@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanSphere.Infrastructure.Contexts;
 
@@ -11,9 +12,11 @@ using PlanSphere.Infrastructure.Contexts;
 namespace PlanSphere.Infrastructure.Migrations
 {
     [DbContext(typeof(PlanSphereDatabaseContext))]
-    partial class PlanSphereDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241114150745_set_nullable_values_work_time_log")]
+    partial class set_nullable_values_work_time_log
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -957,21 +960,6 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserJobTitle", b =>
-                {
-                    b.Property<decimal>("UserId")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.Property<decimal>("JobTitleId")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.HasKey("UserId", "JobTitleId");
-
-                    b.HasIndex("JobTitleId");
-
-                    b.ToTable("UserJobTitle");
-                });
-
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
                 {
                     b.Property<decimal>("UserId")
@@ -1300,7 +1288,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.CompanyJobTitle", b =>
                 {
                     b.HasOne("Domain.Entities.Company", "Company")
-                        .WithMany("JobTitles")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1463,7 +1451,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.DepartmentJobTitle", b =>
                 {
                     b.HasOne("Domain.Entities.Department", "Department")
-                        .WithMany("JobTitles")
+                        .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1603,7 +1591,7 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Organisation", "Organisation")
-                        .WithMany("JobTitles")
+                        .WithMany()
                         .HasForeignKey("OrganisationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1794,7 +1782,7 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Team", "Team")
-                        .WithMany("JobTitles")
+                        .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1908,25 +1896,6 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Navigation("Organisation");
 
                     b.Navigation("UpdatedByUser");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserJobTitle", b =>
-                {
-                    b.HasOne("Domain.Entities.JobTitle", "JobTitle")
-                        .WithMany()
-                        .HasForeignKey("JobTitleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.User", "User")
-                        .WithMany("JobTitles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JobTitle");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
@@ -2052,8 +2021,6 @@ namespace PlanSphere.Infrastructure.Migrations
                 {
                     b.Navigation("Departments");
 
-                    b.Navigation("JobTitles");
-
                     b.Navigation("Settings")
                         .IsRequired();
                 });
@@ -2061,8 +2028,6 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Department", b =>
                 {
                     b.Navigation("DepartmentRoleRights");
-
-                    b.Navigation("JobTitles");
 
                     b.Navigation("Settings")
                         .IsRequired();
@@ -2090,8 +2055,6 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Organisation", b =>
                 {
                     b.Navigation("Companies");
-
-                    b.Navigation("JobTitles");
 
                     b.Navigation("Settings")
                         .IsRequired();
@@ -2124,16 +2087,12 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Team", b =>
                 {
-                    b.Navigation("JobTitles");
-
                     b.Navigation("Settings")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.Navigation("JobTitles");
-
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("Roles");
