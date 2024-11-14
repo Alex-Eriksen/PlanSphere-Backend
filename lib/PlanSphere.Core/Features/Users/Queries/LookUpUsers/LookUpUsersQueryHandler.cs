@@ -27,7 +27,7 @@ public class LookUpUsersQueryHandler(
         var users = await _userRepository.GetQueryable().Where(x => x.OrganisationId == request.OrganisationId).ToListAsync(cancellationToken);
         _logger.LogInformation("Retrieved user from organisation with id: [{organisationId}]", request.OrganisationId);
 
-        var userLookUpDtos = _mapper.Map<List<UserLookUpDTO>>(userRepository);
+        var userLookUpDtos = _mapper.Map<List<UserLookUpDTO>>(users);
 
         return userLookUpDtos;
     }

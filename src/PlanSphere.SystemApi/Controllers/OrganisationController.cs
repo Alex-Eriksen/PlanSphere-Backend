@@ -90,7 +90,7 @@ public class OrganisationController(IMediator mediator, IOrganisationFilter orga
         return NoContent();
     }
 
-    [HttpPost("{organisationId?}/{userId}")]
+    [HttpPost("{userId}/{organisationId?}")]
     public async Task<IActionResult> ChangeOrganisationOwnerAsync(ulong? organisationId, ulong userId)
     {
         var orgId = organisationId ?? Request.HttpContext.User.GetOrganisationId();
