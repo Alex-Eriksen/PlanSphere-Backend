@@ -10,12 +10,14 @@ using PlanSphere.Core.Features.Users.Commands.CreateUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.PatchUser;
 using PlanSphere.Core.Features.Users.Queries.GetUserDetails;
+using PlanSphere.Core.Features.Users.Queries.LookUpUsers;
 using PlanSphere.Core.Features.Users.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
 
 namespace PlanSphere.SystemApi.Controllers;
 
+[Authorize]
 public class UserController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -30,6 +32,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         return Created();
     }
     
+    [AllowAnonymous]
     [HttpPost(Name = nameof(CreateUserDevelopmentAsync))]
     public async Task<IActionResult> CreateUserDevelopmentAsync()
     {
@@ -75,6 +78,15 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         var command = new PatchUserCommand(selectedUserId, request);
         await _mediator.Send(command);
         return NoContent();
+    }
+
+    [HttpGet("{organisationId?}", Name = nameof(LookUpUsersAsync))]
+    public async Task<IActionResult> LookUpUsersAsync(ulong? organisationId)
+    {
+        var selectedId = organisationId ?? Request.HttpContext.User.GetOrganisationId();
+        var query = new LookUpUsersQuery(selectedId);
+        var response = await _mediator.Send(query);
+        return Ok(response);
     }
     
     [Authorize]

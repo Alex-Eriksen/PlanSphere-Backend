@@ -130,6 +130,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
                     .ThenInclude(x => x.Role)
                         .ThenInclude(x => x.TeamRoleRights)
                             .ThenInclude(x => x.Right)
+            .Include(x => x.User).ThenInclude(x => x.OwnedOrganisations)
             .AsSplitQuery()
             .SingleOrDefaultAsync(t => t.Token == token, cancellationToken);
         

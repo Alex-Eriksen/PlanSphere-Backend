@@ -14,6 +14,7 @@ public class LoggedInUserDTOProfile : Profile
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.OwnedOrganisations, opt => opt.MapFrom(src => src.OwnedOrganisations.Select(x => x.Id)))
             .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.ProfilePictureUrl));
     }
 }

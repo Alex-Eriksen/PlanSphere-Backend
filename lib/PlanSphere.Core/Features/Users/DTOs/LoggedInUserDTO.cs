@@ -9,5 +9,6 @@ public class LoggedInUserDTO
     public string LastName { get; set; }
     public string Email { get; set; }
     public string ProfilePictureUrl { get; set; }
+    public List<ulong> OwnedOrganisations { get; set; } = new List<ulong>();
     public List<RoleDTO> Roles { get; set; } = new List<RoleDTO>();
 }
