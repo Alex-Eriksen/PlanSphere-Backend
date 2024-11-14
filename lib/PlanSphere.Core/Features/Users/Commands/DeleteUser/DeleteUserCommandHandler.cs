@@ -17,9 +17,9 @@ public class DeleteUserCommandHandler(
 
     public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Starting to delete user with [DeleteUserCommandHandler] with id: [{userId}]",request.userId);
-        _logger.LogInformation("Deleting user with id: [{id}]", request.userId);
-        await _userRepository.DeleteAsync(request.userId, cancellationToken);
-        _logger.LogInformation("Deleted user with id: [{id}]", request.userId);
+        _logger.BeginScope("Starting to delete user with [DeleteUserCommandHandler] with id: [{userId}]",request.UserId);
+        _logger.LogInformation("Deleting user with id: [{id}]", request.UserId);
+        await _userRepository.DeleteAsync(request.UserId, cancellationToken);
+        _logger.LogInformation("Deleted user with id: [{id}]", request.UserId);
     }
 }
