@@ -8,12 +8,14 @@ public class OrganisationFilter(IOrganisationRepository organisationRepository) 
 {
     private readonly IOrganisationRepository _organisationRepository = organisationRepository ?? throw new ArgumentNullException(nameof(organisationRepository));
 
-    public async Task CheckIsOrganisationOwnerAsync(ulong organisationId, ulong userId, CancellationToken cancellationToken)
+    public async Task<bool> CheckIsOrganisationOwnerAsync(ulong organisationId, ulong userId, CancellationToken cancellationToken, bool shouldThrow = true)
     {
         var organisation = await _organisationRepository.GetByIdAsync(organisationId, cancellationToken);
 
-        if (organisation.OwnerId == userId) return;
+        var isOwner = organisation.OwnerId == userId;
 
-        throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
+        if(shouldThrow && !isOwner) throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
+
+        return isOwner;
     }
 }

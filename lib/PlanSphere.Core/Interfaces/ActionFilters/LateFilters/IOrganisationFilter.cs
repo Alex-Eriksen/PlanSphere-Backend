@@ -2,5 +2,5 @@
 
 public interface IOrganisationFilter
 {
-    Task CheckIsOrganisationOwnerAsync(ulong organisationId, ulong userId, CancellationToken cancellationToken);
+    Task<bool> CheckIsOrganisationOwnerAsync(ulong organisationId, ulong userId, CancellationToken cancellationToken, bool shouldThrow = true);
 }
