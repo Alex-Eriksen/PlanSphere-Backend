@@ -16,7 +16,7 @@ public class OrganisationRoleConfiguration : IEntityTypeConfiguration<Organisati
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.Organisation)
-            .WithMany()
+            .WithMany(e => e.Roles)
             .HasForeignKey(e => e.OrganisationId)
             .OnDelete(DeleteBehavior.Cascade);
     }

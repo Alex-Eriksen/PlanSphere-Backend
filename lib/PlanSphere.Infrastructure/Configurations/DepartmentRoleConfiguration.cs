@@ -11,7 +11,7 @@ public class DepartmentRoleConfiguration : IEntityTypeConfiguration<DepartmentRo
         builder.HasKey(e => new { e.DepartmentId, e.RoleId });
 
         builder.HasOne(e => e.Department)
-            .WithMany()
+            .WithMany(e => e.Roles)
             .HasForeignKey(e => e.DepartmentId)
             .OnDelete(DeleteBehavior.Cascade);
 

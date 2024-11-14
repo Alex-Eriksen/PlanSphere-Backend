@@ -41,6 +41,16 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Teams)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Team).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Team).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
             .AsSplitQuery()
             .SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
         
@@ -61,9 +71,18 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         return request;
     }
 
-    public Task<User> DeleteAsync(ulong id, CancellationToken cancellationToken)
+    public async Task<User> DeleteAsync(ulong id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+        if (user == null)
+        {
+            _logger.LogInformation("User with id: [{id}] does not exist", id);
+            throw new KeyNotFoundException($"User with id: [{id}] does not exist");
+        }
+
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return user;
     }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken)
@@ -74,8 +93,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
     public IQueryable<User> GetQueryable()
     {
         return _dbContext.Users
-            .AsNoTracking()
-            .AsQueryable();
+            .Include(u => u.Roles)
+            .Include(u => u.Address).AsQueryable();
     }
 
     public IQueryable<User> GetQueryableWithRights()

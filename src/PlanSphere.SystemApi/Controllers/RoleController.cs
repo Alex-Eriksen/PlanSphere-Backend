@@ -13,6 +13,7 @@ using PlanSphere.Core.Features.Roles.Commands.ToggleInheritance;
 using PlanSphere.Core.Features.Roles.Commands.UpdateRole;
 using PlanSphere.Core.Features.Roles.Queries.GetRoleById;
 using PlanSphere.Core.Features.Roles.Queries.ListRoles;
+using PlanSphere.Core.Features.Roles.Queries.LookUpRoles;
 using PlanSphere.Core.Features.Roles.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -89,6 +90,14 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
         query.OrganisationId = organisationId;
         query.SourceLevelId = sourceLevelId;
         query.SourceLevel = sourceLevel;
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
+
+    [HttpGet(Name = nameof(LookUpRolesAsync))]
+    public async Task<IActionResult> LookUpRolesAsync()
+    {
+        var query = new LookUpRolesQuery(Request.HttpContext.User.GetUserId());
         var response = await _mediator.Send(query);
         return Ok(response);
     }

@@ -9,9 +9,13 @@ using PlanSphere.Core.Features.Addresses.Requests;
 using PlanSphere.Core.Features.JobTitles.Commands.AssignJobTitle;
 using PlanSphere.Core.Features.Roles.Commands.AssignRole;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
+using PlanSphere.Core.Features.Users.Commands.DeleteUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.PatchUser;
+using PlanSphere.Core.Features.Users.Commands.UpdateUser;
 using PlanSphere.Core.Features.Users.Queries.GetUserDetails;
+using PlanSphere.Core.Features.Users.Queries.GetUser;
+using PlanSphere.Core.Features.Users.Queries.ListUsers;
 using PlanSphere.Core.Features.Users.Requests;
 using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
 using PlanSphere.SystemApi.Action_Filters;
@@ -24,14 +28,28 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     private readonly IRoleFilter _roleFilter = roleFilter ?? throw new ArgumentNullException(nameof(roleFilter));
-
-    [HttpPost(Name = nameof(CreateUserAsync))]
-    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserCommand command)
+    
+    [HttpPost("{sourceLevel}/{sourceLevelId}",Name = nameof(CreateUserAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
+    public async Task<IActionResult> CreateUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, [FromBody] UserRequest request)
     {
-        command.UserId = Request.HttpContext.User.GetUserId();
+        var command = new CreateUserCommand(request);
         command.OrganisationId = Request.HttpContext.User.GetOrganisationId();
+        command.UserId = Request.HttpContext.User.GetUserId();
+        command.SourceLevel = sourceLevel;
+        command.SourceLevelId = sourceLevelId;
         await _mediator.Send(command);
         return Created();
+    }
+    
+    [HttpGet("{sourceLevel}/{sourceLevelId}", Name = nameof(ListUsersAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
+    public async Task<IActionResult> ListUsersAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, [FromQuery] ListUsersQuery query)
+    {
+        query.SourceLevelId = sourceLevelId;
+        query.SourceLevel = sourceLevel;
+        var response = await _mediator.Send(query);
+        return Ok(response);
     }
 
     [AllowAnonymous]
@@ -98,6 +116,29 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
     {
         await _roleFilter.CheckIsAllowedToSetOwnJobTitlesAsync(Request.HttpContext);
         var command = new AssignJobTitleCommand(jobTitleId, Request.HttpContext.User.GetUserId());
+        await _mediator.Send(command);
+        return NoContent();
+    }
+    
+    [HttpPut("{sourceLevel}/{sourceLevelId}/{userId?}", Name = nameof(UpdateUserAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
+    public async Task<IActionResult> UpdateUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, ulong? userId, [FromBody] UserRequest request)
+    {
+        var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
+        var command = new UpdateUserCommand(selectedUserId, request);
+        command.SourceLevel = sourceLevel;
+        command.SourceLevelId = sourceLevelId;
+        await _mediator.Send(command);
+        return Ok(command);
+    }
+
+    [HttpDelete("{sourceLevel}/{sourceLevelId}/{userId}", Name = nameof(DeleteUserAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
+    public async Task<IActionResult> DeleteUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, ulong userId)
+    {
+        var command = new DeleteUserCommand(userId);
+        command.SourceLevel = sourceLevel;
+        command.SourceLevelId = sourceLevelId;
         await _mediator.Send(command);
         return NoContent();
     }
