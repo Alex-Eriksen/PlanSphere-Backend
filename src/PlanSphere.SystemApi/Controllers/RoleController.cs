@@ -94,14 +94,10 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
 
-    [HttpGet("{sourceLevel}/{sourceLevelId}", Name = nameof(LookUpRolesAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
-    public async Task<IActionResult> LookUpRolesAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, [FromQuery] LookUpRolesQuery query)
+    [HttpGet(Name = nameof(LookUpRolesAsync))]
+    public async Task<IActionResult> LookUpRolesAsync()
     {
-        var organisationId = Request.HttpContext.User.GetOrganisationId();
-        query.OrganisationId = organisationId;
-        query.SourceLevel = sourceLevel;
-        query.SourceLevelId = sourceLevelId;
+        var query = new LookUpRolesQuery(Request.HttpContext.User.GetUserId());
         var response = await _mediator.Send(query);
         return Ok(response);
     }

@@ -63,7 +63,7 @@ public class LookUpJobTitlesCommandHandler(
         );
         
         _logger.LogInformation("Retrieved job titles available for user with id: [{userId}]", request.UserId);
-
+        jobTitles = jobTitles.Distinct().ToList();
         var jobTitleLookUpDtos = _mapper.Map<List<JobTitleLookUpDTO>>(jobTitles);
 
         return jobTitleLookUpDtos;

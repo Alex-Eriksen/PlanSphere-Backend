@@ -30,22 +30,26 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
     private readonly IRoleFilter _roleFilter = roleFilter ?? throw new ArgumentNullException(nameof(roleFilter));
     
     [HttpPost("{sourceLevel}/{sourceLevelId}",Name = nameof(CreateUserAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers, true])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
     public async Task<IActionResult> CreateUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId,[FromBody] UserRequest request)
     {
         var command = new CreateUserCommand(request, false)
         {
             OrganisationId = 1,
-            UserId = 0
+            UserId = 0,
+            SourceLevel = sourceLevel,
+            SourceLevelId = sourceLevelId
         };
         await _mediator.Send(command);
         return Created();
     }
     
-    [HttpGet(Name = nameof(ListUsersAsync))]
-    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
-    public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query)
+    [HttpGet("{sourceLevel}/{sourceLevelId}", Name = nameof(ListUsersAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
+    public async Task<IActionResult> ListUsersAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, [FromQuery] ListUsersQuery query)
     {
+        query.SourceLevelId = sourceLevelId;
+        query.SourceLevel = sourceLevel;
         var response = await _mediator.Send(query);
         return Ok(response);
     }
@@ -79,7 +83,7 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
     }
 
     [HttpGet("{userId?}", Name = nameof(GetUserDetailsAsync))]
-    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
+    [TypeFilter(typeof(UserActionFilter))]
     public async Task<IActionResult> GetUserDetailsAsync([FromRoute] ulong? userId)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
@@ -89,7 +93,7 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
     }
 
     [HttpPatch("{userId?}", Name = nameof(PatchUserAsync))]
-    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
+    [TypeFilter(typeof(UserActionFilter))]
     public async Task<IActionResult> PatchUserAsync([FromRoute] ulong? userId, [FromBody] JsonPatchDocument<UserPatchRequest> request)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
@@ -118,21 +122,25 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
         return NoContent();
     }
     
-    [HttpPut("{userId?}", Name = nameof(UpdateUserAsync))]
-    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
-    public async Task<IActionResult> UpdateUserAsync([FromRoute] ulong? userId, [FromBody] UserRequest request)
+    [HttpPut("{sourceLevel}/{sourceLevelId}/{userId?}", Name = nameof(UpdateUserAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
+    public async Task<IActionResult> UpdateUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, ulong? userId, [FromBody] UserRequest request)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
         var command = new UpdateUserCommand(selectedUserId, request);
+        command.SourceLevel = sourceLevel;
+        command.SourceLevelId = sourceLevelId;
         await _mediator.Send(command);
         return Ok(command);
     }
 
-    [HttpDelete("{userId}", Name = nameof(DeleteUserAsync))]
-    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
-    public async Task<IActionResult> DeleteUserAsync([FromRoute] ulong userId)
+    [HttpDelete("{sourceLevel}/{sourceLevelId}/{userId}", Name = nameof(DeleteUserAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
+    public async Task<IActionResult> DeleteUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, ulong userId)
     {
         var command = new DeleteUserCommand(userId);
+        command.SourceLevel = sourceLevel;
+        command.SourceLevelId = sourceLevelId;
         await _mediator.Send(command);
         return NoContent();
     }

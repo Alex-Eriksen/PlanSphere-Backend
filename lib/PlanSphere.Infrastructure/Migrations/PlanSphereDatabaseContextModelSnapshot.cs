@@ -1315,7 +1315,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.CompanyRole", b =>
                 {
                     b.HasOne("Domain.Entities.Company", "Company")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1478,7 +1478,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.DepartmentRole", b =>
                 {
                     b.HasOne("Domain.Entities.Department", "Department")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1612,7 +1612,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.OrganisationRole", b =>
                 {
                     b.HasOne("Domain.Entities.Organisation", "Organisation")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("OrganisationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1809,7 +1809,7 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Team", "Team")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2050,6 +2050,8 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.Navigation("JobTitles");
 
+                    b.Navigation("Roles");
+
                     b.Navigation("Settings")
                         .IsRequired();
                 });
@@ -2059,6 +2061,8 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Navigation("DepartmentRoleRights");
 
                     b.Navigation("JobTitles");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("Settings")
                         .IsRequired();
@@ -2088,6 +2092,8 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Navigation("Companies");
 
                     b.Navigation("JobTitles");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("Settings")
                         .IsRequired();
@@ -2121,6 +2127,8 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Team", b =>
                 {
                     b.Navigation("JobTitles");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("Settings")
                         .IsRequired();
