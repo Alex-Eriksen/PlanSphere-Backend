@@ -9,4 +9,5 @@ public class TeamSettingsDTO : BaseDTO
 {
     public RoleDTO DefaultRole { get; set; }
     public WorkScheduleDTO DefaultWorkSchedule { get; set; }
+    public bool InheritDefaultWorkSchedule { get; set; }
 }

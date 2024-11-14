@@ -209,6 +209,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
                     .ThenInclude(x => x.Role)
                         .ThenInclude(x => x.TeamRoleRights)
                             .ThenInclude(x => x.Right)
+            .Include(x => x.User).ThenInclude(x => x.OwnedOrganisations)
             .AsSplitQuery()
             .SingleOrDefaultAsync(t => t.Token == token, cancellationToken);
         
@@ -274,7 +275,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
-            new(ClaimsConstants.LastName, user.LastName)
+            new(ClaimsConstants.LastName, user.LastName),
+            new(ClaimsConstants.SystemAdministrator, user.SystemAdministrator.ToString())
         };
 
         var accessToken = _jwtHelper.GenerateToken(claims, DateTime.UtcNow.AddMinutes(15));
@@ -293,7 +295,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
-            new(ClaimsConstants.LastName, user.LastName)
+            new(ClaimsConstants.LastName, user.LastName),
+            new(ClaimsConstants.SystemAdministrator, user.SystemAdministrator.ToString())
         };
 
         var accessToken = _jwtHelper.GenerateToken(claims, DateTime.UtcNow.AddMinutes(15));

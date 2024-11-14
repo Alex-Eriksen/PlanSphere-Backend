@@ -14,6 +14,7 @@ using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.PatchUser;
 using PlanSphere.Core.Features.Users.Commands.UpdateUser;
 using PlanSphere.Core.Features.Users.Queries.GetUserDetails;
+using PlanSphere.Core.Features.Users.Queries.LookUpUsers;
 using PlanSphere.Core.Features.Users.Queries.GetUser;
 using PlanSphere.Core.Features.Users.Queries.ListUsers;
 using PlanSphere.Core.Features.Users.Requests;
@@ -108,6 +109,15 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
         var command = new AssignRoleCommand(roleId, Request.HttpContext.User.GetUserId());
         await _mediator.Send(command);
         return NoContent();
+    }
+
+    [HttpGet("{organisationId?}", Name = nameof(LookUpUsersAsync))]
+    public async Task<IActionResult> LookUpUsersAsync(ulong? organisationId)
+    {
+        var selectedId = organisationId ?? Request.HttpContext.User.GetOrganisationId();
+        var query = new LookUpUsersQuery(selectedId);
+        var response = await _mediator.Send(query);
+        return Ok(response);
     }
     
     [HttpPost("{jobTitleId}", Name = nameof(AssignJobTitleToSelfAsync))]

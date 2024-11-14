@@ -23,6 +23,7 @@ public class TeamRepository(IPlanSphereDatabaseContext context, ILogger<TeamRepo
         var team = await _context.Teams
             .Include(x => x.Address)
             .Include(x => x.Department).ThenInclude(x => x.Settings)
+            .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.WorkScheduleShifts)

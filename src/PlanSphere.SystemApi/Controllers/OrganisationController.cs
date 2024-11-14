@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
+using PlanSphere.Core.Features.Organisations.Commands.ChangeOrganisationOwner;
 using PlanSphere.Core.Features.Organisations.Queries.LookUp;
 using PlanSphere.Core.Features.Organisations.Commands.CreateOrganisation;
 using PlanSphere.Core.Features.Organisations.Commands.DeleteOrganisation;
@@ -12,16 +13,18 @@ using PlanSphere.Core.Features.Organisations.Commands.UpdateOrganisation;
 using PlanSphere.Core.Features.Organisations.Queries.GetOrganisation;
 using PlanSphere.Core.Features.Organisations.Queries.ListOrganisations;
 using PlanSphere.Core.Features.Organisations.Requests;
+using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
 
 namespace PlanSphere.SystemApi.Controllers;
 
 [Authorize]
-public class OrganisationController(IMediator mediator) : ApiControllerBase(mediator)
+public class OrganisationController(IMediator mediator, IOrganisationFilter organisationFilter) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-    
+    private readonly IOrganisationFilter _organisationFilter = organisationFilter ?? throw new ArgumentNullException(nameof(organisationFilter));
+
     [HttpGet(Name = nameof(LookUpOrganisationsAsync))]
     public async Task<IActionResult> LookUpOrganisationsAsync()
     {
@@ -69,7 +72,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpDelete("{sourceLevelId}", Name = nameof(DeleteOrganisationAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator, SourceLevel.Organisation])]
+    [TypeFilter(typeof(SystemAdministratorFilter))]
     public async Task<IActionResult> DeleteOrganisationAsync([FromRoute] ulong sourceLevelId)
     {
         var command = new DeleteOrganisationCommand(sourceLevelId);
@@ -83,6 +86,18 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     {
         var selectedId = sourceLevelId ?? Request.HttpContext.User.GetOrganisationId();
         var command = new PatchOrganisationCommand(patchRequest, selectedId);
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    [HttpPost("{userId}/{organisationId?}")]
+    public async Task<IActionResult> ChangeOrganisationOwnerAsync(ulong? organisationId, ulong userId)
+    {
+        var orgId = organisationId ?? Request.HttpContext.User.GetOrganisationId();
+        
+        await _organisationFilter.CheckIsOrganisationOwnerAsync(orgId, Request.HttpContext.User.GetUserId(), CancellationToken.None);
+        
+        var command = new ChangeOrganisationOwnerCommand(userId, orgId);
         await _mediator.Send(command);
         return NoContent();
     }

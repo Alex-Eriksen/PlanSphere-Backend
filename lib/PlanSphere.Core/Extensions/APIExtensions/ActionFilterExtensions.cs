@@ -10,6 +10,7 @@ public static class ActionFilterExtensions
     {
         services.AddScoped<IRoleFilter, RoleFilter>();
         services.AddScoped<IWorkScheduleFilter, WorkScheduleFilter>();
+        services.AddScoped<IOrganisationFilter, OrganisationFilter>();
 
         return services;
     }

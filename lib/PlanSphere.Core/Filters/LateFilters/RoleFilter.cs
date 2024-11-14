@@ -28,7 +28,7 @@ public class RoleFilter(
 
         var authorized = false;
 
-        if (userRoles.Select(x => x.Name).Contains(PermissionFilterConstants.SystemAdministratorKey))
+        if (user.SystemAdministrator)
         {
             return;
         }

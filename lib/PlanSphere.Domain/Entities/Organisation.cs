@@ -11,6 +11,9 @@ public class Organisation : BaseEntity, IAuditableEntity
     public ulong AddressId { get; set; }
     public virtual Address Address { get; set; }
     
+    public ulong? OwnerId { get; set; }
+    public virtual User? Owner { get; set; }
+    
     public ulong SettingsId { get; set; }
     public virtual OrganisationSettings Settings { get; set; }
 
