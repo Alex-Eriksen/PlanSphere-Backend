@@ -19,6 +19,8 @@ public static class DatabaseExtensions
         services.AddScoped<IOrganisationRepository, OrganisationRepository>();
         services.AddScoped<IZipCodeRepository, ZipCodeRepository>();
         services.AddScoped<ITeamRepository, TeamRepository>();
+        services.AddScoped<IWorkTimeRepository, WorkTimeRepository>();
+        services.AddScoped<IWorkTimeLogRepository, WorkTimeLogRepository>();
         return services;
     }
 }
