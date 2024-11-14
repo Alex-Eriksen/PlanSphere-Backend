@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
 
@@ -29,7 +31,7 @@ public class DeleteWorkTimeCommandHandler(
 
         var workTimeLog = _mapper.Map<WorkTimeLog>(workItem, opt =>
         {
-            opt.Items["ActionType"] = command.ActionType;
+            opt.Items[MappingKeys.ActionType] = ActionType.Delete;
         });
         
         _logger.LogInformation("Creating a work time log for user with id: [{userId}].", workItem.UserId);

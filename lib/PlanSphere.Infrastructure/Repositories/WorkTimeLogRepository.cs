@@ -45,7 +45,7 @@ public class WorkTimeLogRepository(IPlanSphereDatabaseContext context, ILogger<W
         throw new NotImplementedException();
     }
 
-    public async Task<WorkTimeLog> GetUncheckedLog(ulong userId, CancellationToken cancellationToken)
+    public async Task<WorkTimeLog> GetUncheckedLogAsync(ulong userId, CancellationToken cancellationToken)
     {
         var workTimeLog = await _context.WorkTimeLogs.SingleOrDefaultAsync(x => x.UserId == userId && x.StartDateTime.Date == DateTime.Today && x.EndDateTime == null, cancellationToken);
         if (workTimeLog == null)

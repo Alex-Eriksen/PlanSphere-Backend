@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
 
@@ -24,7 +26,7 @@ public class CreateWorkTimeCommandHandler(
     public async Task Handle(CreateWorkTimeCommand command, CancellationToken cancellationToken)
     {
         _logger.BeginScope("Creating a work time for user");
-        var workTime = _mapper.Map<WorkTime>(command.Request, opt => opt.Items["UserId"] = command.UserId);
+        var workTime = _mapper.Map<WorkTime>(command.Request, opt => opt.Items[MappingKeys.UserId] = command.UserId);
         
         _logger.LogInformation("Creating a work time for user with id: [{userId}].", command.UserId);
         await _workTimeRepository.CreateAsync(workTime, cancellationToken);
@@ -32,8 +34,8 @@ public class CreateWorkTimeCommandHandler(
 
         var workTimeLog = _mapper.Map<WorkTimeLog>(command.Request, opt =>
         {
-            opt.Items["UserId"] = command.UserId;
-            opt.Items["ActionType"] = command.ActionType;
+            opt.Items[MappingKeys.UserId] = command.UserId;
+            opt.Items[MappingKeys.ActionType] = ActionType.Create;
         });
         
         _logger.LogInformation("Creating a work time log for user with id: [{userId}].", command.UserId);

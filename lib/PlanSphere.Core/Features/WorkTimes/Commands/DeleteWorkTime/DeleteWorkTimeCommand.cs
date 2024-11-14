@@ -3,4 +3,4 @@ using MediatR;
 
 namespace PlanSphere.Core.Features.WorkTimes.Commands.DeleteWorkTime;
 
-public record DeleteWorkTimeCommand(ulong WorkTimeId, ulong UserId, ActionType ActionType) : IRequest;
+public record DeleteWorkTimeCommand(ulong WorkTimeId, ulong UserId) : IRequest;

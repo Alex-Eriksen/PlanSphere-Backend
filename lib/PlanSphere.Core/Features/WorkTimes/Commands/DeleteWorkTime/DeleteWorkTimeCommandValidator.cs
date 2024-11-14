@@ -11,9 +11,5 @@ public class DeleteWorkTimeCommandValidator : AbstractValidator<DeleteWorkTimeCo
         
         RuleFor(x => x.UserId)
             .NotNull();
-        
-        RuleFor(x => x.ActionType)
-            .IsInEnum()
-            .NotNull();
     }
 }

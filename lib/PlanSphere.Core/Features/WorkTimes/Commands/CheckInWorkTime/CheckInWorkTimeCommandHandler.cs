@@ -30,7 +30,7 @@ public class CheckInWorkTimeCommandHandler(
         
         _logger.LogInformation("Fetching user settings from user with id: [{userId}]", request.UserId);
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
-        var shift = user.Settings.WorkSchedule.WorkScheduleShifts.SingleOrDefault(x => x.Day == DateTime.Now.DayOfWeek, null);
+        var shift = user.Settings.WorkSchedule.WorkScheduleShifts.SingleOrDefault(x => x.Day == DateTime.UtcNow.DayOfWeek, null);
         _logger.LogInformation("Fetched user settings from user with id: [{userId}]", request.UserId);
         
         _logger.LogInformation("Fetching any existing work times created today with unset end time, from user with id: [{userId}]", request.UserId);
@@ -93,6 +93,6 @@ public class CheckInWorkTimeCommandHandler(
     }
 
     private bool IsOvertimeForNoShift(WorkScheduleShift? shift) => shift == null;
-    private bool IsOvertimeForEarlyCheckIn(WorkScheduleShift? shift) => shift != null && DateTime.Now.TimeOfDay < shift.StartTime.ToTimeSpan();
+    private bool IsOvertimeForEarlyCheckIn(WorkScheduleShift? shift) => shift != null && DateTime.UtcNow.TimeOfDay < shift.StartTime.ToTimeSpan();
     private bool IsOvertimeForEndTimeMatch(WorkScheduleShift? shift, WorkTime previousWorkTime) => shift != null && previousWorkTime.EndDateTime.HasValue && previousWorkTime.EndDateTime.Value.TimeOfDay == shift.EndTime.ToTimeSpan();
 }

@@ -4,5 +4,5 @@ namespace PlanSphere.Core.Interfaces.Repositories;
 
 public interface IWorkTimeLogRepository : IRepository<WorkTimeLog>
 {
-    Task<WorkTimeLog> GetUncheckedLog(ulong userId, CancellationToken cancellationToken);
+    Task<WorkTimeLog> GetUncheckedLogAsync(ulong userId, CancellationToken cancellationToken);
 }

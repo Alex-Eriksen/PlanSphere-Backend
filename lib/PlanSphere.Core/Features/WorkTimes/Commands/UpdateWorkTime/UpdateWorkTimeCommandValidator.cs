@@ -15,9 +15,6 @@ public class UpdateWorkTimeCommandValidator : AbstractValidator<UpdateWorkTimeCo
         RuleFor(x => x.WorkTimeId)
             .NotNull();
         
-        RuleFor(x => x.ActionType)
-            .NotNull();
-
         RuleFor(x => x.Request)
             .SetValidator(_requestValidator);
     }

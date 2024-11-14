@@ -23,7 +23,7 @@ public class CheckOutWorkTimeCommandHandler(
     public async Task Handle(CheckOutWorkTimeCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
-        var shift = user.Settings.WorkSchedule.WorkScheduleShifts.SingleOrDefault(x => x.Day == DateTime.Now.DayOfWeek, null);
+        var shift = user.Settings.WorkSchedule.WorkScheduleShifts.SingleOrDefault(x => x.Day == DateTime.UtcNow.DayOfWeek, null);
         
         var currentWorkTime = await _workTimeRepository.GetWorkTimeTodayAsync(request.UserId, cancellationToken);
 
@@ -31,7 +31,7 @@ public class CheckOutWorkTimeCommandHandler(
         
         if (shift != null)
         {
-            currentWorkTime.EndDateTime = DateTime.Now;
+            currentWorkTime.EndDateTime = DateTime.UtcNow;
             if (IsWithinShiftEndTime(shift))
             {
                 var endDateTime = DateTime.Today;
@@ -41,7 +41,7 @@ public class CheckOutWorkTimeCommandHandler(
         }
         else
         {
-            currentWorkTime.EndDateTime = DateTime.Now;
+            currentWorkTime.EndDateTime = DateTime.UtcNow;
         }
 
         _logger.LogInformation("Checking out work time for user with id: [{userId}]", request.UserId);
@@ -49,7 +49,7 @@ public class CheckOutWorkTimeCommandHandler(
         _logger.LogInformation("Checked out work time for user with id: [{userId}]", request.UserId);
 
         _logger.LogInformation("Fetching log without end time!");
-        var workTimeLog = await _workTimeLogRepository.GetUncheckedLog(request.UserId, cancellationToken);
+        var workTimeLog = await _workTimeLogRepository.GetUncheckedLogAsync(request.UserId, cancellationToken);
         _logger.LogInformation("Fetched log without end time!");
 
         workTimeLog.EndDateTime = currentWorkTime.EndDateTime;
@@ -64,7 +64,7 @@ public class CheckOutWorkTimeCommandHandler(
         var fifteenMinutesBefore = shift.EndTime.AddMinutes(-15).ToTimeSpan();
         var fifteenMinutesAfter = shift.EndTime.AddMinutes(15).ToTimeSpan();
             
-        var currentTime = DateTime.Now.TimeOfDay;
+        var currentTime = DateTime.UtcNow.TimeOfDay;
 
         return currentTime >= fifteenMinutesBefore && currentTime <= fifteenMinutesAfter;
     }

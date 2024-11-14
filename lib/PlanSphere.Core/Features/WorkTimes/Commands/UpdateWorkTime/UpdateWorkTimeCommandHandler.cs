@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.EmbeddedEntities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
 
@@ -31,13 +33,13 @@ public class UpdateWorkTimeCommandHandler(
 
         var workTimeLog = _mapper.Map<WorkTimeLog>(command.Request, opt =>
         {
-            opt.Items["UserId"] = command.UserId;
-            opt.Items["ActionType"] = command.ActionType;
-            opt.Items["WorkTime"] = workTime;
+            opt.Items[MappingKeys.UserId] = command.UserId;
+            opt.Items[MappingKeys.ActionType] = ActionType.Update;
+            opt.Items[MappingKeys.WorkTime] = workTime;
         });
 
         _logger.LogInformation("Updating work time with id: [{workTimeId}] from user with id: [{userId}]", command.WorkTimeId, command.UserId);
-        var updatedWorkTime = _mapper.Map(command.Request, workTime, opt => opt.Items["UserId"] = command.UserId);
+        var updatedWorkTime = _mapper.Map(command.Request, workTime, opt => opt.Items[MappingKeys.UserId] = command.UserId);
         _logger.LogInformation("Updated work time with id: [{workTimeId}] from user with id: [{userId}]", command.WorkTimeId, command.UserId);
 
         await _workTimeRepository.UpdateAsync(command.WorkTimeId, updatedWorkTime, cancellationToken);
