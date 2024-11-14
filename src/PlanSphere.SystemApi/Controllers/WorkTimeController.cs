@@ -10,15 +10,17 @@ using PlanSphere.Core.Features.WorkTimes.Commands.DeleteWorkTime;
 using PlanSphere.Core.Features.WorkTimes.Commands.UpdateWorkTime;
 using PlanSphere.Core.Features.WorkTimes.Queries.GetWorkTimes;
 using PlanSphere.Core.Features.WorkTimes.Requests;
+using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
 
 namespace PlanSphere.SystemApi.Controllers;
 
 [Authorize]
-public class WorkTimeController(IMediator mediator) : ApiControllerBase(mediator)
+public class WorkTimeController(IMediator mediator, IRoleFilter roleFilter) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+    private readonly IRoleFilter _roleFilter = roleFilter ?? throw new ArgumentNullException(nameof(roleFilter));
 
     [HttpGet(Name = nameof(GetWorkTimesAsync))]
     public async Task<IActionResult> GetWorkTimesAsync([FromQuery] GetWorkTimesQuery query)
@@ -29,9 +31,9 @@ public class WorkTimeController(IMediator mediator) : ApiControllerBase(mediator
     }
     
     [HttpPost(Name = nameof(CreateWorkTimeAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManuallySetOwnWorkTime, true])]
     public async Task<IActionResult> CreateWorkTimeAsync([FromBody] WorkTimeRequest request)
     {
+        await _roleFilter.CheckIsAllowedToManuallySetOwnWorkTimesAsync(Request.HttpContext);
         var userId = Request.HttpContext.User.GetUserId();
         var command = new CreateWorkTimeCommand(request, userId);
         await _mediator.Send(command);
@@ -39,9 +41,9 @@ public class WorkTimeController(IMediator mediator) : ApiControllerBase(mediator
     }
     
     [HttpPut("{workTimeId}", Name = nameof(UpdateWorkTimeAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManuallySetOwnWorkTime, true])]
     public async Task<IActionResult> UpdateWorkTimeAsync([FromRoute] ulong workTimeId, [FromBody] WorkTimeRequest request)
     {
+        await _roleFilter.CheckIsAllowedToManuallySetOwnWorkTimesAsync(Request.HttpContext);
         var userId = Request.HttpContext.User.GetUserId();
         var command = new UpdateWorkTimeCommand(workTimeId, userId, request);
         await _mediator.Send(command);
@@ -67,9 +69,9 @@ public class WorkTimeController(IMediator mediator) : ApiControllerBase(mediator
     }
     
     [HttpDelete("{workTimeId}", Name = nameof(DeleteWorkTimeAsync))]
-    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManuallySetOwnWorkTime, true])]
     public async Task<IActionResult> DeleteWorkTimeAsync([FromRoute] ulong workTimeId)
     {
+        await _roleFilter.CheckIsAllowedToManuallySetOwnWorkTimesAsync(Request.HttpContext);
         var userId = Request.HttpContext.User.GetUserId();
         var command = new DeleteWorkTimeCommand(workTimeId, userId);
         await _mediator.Send(command);
