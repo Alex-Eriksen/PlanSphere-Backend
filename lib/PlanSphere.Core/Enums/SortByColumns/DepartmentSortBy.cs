@@ -3,5 +3,6 @@
 public enum DepartmentSortBy
 {
     Name,
-    Address
+    StreetName,
+    HouseNumber
 }

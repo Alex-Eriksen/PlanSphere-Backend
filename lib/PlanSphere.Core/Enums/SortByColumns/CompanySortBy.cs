@@ -3,6 +3,7 @@
     public enum CompanySortBy
     {
         Name,
-        Address
+        StreetName,
+        HouseNumber
     }
 }

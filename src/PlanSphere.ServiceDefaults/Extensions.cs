@@ -184,6 +184,7 @@ public static class Extensions
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddScoped<IPaginationService, PaginationService>();
+        services.AddScoped<IRightsService, RightsService>();
 
         return services;
     }

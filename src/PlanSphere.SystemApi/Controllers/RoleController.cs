@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Rights.Queries.LookUp;
+using PlanSphere.Core.Features.Roles.Commands.AssignRole;
 using PlanSphere.Core.Features.Roles.Commands.CreateRole;
 using PlanSphere.Core.Features.Roles.Commands.DeleteRole;
 using PlanSphere.Core.Features.Roles.Commands.ToggleInheritance;
@@ -110,6 +111,15 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     public async Task<IActionResult> ToggleRoleInheritanceAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong roleId)
     {
         var command = new ToggleRoleInheritanceCommand(roleId) { SourceLevelId = sourceLevelId, SourceLevel = sourceLevel };
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    [HttpPost("{sourceLevel}/{sourceLevelId}/{roleId}/{userId}", Name = nameof(AssignRoleAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers, true])]
+    public async Task<IActionResult> AssignRoleAsync(ulong roleId, ulong userId)
+    {
+        var command = new AssignRoleCommand(roleId, userId);
         await _mediator.Send(command);
         return NoContent();
     }

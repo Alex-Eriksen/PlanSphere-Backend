@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Addresses.Requests;
+using PlanSphere.Core.Features.JobTitles.Commands.AssignJobTitle;
+using PlanSphere.Core.Features.Roles.Commands.AssignRole;
 using PlanSphere.Core.Features.Users.Commands.CreateUser;
 using PlanSphere.Core.Features.Users.Commands.DeleteUser;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
@@ -15,15 +17,17 @@ using PlanSphere.Core.Features.Users.Queries.GetUserDetails;
 using PlanSphere.Core.Features.Users.Queries.GetUser;
 using PlanSphere.Core.Features.Users.Queries.ListUsers;
 using PlanSphere.Core.Features.Users.Requests;
+using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
 
 namespace PlanSphere.SystemApi.Controllers;
 
-public class UserController(IMediator mediator, IHttpContextAccessor httpContextAccessor) : ApiControllerBase(mediator)
+[Authorize]
+public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiControllerBase(mediator)
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-    private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext?.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+    private readonly IRoleFilter _roleFilter = roleFilter ?? throw new ArgumentNullException(nameof(roleFilter));
     
     [HttpPost("{sourceLevel}/{sourceLevelId}",Name = nameof(CreateUserAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers, true])]
@@ -37,7 +41,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         await _mediator.Send(command);
         return Created();
     }
-
+    
     [HttpGet(Name = nameof(ListUsersAsync))]
     [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
     public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query)
@@ -45,7 +49,8 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
         var response = await _mediator.Send(query);
         return Ok(response);
     }
-    
+
+    [AllowAnonymous]
     [HttpPost(Name = nameof(CreateUserDevelopmentAsync))]
     public async Task<IActionResult> CreateUserDevelopmentAsync()
     {
@@ -89,6 +94,26 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
         var command = new PatchUserCommand(selectedUserId, request);
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    [HttpPost("{roleId}", Name = nameof(AssignRoleToSelfAsync))]
+    [TypeFilter(typeof(UserActionFilter))]
+    public async Task<IActionResult> AssignRoleToSelfAsync(ulong roleId)
+    {
+        await _roleFilter.CheckIsAllowedToSetOwnRolesAsync(Request.HttpContext);
+        var command = new AssignRoleCommand(roleId, Request.HttpContext.User.GetUserId());
+        await _mediator.Send(command);
+        return NoContent();
+    }
+    
+    [HttpPost("{jobTitleId}", Name = nameof(AssignJobTitleToSelfAsync))]
+    [TypeFilter(typeof(UserActionFilter))]
+    public async Task<IActionResult> AssignJobTitleToSelfAsync(ulong jobTitleId)
+    {
+        await _roleFilter.CheckIsAllowedToSetOwnJobTitlesAsync(Request.HttpContext);
+        var command = new AssignJobTitleCommand(jobTitleId, Request.HttpContext.User.GetUserId());
         await _mediator.Send(command);
         return NoContent();
     }

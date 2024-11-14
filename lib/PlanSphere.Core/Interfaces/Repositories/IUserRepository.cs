@@ -12,4 +12,6 @@ public interface IUserRepository : IRepository<User>
     Task<RefreshTokenDTO> RefreshTokenAsync(string token, string ipAddress, CancellationToken cancellationToken);
     Task<RefreshTokenDTO> AuthenticateAsync(User user, string ipAddress, CancellationToken cancellationToken);
     IQueryable<User> GetQueryableWithRights();
+    Task<UserRole> AssignRoleAsync(ulong userId, ulong roleId, CancellationToken cancellationToken);
+    Task<UserJobTitle> AssignJobTitleAsync(ulong userId, ulong jobTitleId, CancellationToken cancellationToken);
 }

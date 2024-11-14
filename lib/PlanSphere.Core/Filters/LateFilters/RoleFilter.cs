@@ -6,15 +6,20 @@ using PlanSphere.Core.Exceptions;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
 using PlanSphere.Core.Interfaces.Repositories;
-using Right = Domain.Entities.EmbeddedEntities.Right;
+using PlanSphere.Core.Interfaces.Services;
+using RightEnum = Domain.Entities.EmbeddedEntities.Right;
 
 namespace PlanSphere.Core.Filters.LateFilters;
 
-public class RoleFilter(IUserRepository userRepository) : IRoleFilter
+public class RoleFilter(
+    IUserRepository userRepository,
+    IRightsService rightsService
+) : IRoleFilter
 {
     private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-    
-    public async Task CheckIsAuthorizedSourceLevelAsync(HttpContext context, Right requiredRight, SourceLevel? targetedLayer = null, bool isSpecific = false)
+    private readonly IRightsService _rightsService = rightsService ?? throw new ArgumentNullException(nameof(rightsService));
+
+    public async Task CheckIsAuthorizedSourceLevelAsync(HttpContext context, RightEnum requiredRight, SourceLevel? targetedLayer = null, bool isSpecific = false)
     {
         var user = await _userRepository.GetByIdAsync(context.User.GetUserId(), CancellationToken.None);
         var userRoles = user.Roles.Select(x => x.Role).ToList();
@@ -35,8 +40,36 @@ public class RoleFilter(IUserRepository userRepository) : IRoleFilter
             throw new ForbiddenAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
         }
     }
+
+    public async Task CheckIsAllowedToSetOwnRolesAsync(HttpContext context)
+    {
+        var user = await _userRepository.GetByIdAsync(context.User.GetUserId(), CancellationToken.None);
+        var roles = user.Roles.Select(x => x.Role).ToList();
+        var rights = _rightsService.GetUserRights(roles);
+
+        if (rights.Contains(RightEnum.Administrator))
+        {
+            return;
+        }
+
+        throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
+    }
     
-    private bool AuthorizedSpecific(List<Role> userRoles, SourceLevel sourceLevel, ulong sourceLevelId, bool authorized, Right requiredRight)
+    public async Task CheckIsAllowedToSetOwnJobTitlesAsync(HttpContext context)
+    {
+        var user = await _userRepository.GetByIdAsync(context.User.GetUserId(), CancellationToken.None);
+        var roles = user.Roles.Select(x => x.Role).ToList();
+        var rights = _rightsService.GetUserRights(roles);
+
+        if (rights.Contains(RightEnum.SetOwnJobTitle))
+        {
+            return;
+        }
+
+        throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
+    }
+
+    private bool AuthorizedSpecific(List<Role> userRoles, SourceLevel sourceLevel, ulong sourceLevelId, bool authorized, RightEnum requiredRight)
     {
         foreach (var role in userRoles)
         {
@@ -112,7 +145,7 @@ public class RoleFilter(IUserRepository userRepository) : IRoleFilter
         return authorized;
     }
     
-    private bool Authorized(List<Role> userRoles, SourceLevel sourceLevel, ulong sourceLevelId, bool authorized, Right requiredRight)
+    private bool Authorized(List<Role> userRoles, SourceLevel sourceLevel, ulong sourceLevelId, bool authorized, RightEnum requiredRight)
     {
         foreach (var role in userRoles)
         {
