@@ -14,6 +14,9 @@ public class WorkTimeConfiguration : IEntityTypeConfiguration<WorkTime>
         builder.Property(e => e.Id)
             .ValueGeneratedOnAdd();
 
+        builder.Property(e => e.StartDateTime)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
         builder.HasOne(e => e.User)
             .WithMany(e => e.WorkTimes)
             .HasForeignKey(e => e.UserId)

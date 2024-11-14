@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using PlanSphere.Core.Features.Roles.DTOs;
 
 namespace PlanSphere.Core.Interfaces.Repositories;
 

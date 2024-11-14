@@ -220,4 +220,18 @@ public class RoleFilter(
 
         return authorized;
     }
+    
+    public async Task CheckIsAllowedToManuallySetOwnWorkTimesAsync(HttpContext context)
+    {
+        var user = await _userRepository.GetByIdAsync(context.User.GetUserId(), CancellationToken.None);
+        var roles = user.Roles.Select(x => x.Role).ToList();
+        var rights = _rightsService.GetUserRights(roles);
+
+        if (rights.Contains(RightEnum.ManuallySetOwnWorkTime))
+        {
+            return;
+        }
+
+        throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
+    }
 }

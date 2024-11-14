@@ -11,7 +11,7 @@ public class TeamRoleConfiguration : IEntityTypeConfiguration<TeamRole>
         builder.HasKey(e => new { e.TeamId, e.RoleId });
 
         builder.HasOne(e => e.Team)
-            .WithMany()
+            .WithMany(e => e.Roles)
             .HasForeignKey(e => e.TeamId)
             .OnDelete(DeleteBehavior.Cascade);
 

@@ -42,7 +42,7 @@ public class UserActionFilter(
             return;
         }
 
-        var user = await _userRepository.GetByIdAsync(activatingUserId, CancellationToken.None);
+        var user = await _userRepository.GetByIdAsync(userId, CancellationToken.None);
 
         if (!user.Roles.Select(x => x.Role).Any(role => role.OrganisationRoleRights.Any(x => x.OrganisationId == context.HttpContext.User.GetOrganisationId() && x.Right.AsEnum == Right.ManageUsers)))
         {

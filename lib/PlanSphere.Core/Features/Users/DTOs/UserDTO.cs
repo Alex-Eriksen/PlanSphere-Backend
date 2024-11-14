@@ -1,6 +1,7 @@
 ﻿using PlanSphere.Core.Abstract;
 using PlanSphere.Core.Common.DTOs;
 using PlanSphere.Core.Features.Addresses.DTOs;
+using PlanSphere.Core.Features.Roles.DTOs;
 
 namespace PlanSphere.Core.Features.Users.DTOs;
 
@@ -12,9 +13,8 @@ public class UserDTO : BaseDTO, IAuditableEntityDTO
     public AddressDTO Address { get; set; }
     public string? PhoneNumber { get; set; }
     public DateOnly? Birthday { get; set; }
-    
+    public List<ulong> RoleIds { get; set; } = new List<ulong>();
     public UserSettingsDTO Settings { get; set; }
-    
     public DateTime CreatedAt { get; set; }
     public string? CreatedBy { get; set; }
     public DateTime? UpdatedAt { get; set; }

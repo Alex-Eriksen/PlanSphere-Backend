@@ -2,6 +2,7 @@
 using Domain.Entities.EmbeddedEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PlanSphere.Core.Features.Roles.DTOs;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Core.Interfaces.Repositories;
 using Right = Domain.Entities.Right;

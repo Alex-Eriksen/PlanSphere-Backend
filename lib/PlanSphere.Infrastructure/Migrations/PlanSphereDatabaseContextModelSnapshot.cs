@@ -1110,7 +1110,9 @@ namespace PlanSphere.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -1148,28 +1150,30 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Property<int>("ActionType")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDateTime")
+                    b.Property<DateTime?>("EndDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Location")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LogTime")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<decimal?>("LoggedBy")
                         .HasColumnType("decimal(20,0)");
 
-                    b.Property<DateTime>("OldEndDateTime")
+                    b.Property<DateTime?>("OldEndDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OldLocation")
+                    b.Property<int?>("OldLocation")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("OldStartDateTime")
+                    b.Property<DateTime?>("OldStartDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OldWorkTimeType")
+                    b.Property<int?>("OldWorkTimeType")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDateTime")
@@ -1323,7 +1327,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.CompanyRole", b =>
                 {
                     b.HasOne("Domain.Entities.Company", "Company")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1486,7 +1490,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.DepartmentRole", b =>
                 {
                     b.HasOne("Domain.Entities.Department", "Department")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1627,7 +1631,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.OrganisationRole", b =>
                 {
                     b.HasOne("Domain.Entities.Organisation", "Organisation")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("OrganisationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1824,7 +1828,7 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Team", "Team")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2065,6 +2069,8 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.Navigation("JobTitles");
 
+                    b.Navigation("Roles");
+
                     b.Navigation("Settings")
                         .IsRequired();
                 });
@@ -2074,6 +2080,8 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Navigation("DepartmentRoleRights");
 
                     b.Navigation("JobTitles");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("Settings")
                         .IsRequired();
@@ -2103,6 +2111,8 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Navigation("Companies");
 
                     b.Navigation("JobTitles");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("Settings")
                         .IsRequired();
@@ -2136,6 +2146,8 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Team", b =>
                 {
                     b.Navigation("JobTitles");
+
+                    b.Navigation("Roles");
 
                     b.Navigation("Settings")
                         .IsRequired();
