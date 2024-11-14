@@ -68,6 +68,7 @@ try
 }
 catch (Exception exception)
 {
+    Console.WriteLine(exception);
     Log.Fatal(exception, "Host terminated unexpectedly");
 }
 finally

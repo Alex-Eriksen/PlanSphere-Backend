@@ -11,7 +11,7 @@ public class OrganisationJobTitleConfiguration : IEntityTypeConfiguration<Organi
         builder.HasKey(e => new { e.OrganisationId, e.JobTitleId });
 
         builder.HasOne(e => e.Organisation)
-            .WithMany()
+            .WithMany(e => e.JobTitles)
             .HasForeignKey(e => e.OrganisationId)
             .OnDelete(DeleteBehavior.Cascade);
 

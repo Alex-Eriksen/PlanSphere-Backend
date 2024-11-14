@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanSphere.Infrastructure.Contexts;
 
@@ -11,9 +12,11 @@ using PlanSphere.Infrastructure.Contexts;
 namespace PlanSphere.Infrastructure.Migrations
 {
     [DbContext(typeof(PlanSphereDatabaseContext))]
-    partial class PlanSphereDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241113134317_add_user_jobtitles_table")]
+    partial class add_user_jobtitles_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -501,9 +504,6 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("OwnerId")
-                        .HasColumnType("decimal(20,0)");
-
                     b.Property<decimal>("SettingsId")
                         .HasColumnType("decimal(20,0)");
 
@@ -519,8 +519,6 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsUnique();
 
                     b.HasIndex("CreatedBy");
-
-                    b.HasIndex("OwnerId");
 
                     b.HasIndex("UpdatedBy");
 
@@ -939,9 +937,6 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Property<decimal>("SettingsId")
                         .HasColumnType("decimal(20,0)");
 
-                    b.Property<bool>("SystemAdministrator")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -1304,7 +1299,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.CompanyJobTitle", b =>
                 {
                     b.HasOne("Domain.Entities.Company", "Company")
-                        .WithMany("JobTitles")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1467,7 +1462,7 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.DepartmentJobTitle", b =>
                 {
                     b.HasOne("Domain.Entities.Department", "Department")
-                        .WithMany("JobTitles")
+                        .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1586,11 +1581,6 @@ namespace PlanSphere.Infrastructure.Migrations
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Domain.Entities.User", "Owner")
-                        .WithMany("OwnedOrganisations")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Domain.Entities.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("UpdatedBy")
@@ -1599,8 +1589,6 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("CreatedByUser");
-
-                    b.Navigation("Owner");
 
                     b.Navigation("UpdatedByUser");
                 });
@@ -1614,7 +1602,7 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Organisation", "Organisation")
-                        .WithMany("JobTitles")
+                        .WithMany()
                         .HasForeignKey("OrganisationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1805,7 +1793,7 @@ namespace PlanSphere.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Team", "Team")
-                        .WithMany("JobTitles")
+                        .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2063,8 +2051,6 @@ namespace PlanSphere.Infrastructure.Migrations
                 {
                     b.Navigation("Departments");
 
-                    b.Navigation("JobTitles");
-
                     b.Navigation("Settings")
                         .IsRequired();
                 });
@@ -2072,8 +2058,6 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Department", b =>
                 {
                     b.Navigation("DepartmentRoleRights");
-
-                    b.Navigation("JobTitles");
 
                     b.Navigation("Settings")
                         .IsRequired();
@@ -2101,8 +2085,6 @@ namespace PlanSphere.Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Organisation", b =>
                 {
                     b.Navigation("Companies");
-
-                    b.Navigation("JobTitles");
 
                     b.Navigation("Settings")
                         .IsRequired();
@@ -2135,16 +2117,12 @@ namespace PlanSphere.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Team", b =>
                 {
-                    b.Navigation("JobTitles");
-
                     b.Navigation("Settings")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.Navigation("OwnedOrganisations");
-
                     b.Navigation("JobTitles");
 
                     b.Navigation("RefreshTokens");

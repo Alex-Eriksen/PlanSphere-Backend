@@ -30,7 +30,7 @@ public class JobTitleDTOProfile : Profile
     
         private ulong? TryGetSourceLevelId(ResolutionContext context)
         {
-            if (context.Items.TryGetValue("SourceLevelId", out var sourceLevelIdObj) &&
+            if (context.TryGetItems(out var items) && items.TryGetValue("SourceLevelId", out var sourceLevelIdObj) &&
                 ulong.TryParse(sourceLevelIdObj?.ToString(), out var parsedSourceLevelId))
             {
                 return parsedSourceLevelId;
@@ -40,7 +40,7 @@ public class JobTitleDTOProfile : Profile
     
         private SourceLevel? TryGetSourceLevel(ResolutionContext context)
         {
-            if (context.Items.TryGetValue("SourceLevel", out var sourceLevelObj) &&
+            if (context.TryGetItems(out var items) && items.TryGetValue("SourceLevel", out var sourceLevelObj) &&
                 sourceLevelObj is SourceLevel parsedSourceLevel)
             {
                 return parsedSourceLevel;

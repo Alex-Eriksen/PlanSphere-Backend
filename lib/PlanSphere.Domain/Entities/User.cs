@@ -25,6 +25,7 @@ public class User : BaseEntity, IAuditableEntity
     public virtual List<WorkTime> WorkTimes { get; set; } = new List<WorkTime>();
     public virtual List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public virtual List<Organisation> OwnedOrganisations { get; set; } = new List<Organisation>();
+    public virtual List<UserJobTitle> JobTitles { get; set; } = new List<UserJobTitle>();
     
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }

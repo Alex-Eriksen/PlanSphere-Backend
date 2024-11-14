@@ -18,6 +18,7 @@ public class Organisation : BaseEntity, IAuditableEntity
     public virtual OrganisationSettings Settings { get; set; }
 
     public List<Company> Companies { get; set; } = new List<Company>();
+    public virtual List<OrganisationJobTitle> JobTitles { get; set; } = new List<OrganisationJobTitle>();
 
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }
