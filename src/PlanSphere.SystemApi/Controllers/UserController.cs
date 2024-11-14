@@ -31,15 +31,13 @@ public class UserController(IMediator mediator, IRoleFilter roleFilter) : ApiCon
     
     [HttpPost("{sourceLevel}/{sourceLevelId}",Name = nameof(CreateUserAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers])]
-    public async Task<IActionResult> CreateUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId,[FromBody] UserRequest request)
+    public async Task<IActionResult> CreateUserAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, [FromBody] UserRequest request)
     {
-        var command = new CreateUserCommand(request, false)
-        {
-            OrganisationId = 1,
-            UserId = 0,
-            SourceLevel = sourceLevel,
-            SourceLevelId = sourceLevelId
-        };
+        var command = new CreateUserCommand(request);
+        command.OrganisationId = Request.HttpContext.User.GetOrganisationId();
+        command.UserId = Request.HttpContext.User.GetUserId();
+        command.SourceLevel = sourceLevel;
+        command.SourceLevelId = sourceLevelId;
         await _mediator.Send(command);
         return Created();
     }

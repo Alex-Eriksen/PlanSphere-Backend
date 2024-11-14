@@ -20,7 +20,7 @@ public class UserProfile : Profile
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Request.LastName))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Request.PhoneNumber))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Request.Address))
-            .ForMember(dest => dest.CreatedByUser, opt =>
+            .ForMember(dest => dest.CreatedBy, opt =>
             {
                 opt.PreCondition(src => src.UserId is not 0);
                 opt.MapFrom(src => src.UserId);
