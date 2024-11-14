@@ -32,7 +32,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
     
     [HttpGet("{sourceLevelId?}", Name = nameof(GetOrganisationByIdAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View, SourceLevel.Organisation])]
     public async Task<IActionResult> GetOrganisationByIdAsync([FromRoute] ulong? sourceLevelId)
     {
         var selectedId = sourceLevelId ?? Request.HttpContext.User.GetOrganisationId();
@@ -43,7 +43,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpGet(Name = nameof(ListOrganisationsAsync))]
-    //[TypeFilter(typeof(SystemAdministratorFilter))]
+    [TypeFilter(typeof(SystemAdministratorFilter))]
     public async Task<IActionResult> ListOrganisationsAsync([FromQuery] ListOrganisationsQuery query)
     {
         var response = await _mediator.Send(query);
@@ -60,7 +60,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpPut("{sourceLevelId?}",Name = nameof(UpdateOrganisationAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
     public async Task<IActionResult> UpdateOrganisationAsync([FromRoute] ulong? sourceLevelId, [FromBody] OrganisationRequest request)
     {
         var command = new UpdateOrganisationCommand(request, sourceLevelId ?? Request.HttpContext.User.GetOrganisationId());
@@ -69,7 +69,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpDelete("{sourceLevelId}", Name = nameof(DeleteOrganisationAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator, SourceLevel.Organisation])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator, SourceLevel.Organisation])]
     public async Task<IActionResult> DeleteOrganisationAsync([FromRoute] ulong sourceLevelId)
     {
         var command = new DeleteOrganisationCommand(sourceLevelId);
@@ -78,7 +78,7 @@ public class OrganisationController(IMediator mediator) : ApiControllerBase(medi
     }
 
     [HttpPatch("{sourceLevelId}", Name = nameof(PatchOrganisationAsync))]
-    //[TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
     public async Task<IActionResult> PatchOrganisationAsync([FromRoute] ulong? sourceLevelId, [FromBody] JsonPatchDocument<OrganisationRequest> patchRequest)
     {
         var selectedId = sourceLevelId ?? Request.HttpContext.User.GetOrganisationId();

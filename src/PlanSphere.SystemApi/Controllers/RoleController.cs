@@ -94,6 +94,7 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
     }
 
     [HttpGet("{sourceLevel}/{sourceLevelId}", Name = nameof(LookUpRolesAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.View])]
     public async Task<IActionResult> LookUpRolesAsync([FromRoute] SourceLevel sourceLevel, ulong sourceLevelId, [FromQuery] LookUpRolesQuery query)
     {
         var organisationId = Request.HttpContext.User.GetOrganisationId();

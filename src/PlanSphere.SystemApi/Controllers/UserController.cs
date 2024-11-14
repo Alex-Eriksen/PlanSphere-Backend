@@ -39,6 +39,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     }
 
     [HttpGet(Name = nameof(ListUsersAsync))]
+    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
     public async Task<IActionResult> ListUsersAsync([FromQuery] ListUsersQuery query)
     {
         var response = await _mediator.Send(query);
@@ -73,7 +74,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     }
 
     [HttpGet("{userId?}", Name = nameof(GetUserDetailsAsync))]
-    //[TypeFilter(typeof(UserActionFilter))]
+    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
     public async Task<IActionResult> GetUserDetailsAsync([FromRoute] ulong? userId)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
@@ -83,7 +84,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     }
 
     [HttpPatch("{userId?}", Name = nameof(PatchUserAsync))]
-    //[TypeFilter(typeof(UserActionFilter))]
+    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
     public async Task<IActionResult> PatchUserAsync([FromRoute] ulong? userId, [FromBody] JsonPatchDocument<UserPatchRequest> request)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
@@ -93,7 +94,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     }
     
     [HttpPut("{userId?}", Name = nameof(UpdateUserAsync))]
-    //[TypeFilter(typeof(UserActionFilter))]
+    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
     public async Task<IActionResult> UpdateUserAsync([FromRoute] ulong? userId, [FromBody] UserRequest request)
     {
         var selectedUserId = userId ?? Request.HttpContext.User.GetUserId();
@@ -103,7 +104,7 @@ public class UserController(IMediator mediator, IHttpContextAccessor httpContext
     }
 
     [HttpDelete("{userId}", Name = nameof(DeleteUserAsync))]
-    //[TypeFilter(typeof(UserActionFilter))]
+    [TypeFilter(typeof(UserActionFilter), Arguments = [Right.ManageUsers])]
     public async Task<IActionResult> DeleteUserAsync([FromRoute] ulong userId)
     {
         var command = new DeleteUserCommand(userId);

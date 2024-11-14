@@ -47,7 +47,6 @@ public class ListOrganisationsQueryHandler(
 
             query = query.Where(x => x.Name.ToLower().Contains(filteredSearch));
         }
-
         return query;
     }
 
