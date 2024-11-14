@@ -5,12 +5,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
+using PlanSphere.Core.Features.JobTitles.Commands.AssignJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.CreateJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.DeleteJobTitle;
 using PlanSphere.Core.Features.JobTitles.Commands.ToggleJobTitleInheritance;
 using PlanSphere.Core.Features.JobTitles.Commands.UpdateJobTitle;
 using PlanSphere.Core.Features.JobTitles.Queries.GetJobTitle;
 using PlanSphere.Core.Features.JobTitles.Queries.ListJobTitles;
+using PlanSphere.Core.Features.JobTitles.Queries.LookUpJobTitles;
 using PlanSphere.Core.Features.JobTitles.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -23,7 +25,7 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     private readonly ClaimsPrincipal _claims = httpContextAccessor.HttpContext?.User ?? throw new ArgumentNullException(nameof(httpContextAccessor));
     
-    [HttpGet("{jobTitleId}", Name = nameof(GetJobTitleAsync))]
+    [HttpGet("{sourceLevel}/{sourceLevelId}/{jobTitleId}", Name = nameof(GetJobTitleAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.PureView])]
     public async Task<IActionResult> GetJobTitleAsync([FromRoute] ulong jobTitleId)
     {
@@ -89,6 +91,23 @@ public class JobTitleController(IMediator mediator, IHttpContextAccessor httpCon
             SourceLevelId = sourceLevelId
         };
         var response = await _mediator.Send(command);
+        return Ok(response);
+    }
+
+    [HttpPost("{sourceLevel}/{sourceLevelId}/{jobTitleId}/{userId}", Name = nameof(AssignJobTitleAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers, true])]
+    public async Task<IActionResult> AssignJobTitleAsync(ulong jobTitleId, ulong userId)
+    {
+        var command = new AssignJobTitleCommand(jobTitleId, userId);
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    [HttpGet(Name = nameof(LookUpJobTitlesAsync))]
+    public async Task<IActionResult> LookUpJobTitlesAsync()
+    {
+        var query = new LookUpJobTitlesCommand(Request.HttpContext.User.GetUserId());
+        var response = await _mediator.Send(query);
         return Ok(response);
     }
 }
