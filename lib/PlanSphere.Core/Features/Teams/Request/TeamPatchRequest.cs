@@ -8,5 +8,6 @@ public class TeamPatchRequest
     public string? Description { get; set; }
     public string? Identifier { get; set; }
     public AddressRequest Address { get; set; }
+    public bool InheritAddress { get; set; }
     public bool? InheritDefaultWorkSchedule { get; set; }
 }

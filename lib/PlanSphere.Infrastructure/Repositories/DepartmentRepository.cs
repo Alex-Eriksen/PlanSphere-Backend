@@ -21,6 +21,7 @@ public class DepartmentRepository(IPlanSphereDatabaseContext context, ILogger<De
     {
         var department = await _context.Departments
             .Include(x => x.Address)
+            .Include(x => x.Address).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent)
             .Include(x => x.Company).ThenInclude(x => x.Settings)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
@@ -60,6 +61,7 @@ public class DepartmentRepository(IPlanSphereDatabaseContext context, ILogger<De
     {
         return _context.Departments
             .Include(x => x.Address).ThenInclude(x => x.ZipCode).ThenInclude(x => x.Country)
+            .Include(x => x.Address).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent)
             .AsNoTracking()
             .AsQueryable();
     }

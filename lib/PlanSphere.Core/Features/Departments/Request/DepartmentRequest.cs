@@ -8,4 +8,5 @@ public class DepartmentRequest
     public string Description { get; set; }
     public string Building { get; set; }
     public AddressRequest Address { get; set; }
+    public bool InheritAddress { get; set; }
 }

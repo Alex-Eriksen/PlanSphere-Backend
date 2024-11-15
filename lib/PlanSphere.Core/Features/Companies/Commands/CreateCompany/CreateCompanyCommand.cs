@@ -7,5 +7,5 @@ public record CreateCompanyCommand (CompanyRequest Request) : IRequest
 {
     [JsonIgnore]
     public ulong OrganisationId { get; set; }
-    
+    public bool InheritAddress { get; set; }
 }

@@ -8,4 +8,5 @@ public record CreateDepartmentCommand (DepartmentRequest Request) : IRequest
 {
     [JsonIgnore]
     public ulong CompanyId { get; set; }
+    public bool InheritAddress { get; set; }
 }

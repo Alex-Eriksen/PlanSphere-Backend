@@ -14,6 +14,8 @@ public class Company : BaseEntity, IAuditableEntity, IContactableEntity
     public ulong AddressId { get; set; }
     public virtual Address Address { get; set; }
     
+    public bool InheritAddress { get; set; }
+    
     public ulong SettingsId { get; set; }
     public virtual CompanySettings Settings { get; set; }
 

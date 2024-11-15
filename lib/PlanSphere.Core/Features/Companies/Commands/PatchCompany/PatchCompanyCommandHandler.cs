@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
@@ -30,6 +31,16 @@ public class PatchCompanyCommandHandler(
         command.PatchDocument.ApplyTo(companyPatchRequest);
         
         company = _mapper.Map(companyPatchRequest, company);
+
+        if (company.InheritAddress)
+        {
+            company.Address.ParentId = company.Organisation.AddressId;
+        }
+        else
+        {
+            company.Address.Parent = null;
+            company.Address.ParentId = null;
+        }
 
         if (company.Settings.InheritDefaultWorkSchedule)
         {
