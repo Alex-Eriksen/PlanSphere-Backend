@@ -7,5 +7,7 @@ public class UserRequest
     public string Email { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string PhoneNumber { get; set; }
     public AddressRequest Address { get; set; }
+    public List<ulong> RoleIds { get; set; } = new List<ulong>();
 }

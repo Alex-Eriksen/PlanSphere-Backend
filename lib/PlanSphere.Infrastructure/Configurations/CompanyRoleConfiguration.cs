@@ -11,7 +11,7 @@ public class CompanyRoleConfiguration : IEntityTypeConfiguration<CompanyRole>
         builder.HasKey(e => new { e.CompanyId, e.RoleId });
 
         builder.HasOne(e => e.Company)
-            .WithMany()
+            .WithMany(e => e.Roles)
             .HasForeignKey(e => e.CompanyId)
             .OnDelete(DeleteBehavior.Cascade);
 

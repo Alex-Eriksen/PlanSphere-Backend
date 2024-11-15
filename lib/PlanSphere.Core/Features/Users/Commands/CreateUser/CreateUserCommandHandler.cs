@@ -31,7 +31,7 @@ public class CreateUserCommandHandler(
         var applicationUser = await CreateIdentityUser(command, cancellationToken);
         _logger.LogInformation("Created user identity");
         
-        await CreateUser(command, applicationUser.Id, cancellationToken);
+        var user = await CreateUser(command, applicationUser.Id, cancellationToken);
         _logger.LogInformation("Created a new user on organisation with id: [{organisationId}]", command.OrganisationId);
     }
 
@@ -69,15 +69,19 @@ public class CreateUserCommandHandler(
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
             var encodedToken = HttpUtility.UrlEncode(token);
         }
-
         return applicationUser;
-
     }
 
-    private async Task CreateUser(CreateUserCommand command, string applicationUserId, CancellationToken cancellationToken)
+    private async Task<User> CreateUser(CreateUserCommand command, string applicationUserId, CancellationToken cancellationToken)
     {
         var newUser = _mapper.Map<CreateUserCommand, User>(command);
         newUser.IdentityUserId = applicationUserId;
-        await _userRepository.CreateAsync(newUser, cancellationToken);
+        newUser.Roles.AddRange(
+            command.Request.RoleIds.Select(roleId => new UserRole
+            {
+                RoleId = roleId,
+            })
+        );
+        return await _userRepository.CreateAsync(newUser, cancellationToken);
     }
 }

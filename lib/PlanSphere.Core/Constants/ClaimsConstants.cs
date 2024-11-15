@@ -7,5 +7,5 @@ public class ClaimsConstants
     public const string Email = "Email";
     public const string FirstName = "FirstName";
     public const string LastName = "LastName";
-    
+    public const string SystemAdministrator = "SystemAdministrator";
 }

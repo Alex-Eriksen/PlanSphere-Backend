@@ -3,5 +3,5 @@
 public class OrganisationSettingsRequest
 {
     public ulong DefaultRoleId { get; set; }
-    public ulong DefualtWorkScheduleId { get; set; }
+    public ulong DefaultWorkScheduleId { get; set; }
 }

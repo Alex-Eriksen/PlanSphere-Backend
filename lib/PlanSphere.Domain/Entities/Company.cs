@@ -20,6 +20,8 @@ public class Company : BaseEntity, IAuditableEntity, IContactableEntity
     public virtual CompanySettings Settings { get; set; }
 
     public List<Department> Departments { get; set; } = new List<Department>();
+    public virtual List<CompanyJobTitle> JobTitles { get; set; } = new List<CompanyJobTitle>();
+    public virtual List<CompanyRole> Roles { get; set; } = new List<CompanyRole>();
     
     public DateTime CreatedAt { get; set; }
     

@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Rights.Queries.LookUp;
+using PlanSphere.Core.Features.Roles.Commands.AssignRole;
 using PlanSphere.Core.Features.Roles.Commands.CreateRole;
 using PlanSphere.Core.Features.Roles.Commands.DeleteRole;
 using PlanSphere.Core.Features.Roles.Commands.ToggleInheritance;
 using PlanSphere.Core.Features.Roles.Commands.UpdateRole;
 using PlanSphere.Core.Features.Roles.Queries.GetRoleById;
 using PlanSphere.Core.Features.Roles.Queries.ListRoles;
+using PlanSphere.Core.Features.Roles.Queries.LookUpRoles;
 using PlanSphere.Core.Features.Roles.Requests;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -92,11 +94,28 @@ public class RoleController(IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
 
+    [HttpGet(Name = nameof(LookUpRolesAsync))]
+    public async Task<IActionResult> LookUpRolesAsync()
+    {
+        var query = new LookUpRolesQuery(Request.HttpContext.User.GetUserId());
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
+
     [HttpPost("{sourceLevel}/{sourceLevelId}/{roleId}", Name = nameof(ToggleRoleInheritanceAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Administrator])]
     public async Task<IActionResult> ToggleRoleInheritanceAsync([FromRoute] SourceLevel sourceLevel, [FromRoute] ulong sourceLevelId, [FromRoute] ulong roleId)
     {
         var command = new ToggleRoleInheritanceCommand(roleId) { SourceLevelId = sourceLevelId, SourceLevel = sourceLevel };
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    [HttpPost("{sourceLevel}/{sourceLevelId}/{roleId}/{userId}", Name = nameof(AssignRoleAsync))]
+    [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.ManageUsers, true])]
+    public async Task<IActionResult> AssignRoleAsync(ulong roleId, ulong userId)
+    {
+        var command = new AssignRoleCommand(roleId, userId);
         await _mediator.Send(command);
         return NoContent();
     }

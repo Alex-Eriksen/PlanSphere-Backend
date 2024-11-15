@@ -19,9 +19,13 @@ public class User : BaseEntity, IAuditableEntity
     public ulong SettingsId { get; set; }
     public virtual UserSettings Settings { get; set; }
 
-    public List<UserRole> Roles { get; set; } = new List<UserRole>();
-    public List<WorkTime> WorkTimes { get; set; } = new List<WorkTime>();
-    public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public virtual bool SystemAdministrator { get; set; } 
+    
+    public virtual List<UserRole> Roles { get; set; } = new List<UserRole>();
+    public virtual List<WorkTime> WorkTimes { get; set; } = new List<WorkTime>();
+    public virtual List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public virtual List<Organisation> OwnedOrganisations { get; set; } = new List<Organisation>();
+    public virtual List<UserJobTitle> JobTitles { get; set; } = new List<UserJobTitle>();
     
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }

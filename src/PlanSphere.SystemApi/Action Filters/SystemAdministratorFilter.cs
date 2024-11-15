@@ -17,11 +17,8 @@ public class SystemAdministratorFilter(
         var userId = context.HttpContext.User.GetUserId();
 
         var user = await _userRepository.GetByIdAsync(userId, CancellationToken.None);
-        var userRoles = user.Roles.Select(x => x.Role);
 
-        var isSystemAdmin = userRoles.Select(x => x.Name).Contains(PermissionFilterConstants.SystemAdministratorKey);
-        
-        if (!isSystemAdmin)
+        if (!user.SystemAdministrator)
         {
             throw new UnauthorizedAccessException(ErrorMessageConstants.UnauthorizedActionMessage);
         }

@@ -22,6 +22,8 @@ public class Department : BaseEntity, IAuditableEntity
     public virtual List<Team> Teams { get; set; } = new List<Team>();
 
     public virtual List<DepartmentRoleRight> DepartmentRoleRights { get; set; } = new List<DepartmentRoleRight>();
+    public virtual List<DepartmentJobTitle> JobTitles { get; set; } = new List<DepartmentJobTitle>();
+    public virtual List<DepartmentRole> Roles { get; set; } = new List<DepartmentRole>();
     
     public DateTime CreatedAt { get; set; }
     public ulong? CreatedBy { get; set; }

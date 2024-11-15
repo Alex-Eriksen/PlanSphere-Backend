@@ -14,6 +14,9 @@ public class Team : BaseEntity, IAuditableEntity
     public ulong AddressId { get; set; }
     public virtual Address Address { get; set; }
     public bool InheritAddress { get; set; }
+
+    public virtual List<TeamJobTitle> JobTitles { get; set; } = new List<TeamJobTitle>();
+    public virtual List<TeamRole> Roles { get; set; } = new List<TeamRole>();
     
     public ulong SettingsId { get; set; }
     public virtual TeamSettings Settings { get; set; }

@@ -41,6 +41,16 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Teams)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Team).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Team).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
             .AsSplitQuery()
             .SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
         
@@ -61,9 +71,18 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         return request;
     }
 
-    public Task<User> DeleteAsync(ulong id, CancellationToken cancellationToken)
+    public async Task<User> DeleteAsync(ulong id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+        if (user == null)
+        {
+            _logger.LogInformation("User with id: [{id}] does not exist", id);
+            throw new KeyNotFoundException($"User with id: [{id}] does not exist");
+        }
+
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return user;
     }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken)
@@ -74,8 +93,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
     public IQueryable<User> GetQueryable()
     {
         return _dbContext.Users
-            .AsNoTracking()
-            .AsQueryable();
+            .Include(u => u.Roles)
+            .Include(u => u.Address).AsQueryable();
     }
 
     public IQueryable<User> GetQueryableWithRights()
@@ -88,6 +107,66 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             .AsNoTracking()
             .AsSplitQuery()
             .AsQueryable();
+    }
+
+    public async Task<UserRole> AssignRoleAsync(ulong userId, ulong roleId, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users
+            .Include(x => x.Roles)
+            .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        
+        if (user == null)
+        {
+            _logger.LogInformation("Could not find user with id: [{userId}]. User doesn't exist!", userId);
+            throw new KeyNotFoundException($"Could not find user with id: [{userId}]. User doesn't exist!");
+        }
+
+        var roleAssignment = user.Roles.SingleOrDefault(x => x.RoleId == roleId && x.UserId == userId);
+        
+        if (roleAssignment != null)
+        {
+            user.Roles.Remove(roleAssignment);
+        }
+        else
+        {
+            roleAssignment = new UserRole { RoleId = roleId, UserId = userId };
+            user.Roles.Add(roleAssignment);
+        }
+        
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return roleAssignment;
+    }
+
+    public async Task<UserJobTitle> AssignJobTitleAsync(ulong userId, ulong jobTitleId, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users
+            .Include(x => x.JobTitles)
+            .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        
+        if (user == null)
+        {
+            _logger.LogInformation("Could not find user with id: [{userId}]. User doesn't exist!", userId);
+            throw new KeyNotFoundException($"Could not find user with id: [{userId}]. User doesn't exist!");
+        }
+
+        var jobTitleAssignment = user.JobTitles.SingleOrDefault(x => x.JobTitleId == jobTitleId && x.UserId == userId);
+        
+        if (jobTitleAssignment != null)
+        {
+            user.JobTitles.Remove(jobTitleAssignment);
+        }
+        else
+        {
+            jobTitleAssignment = new UserJobTitle { JobTitleId = jobTitleId, UserId = userId };
+            user.JobTitles.Add(jobTitleAssignment);
+        }
+        
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return jobTitleAssignment;
     }
 
     public async Task<User> GetByIdentityIdAsync(string identityId, CancellationToken cancellationToken)
@@ -130,6 +209,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
                     .ThenInclude(x => x.Role)
                         .ThenInclude(x => x.TeamRoleRights)
                             .ThenInclude(x => x.Right)
+            .Include(x => x.User).ThenInclude(x => x.OwnedOrganisations)
             .AsSplitQuery()
             .SingleOrDefaultAsync(t => t.Token == token, cancellationToken);
         
@@ -195,7 +275,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
-            new(ClaimsConstants.LastName, user.LastName)
+            new(ClaimsConstants.LastName, user.LastName),
+            new(ClaimsConstants.SystemAdministrator, user.SystemAdministrator.ToString())
         };
 
         var accessToken = _jwtHelper.GenerateToken(claims, DateTime.UtcNow.AddMinutes(15));
@@ -214,7 +295,8 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
             new(ClaimsConstants.OrganisationId, user.OrganisationId.ToString()),
             new(ClaimsConstants.Email, user.Email),
             new(ClaimsConstants.FirstName, user.FirstName),
-            new(ClaimsConstants.LastName, user.LastName)
+            new(ClaimsConstants.LastName, user.LastName),
+            new(ClaimsConstants.SystemAdministrator, user.SystemAdministrator.ToString())
         };
 
         var accessToken = _jwtHelper.GenerateToken(claims, DateTime.UtcNow.AddMinutes(15));

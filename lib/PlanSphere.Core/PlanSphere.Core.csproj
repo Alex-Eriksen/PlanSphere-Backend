@@ -49,8 +49,4 @@
     <ItemGroup>
       <ProjectReference Include="..\PlanSphere.Domain\PlanSphere.Domain.csproj" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="Features\Countries\Request\" />
-    </ItemGroup>
 </Project>
