@@ -63,6 +63,56 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
         return user;
     }
 
+    public async Task<User> GetByIdWithRolesAndJobTitlesAsync(ulong id, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Right)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Teams)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Team).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Teams).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Departments).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams).ThenInclude(x => x.Roles).ThenInclude(x => x.Role)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Team).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.Teams).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Departments).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            
+            .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.OrganisationRoleRights).ThenInclude(x => x.Organisation).ThenInclude(x => x.Companies).ThenInclude(x => x.Departments).ThenInclude(x => x.Teams).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .AsSplitQuery()
+            .SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
+        
+        if (user == null)
+        {
+            _logger.LogInformation("Could not find user with id: [{userId}]. User doesn't exist!", id);
+            throw new KeyNotFoundException($"Could not find user with id: [{id}]. User doesn't exist!");
+        }
+
+        return user;
+    }
+    
     public async Task<User> UpdateAsync(ulong id, User request, CancellationToken cancellationToken)
     {
         _dbContext.Users.Update(request);

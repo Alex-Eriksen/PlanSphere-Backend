@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class OrganisationRoleRight : BaseEntity
+public class OrganisationRoleRight : BaseEntity, IRoleRight
 {
     public ulong OrganisationId { get; set; }
     public virtual Organisation Organisation { get; set; }

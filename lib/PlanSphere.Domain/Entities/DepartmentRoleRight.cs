@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class DepartmentRoleRight : BaseEntity
+public class DepartmentRoleRight : BaseEntity, IRoleRight
 {
     public ulong DepartmentId { get; set; }
     public virtual Department Department { get; set; }

@@ -11,6 +11,7 @@ using PlanSphere.Core.Features.Teams.Commands.PatchTeam;
 using PlanSphere.Core.Features.Teams.Queries.GetTeam;
 using PlanSphere.Core.Features.Teams.Queries.ListTeams;
 using PlanSphere.Core.Features.Teams.Queries.ListUserTeams;
+using PlanSphere.Core.Features.Teams.Queries.LookUpTeams;
 using PlanSphere.Core.Features.Teams.Request;
 using PlanSphere.SystemApi.Action_Filters;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -78,4 +79,11 @@ public class TeamController (IMediator mediator) : ApiControllerBase(mediator)
         return Ok(response);
     }
 
+    [HttpGet(Name = nameof(LookUpTeamsAsync))]
+    public async Task<IActionResult> LookUpTeamsAsync()
+    {
+        var query = new LookUpTeamsQuery(Request.HttpContext.User.GetUserId());
+        var response = await _mediator.Send(query);
+        return Ok(response);
+    }
 }
