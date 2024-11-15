@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
@@ -43,11 +44,8 @@ public class ListDepartmentQueryHandler (
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.ToLower().Trim();
-            query = query.Where(d => d.Name.ToLower().Contains(search) ||
-                                     (d.Address.StreetName.ToLower() + " " + d.Address.HouseNumber.ToLower()).Contains(search));
-
+            query = query.Where(d => d.Name.ToLower().Contains(search) || (d.Address.StreetName.ToLower() + " " + d.Address.HouseNumber.ToLower()).Contains(search));
         }
-
         return query;
     }
 

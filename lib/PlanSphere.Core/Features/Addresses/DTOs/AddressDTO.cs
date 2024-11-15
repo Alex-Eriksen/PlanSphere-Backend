@@ -4,6 +4,7 @@ namespace PlanSphere.Core.Features.Addresses.DTOs;
 
 public class AddressDTO : BaseDTO
 {
+    public AddressDTO? Parent { get; set; }
     public string? StreetName { get; set; }
     public string? HouseNumber { get; set; }
     public string? Door { get; set; }

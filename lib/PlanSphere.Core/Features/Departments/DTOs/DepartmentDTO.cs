@@ -10,5 +10,6 @@ public class DepartmentDTO : BaseDTO
     public string Description { get; set; }
     public string Building { get; set; }
     public AddressDTO Address { get; set; }
+    public bool InheritAddress { get; set; }
     public DepartmentSettingsDTO Settings { get; set; }
 }

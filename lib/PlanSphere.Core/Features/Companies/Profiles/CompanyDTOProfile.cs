@@ -15,6 +15,7 @@ public class CompanyDTOProfile : Profile
             .ForMember(dest => dest.CVR, opt => opt.MapFrom(src => src.VAT))
             .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+            .ForMember(dest => dest.InheritAddress, opt => opt.MapFrom(src => src.InheritAddress))
             .ForMember(dest => dest.CareOf, opt => opt.MapFrom(src => src.CareOf))
             .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.ContactName))
             .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))

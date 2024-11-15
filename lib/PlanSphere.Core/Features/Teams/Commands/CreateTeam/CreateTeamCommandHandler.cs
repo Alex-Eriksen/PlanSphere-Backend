@@ -12,11 +12,13 @@ namespace PlanSphere.Core.Features.Teams.Commands.CreateTeam;
 [HandlerType(HandlerType.SystemApi)]
 public class CreateTeamCommandHandler(
     ITeamRepository teamRepository,
+    IDepartmentRepository departmentRepository,
     ILogger<CreateTeamCommandHandler> logger,
     IMapper mapper
 ) : IRequestHandler<CreateTeamCommand>
 {
     private readonly ITeamRepository _teamRepository = teamRepository ?? throw new ArgumentNullException(nameof(teamRepository));
+    private readonly IDepartmentRepository _departmentRepository = departmentRepository ?? throw new ArgumentNullException(nameof(departmentRepository));
     private readonly ILogger<CreateTeamCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
@@ -25,6 +27,13 @@ public class CreateTeamCommandHandler(
         _logger.BeginScope("Creating Team");
         _logger.LogInformation("Creating Team on department with id [{departmentId}]", command.DepartmentId);
         var team = _mapper.Map<Team>(command);
+
+        var department = await _departmentRepository.GetByIdAsync(command.DepartmentId, cancellationToken);
+
+        if (command.Request.InheritAddress)
+        {
+            team.Address.ParentId = department.AddressId;
+        }
 
         team.Settings = new TeamSettings()
         {

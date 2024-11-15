@@ -14,6 +14,7 @@ public class DepartmentDTOProfile : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.Building, opt => opt.MapFrom(src => src.Building))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+            .ForMember(dest => dest.InheritAddress, opt => opt.MapFrom(src => src.InheritAddress))
             .ForMember(dest => dest.Settings, opt => opt.MapFrom(src => src.Settings));
     }
 }

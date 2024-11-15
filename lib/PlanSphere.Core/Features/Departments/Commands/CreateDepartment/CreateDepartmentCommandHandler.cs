@@ -12,11 +12,13 @@ namespace PlanSphere.Core.Features.Departments.Commands.CreateDepartment;
 [HandlerType(HandlerType.SystemApi)]
 public class CreateDepartmentCommandHandler(
     IDepartmentRepository departmentRepository,
+    ICompanyRepository companyRepository,
     ILogger<CreateDepartmentCommandHandler> logger,
     IMapper mapper
 ) : IRequestHandler<CreateDepartmentCommand>
 {
     private readonly IDepartmentRepository _departmentRepository = departmentRepository ?? throw new ArgumentNullException(nameof(departmentRepository));
+    private readonly ICompanyRepository _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
     private readonly ILogger<CreateDepartmentCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
@@ -25,6 +27,14 @@ public class CreateDepartmentCommandHandler(
         _logger.BeginScope("Creating Department");
         _logger.LogInformation("Creating department on company with id: [{companyId}]", command.CompanyId);
         var department = _mapper.Map<Department>(command);
+
+        var company = await _companyRepository.GetByIdAsync(command.CompanyId, cancellationToken);
+
+        if (command.Request.InheritAddress)
+        {
+            department.Address.ParentId = company.AddressId;
+        }
+        
         
         department.Settings = new DepartmentSettings
         {

@@ -9,4 +9,5 @@ public record PatchDepartmentCommand(JsonPatchDocument<DepartmentUpdateRequest> 
 {
     [JsonIgnore]
     public ulong DepartmentId { get; set; }
+    public bool InheritAddress { get; set; }
 }

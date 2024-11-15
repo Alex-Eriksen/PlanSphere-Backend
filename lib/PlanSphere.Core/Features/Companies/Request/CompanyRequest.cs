@@ -8,6 +8,7 @@ public class CompanyRequest : IContactable
     public string Name { get; set; }
     public string CVR { get; set; }
     public AddressRequest Address { get; set; }
+    public bool InheritAddress { get; set; }
     public string? CareOf { get; set; }
     public string? ContactName { get; set; }
     public string? ContactEmail { get; set; }

@@ -9,6 +9,7 @@ public class AddressDTOProfile : Profile
     public AddressDTOProfile()
     {
         CreateMap<Address, AddressDTO>()
+            .ForMember(dest => dest.Parent, opt => opt.MapFrom(src => src.Parent))
             .ForMember(dest => dest.StreetName, opt => opt.MapFrom(src => src.StreetName))
             .ForMember(dest => dest.HouseNumber, opt => opt.MapFrom(src => src.HouseNumber))
             .ForMember(dest => dest.Floor, opt => opt.MapFrom(src => src.Floor))

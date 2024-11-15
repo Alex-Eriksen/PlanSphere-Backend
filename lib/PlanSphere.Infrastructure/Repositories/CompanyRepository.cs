@@ -35,6 +35,7 @@ namespace PlanSphere.Infrastructure.Repositories
         {
             var company = await _context.Companies
                 .Include(x => x.Address)
+                .Include(x => x.Address).ThenInclude(x => x.Parent)
                 .Include(x => x.Organisation).ThenInclude(x => x.Settings)
                 .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.Parent).ThenInclude(x => x.WorkScheduleShifts)
                 .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.WorkScheduleShifts)
@@ -60,6 +61,7 @@ namespace PlanSphere.Infrastructure.Repositories
         {
             return _context.Companies
                 .Include(x => x.Address).ThenInclude(x => x.ZipCode).ThenInclude(x => x.Country)
+                .Include(x => x.Address).ThenInclude(x => x.Parent)
                 .AsNoTracking()
                 .AsQueryable();
         }

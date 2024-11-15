@@ -32,6 +32,16 @@ public class PatchDepartmentCommandHandler(
 
         department = _mapper.Map(departmentPatchRequest, department);
 
+        if (department.InheritAddress)
+        {
+            department.Address.ParentId = department.Company.AddressId;
+        }
+        else
+        {
+            department.Address.Parent = null;
+            department.Address.ParentId = null;
+        }
+
         if (department.Settings.InheritDefaultWorkSchedule)
         {
             department.Settings.DefaultWorkSchedule.ParentId = department.Company.Settings.DefaultWorkScheduleId;

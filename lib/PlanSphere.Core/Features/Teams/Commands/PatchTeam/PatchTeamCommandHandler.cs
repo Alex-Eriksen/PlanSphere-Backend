@@ -32,6 +32,16 @@ public class PatchTeamCommandHandler(
 
         team = _mapper.Map(teamPatchRequest, team);
 
+        if (team.InheritAddress)
+        {
+            team.Address.ParentId = team.Department.AddressId;
+        }
+        else
+        {
+            team.Address.Parent = null;
+            team.Address.ParentId = null;
+        }
+
         if (team.Settings.InheritDefaultWorkSchedule)
         {
             team.Settings.DefaultWorkSchedule.ParentId = team.Department.Settings.DefaultWorkScheduleId;
