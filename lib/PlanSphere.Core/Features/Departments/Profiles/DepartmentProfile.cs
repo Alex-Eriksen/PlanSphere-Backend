@@ -28,6 +28,7 @@ public class DepartmentProfile : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.Building, opt => opt.MapFrom(src => src.Building))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+            .ForMember(dest => dest.InheritAddress, opt => opt.MapFrom(src => src.InheritAddress))
             .ForPath(dest => dest.Settings.InheritDefaultWorkSchedule, opt => opt.MapFrom(src => src.InheritDefaultWorkSchedule));
     }
 }
