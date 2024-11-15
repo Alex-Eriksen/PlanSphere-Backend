@@ -8,7 +8,6 @@ public class OrganisationDTO : BaseDTO
 {
     public string Name { get; set; }
     public string? LogoUrl { get; set; }
-    public List<JobTitleDTO> JobTitles {get; set; }
     public int OrganisationMembers { get; set; }
     public int CompanyMembers { get; set; }
     public int DepartmentMembers { get; set; }
