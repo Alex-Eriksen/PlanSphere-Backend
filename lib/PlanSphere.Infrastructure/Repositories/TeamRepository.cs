@@ -21,6 +21,7 @@ public class TeamRepository(IPlanSphereDatabaseContext context, ILogger<TeamRepo
     public async Task<Team> GetByIdAsync(ulong id, CancellationToken cancellationToken)
     {
         var team = await _context.Teams
+            .Include(x => x.Department).ThenInclude(x => x.Company).ThenInclude(x => x.Organisation)
             .Include(x => x.Address)
             .Include(x => x.Address).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent).ThenInclude(x => x.Parent)
             .Include(x => x.Department).ThenInclude(x => x.Settings)
