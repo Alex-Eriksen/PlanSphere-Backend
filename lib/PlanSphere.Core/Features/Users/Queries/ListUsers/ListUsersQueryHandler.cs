@@ -25,16 +25,20 @@ public class ListUsersQueryHandler(
 
     public async Task<IPaginatedResponse<UserListDTO>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
     {
-        _logger.BeginScope("Starting to List Organisations with [ListUsersQueryHandler]");
+        _logger.BeginScope("Starting to List users with [ListUsersQueryHandler]");
         
-        _logger.LogInformation("Listing all users");
+        _logger.LogInformation("Listing all users on [{sourceLevel}]", request.SourceLevel);
         var query = _userRepository.GetQueryable();
-        _logger.LogInformation("Listed all users");
+        _logger.LogInformation("Listed all users on [{sourceLevel}]", request.SourceLevel);
 
+        _logger.LogInformation("Making search on listing all users");
         query = SearchQuery(request.Search, query);
         query = SortQuery(request, query);
+        _logger.LogInformation("Searched on listing all users");
 
+        _logger.LogInformation("Mapping  listing all users");
         var paginatedResponse = await _paginationService.PaginateAsync<User, UserListDTO>(query, request);
+        _logger.LogInformation("Mapped search on listing all users");
 
         return paginatedResponse;
     }
@@ -60,7 +64,7 @@ public class ListUsersQueryHandler(
             UserSortBy.PhoneNumber => query.OrderByExpression(u => u.PhoneNumber, request.SortDescending),
             UserSortBy.Email => query.OrderByExpression(u => u.Email, request.SortDescending),
             UserSortBy.CreatedAt => query.OrderByExpression(u => u.CreatedAt, request.SortDescending),
-            UserSortBy.CreatedBy => query.OrderByExpression(u => u.CreatedBy, request.SortDescending)
+            UserSortBy.CreatedBy => query.OrderByExpression(u => u.CreatedByUser, request.SortDescending)
         };
     }
 }

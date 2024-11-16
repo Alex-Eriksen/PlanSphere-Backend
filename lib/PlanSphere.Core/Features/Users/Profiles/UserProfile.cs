@@ -35,7 +35,7 @@ public class UserProfile : Profile
             .ForMember(dest => dest.CreatedBy, opt =>
             {
                 opt.PreCondition(src => src.Id is not 0);
-                opt.MapFrom(src => src.CreatedByUser.FirstName);
+                opt.MapFrom(src => src.CreatedByUser.FullName);
             })
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 

@@ -8,13 +8,15 @@ using PlanSphere.Core.Features.Users.DTOs;
 using PlanSphere.Core.Interfaces;
 using PlanSphere.Core.Interfaces.Database;
 using PlanSphere.Core.Interfaces.Repositories;
+using PlanSphere.Infrastructure.Contexts;
 using BC = BCrypt.Net.BCrypt;
 
 namespace PlanSphere.Infrastructure.Repositories;
 
-public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRepository> logger, IJwtHelper jwtHelper) : IUserRepository
+public class UserRepository(IPlanSphereDatabaseContext dbContext,  IdentityDatabaseContext identContext, ILogger<UserRepository> logger, IJwtHelper jwtHelper) : IUserRepository
 {
     private readonly IPlanSphereDatabaseContext _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+    private readonly IdentityDatabaseContext _identContext = identContext ?? throw new ArgumentNullException(nameof(identContext));
     private readonly ILogger<UserRepository> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IJwtHelper _jwtHelper = jwtHelper ?? throw new ArgumentNullException(nameof(jwtHelper));
 
@@ -74,14 +76,17 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext, ILogger<UserRe
     public async Task<User> DeleteAsync(ulong id, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
-        if (user == null)
+        var identUser = await _identContext.Users.SingleOrDefaultAsync(u => u.Id == user.IdentityUserId, cancellationToken);
+        if (user == null || identUser == null )
         {
             _logger.LogInformation("User with id: [{id}] does not exist", id);
             throw new KeyNotFoundException($"User with id: [{id}] does not exist");
         }
 
         _dbContext.Users.Remove(user);
+        _identContext.Users.Remove(identUser);
         await _dbContext.SaveChangesAsync(cancellationToken);
+        await _identContext.SaveChangesAsync(cancellationToken);
         return user;
     }
 
