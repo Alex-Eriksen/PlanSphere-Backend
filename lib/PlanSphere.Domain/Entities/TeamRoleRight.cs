@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class TeamRoleRight : BaseEntity
+public class TeamRoleRight : BaseEntity, IRoleRight
 {
     public ulong TeamId { get; set; }
     public virtual Team Team { get; set; }

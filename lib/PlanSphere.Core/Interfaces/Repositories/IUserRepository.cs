@@ -5,6 +5,7 @@ namespace PlanSphere.Core.Interfaces.Repositories;
 
 public interface IUserRepository : IRepository<User>
 {
+    Task<User> GetByIdWithRolesAndJobTitlesAsync(ulong id, CancellationToken cancellationToken);
     Task<User> GetByIdentityIdAsync(string identityId, CancellationToken cancellationToken);
     Task<User> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken);
     Task<bool> IsUserRegisteredAsync(string email, CancellationToken cancellationToken);
