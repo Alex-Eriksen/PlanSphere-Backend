@@ -8,9 +8,13 @@ var isEnvLocal = builder.Configuration.GetSection("CUSTOM_ENVIRONMENT").Value ==
 var systemApi = builder.AddProject<Projects.PlanSphere_SystemApi>(AspireComponents.SystemApi)
     .AddCustomEnvironmentVariables();
 
+var scheduler = builder.AddProject<Projects.PlanSphere_CronJobScheduler>(AspireComponents.TaskScheduler)
+    .AddCustomEnvironmentVariables();
+
 var applications = new List<IResourceBuilder<ProjectResource>>();
 
 applications.Add(systemApi);
+applications.Add(scheduler);
 
 if (isEnvLocal)
 {
