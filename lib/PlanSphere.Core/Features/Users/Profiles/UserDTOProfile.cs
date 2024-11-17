@@ -21,6 +21,7 @@ public class UserDTOProfile : Profile
             .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedByUser.FullName))
             .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
             .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedByUser.FullName))
-            .ForMember(dest => dest.RoleIds, opt => opt.MapFrom(src => src.Roles.Select(x => x.RoleId)));
+            .ForMember(dest => dest.RoleIds, opt => opt.MapFrom(src => src.Roles.Select(x => x.RoleId)))
+            .ForMember(dest => dest.JobTitleIds, opt => opt.MapFrom(src => src.JobTitles.Select(x => x.JobTitleId)));
     }
 }

@@ -43,6 +43,17 @@ public class UpdateUserCommandHandler(
         mappedUser.Roles.AddRange(rolesToAdd);
         _logger.LogInformation("Mapped roles with new roles on user with id: [{userId}] with roles: [{roles}]", command.UserId, command.Request.RoleIds);
         
+        _logger.LogInformation("Mapping jobTitle with new jobTitle on user with id: [{userId}]", command.UserId);
+        var currentJobTitleIds = mappedUser.JobTitles.Select(r => r.JobTitleId).ToList();
+        var newJobTitleIds = command.Request.JobTitleIds.Distinct().ToList();
+        mappedUser.JobTitles.RemoveAll(r => !newJobTitleIds.Contains(r.JobTitleId));
+        var jobTitlesToAdd = newJobTitleIds
+            .Except(currentJobTitleIds)
+            .Select(jobTitleId => new UserJobTitle { JobTitleId = jobTitleId, UserId = mappedUser.Id});
+        
+        mappedUser.JobTitles.AddRange(jobTitlesToAdd);
+        _logger.LogInformation("Mapped jobTitles with new jobTitles on user with id: [{userId}] with jobTitlesIds: [{roles}]", command.UserId, command.Request.JobTitleIds);
+        
         _logger.LogInformation("Updating user.");
         await _userRepository.UpdateAsync(command.UserId, mappedUser, cancellationToken);
         _logger.LogInformation("Updated user.");

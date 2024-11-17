@@ -1,4 +1,5 @@
-﻿using PlanSphere.Core.Features.Roles.DTOs;
+﻿using PlanSphere.Core.Features.JobTitles.DTOs;
+using PlanSphere.Core.Features.Roles.DTOs;
 
 namespace PlanSphere.Core.Features.Users.DTOs;
 
@@ -12,4 +13,5 @@ public class LoggedInUserDTO
     public string ProfilePictureUrl { get; set; }
     public List<ulong> OwnedOrganisations { get; set; } = new List<ulong>();
     public List<RoleDTO> Roles { get; set; } = new List<RoleDTO>();
+    public List<JobTitleDTO> JobTitles { get; set; } = new List<JobTitleDTO>();
 }

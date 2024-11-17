@@ -12,6 +12,7 @@ public class LoggedInUserDTOProfile : Profile
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.OrganisationId, opt => opt.MapFrom(src => src.OrganisationId))
             .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles))
+            .ForMember(dest => dest.JobTitles, opt => opt.MapFrom(src => src.JobTitles))
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))

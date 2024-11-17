@@ -14,6 +14,7 @@ public class UserDTO : BaseDTO, IAuditableEntityDTO
     public string? PhoneNumber { get; set; }
     public DateOnly? Birthday { get; set; }
     public List<ulong> RoleIds { get; set; } = new List<ulong>();
+    public List<ulong> JobTitleIds { get; set; } = new List<ulong>();
     public UserSettingsDTO Settings { get; set; }
     public DateTime CreatedAt { get; set; }
     public string? CreatedBy { get; set; }
