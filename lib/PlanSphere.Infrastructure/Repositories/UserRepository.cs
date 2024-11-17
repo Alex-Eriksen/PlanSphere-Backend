@@ -53,6 +53,7 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext,  IdentityDatab
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.CompanyRoleRights).ThenInclude(x => x.Company).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.DepartmentRoleRights).ThenInclude(x => x.Department).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
             .Include(x => x.Roles).ThenInclude(x => x.Role).ThenInclude(x => x.TeamRoleRights).ThenInclude(x => x.Team).ThenInclude(x => x.JobTitles).ThenInclude(x => x.JobTitle)
+            .Include(x => x.JobTitles)
             .AsSplitQuery()
             .SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
         

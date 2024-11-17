@@ -10,4 +10,5 @@ public class UserRequest
     public string PhoneNumber { get; set; }
     public AddressRequest Address { get; set; }
     public List<ulong> RoleIds { get; set; } = new List<ulong>();
+    public List<ulong> JobTitleIds { get; set; } = new List<ulong>();
 }

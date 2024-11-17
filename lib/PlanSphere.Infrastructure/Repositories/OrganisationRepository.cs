@@ -25,6 +25,7 @@ public class OrganisationRepository(IPlanSphereDatabaseContext context, ILogger<
             .Include(x => x.Owner)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultWorkSchedule).ThenInclude(x => x.WorkScheduleShifts)
             .Include(x => x.Settings).ThenInclude(x => x.DefaultRole)
+            .Include(x => x.JobTitles)
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         
         if (organisation == null)

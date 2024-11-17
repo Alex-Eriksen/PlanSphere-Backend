@@ -82,6 +82,14 @@ public class CreateUserCommandHandler(
                 RoleId = roleId,
             })
         );
+        
+        newUser.JobTitles.AddRange(
+            command.Request.JobTitleIds.Select(jobTitleId => new UserJobTitle
+            {
+                JobTitleId = jobTitleId
+            })
+        );
+        
         return await _userRepository.CreateAsync(newUser, cancellationToken);
     }
 }
