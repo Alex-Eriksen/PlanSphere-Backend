@@ -11,5 +11,5 @@ public class OrganisationDTO : BaseDTO
     public int OrganisationMembers { get; set; }
     public int CompanyMembers { get; set; }
     public int DepartmentMembers { get; set; }
-    public int TeamsMembers { get; set; }
+    public int TeamMembers { get; set; }
 }

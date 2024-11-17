@@ -55,7 +55,6 @@ public class ListOrganisationsQueryHandler(
         return request.SortBy switch
         {
             OrganisationSortBy.Name => query.OrderByExpression(o => o.Name, request.SortDescending),
-            OrganisationSortBy.Users => query.OrderByExpression(o => o.Users.Count, request.SortDescending),
             OrganisationSortBy.OrganisationMembers => query.OrderByExpression(o => o.Users.Count, request.SortDescending),
             OrganisationSortBy.CompanyMembers => query.OrderByExpression(o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.CompanyRole != null), request.SortDescending),
             OrganisationSortBy.DepartmentMembers => query.OrderByExpression(o => o.Users.SelectMany(x => x.Roles).Count(x => x.Role.DepartmentRole != null), request.SortDescending),

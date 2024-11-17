@@ -15,6 +15,6 @@ public class OrganisationDTOProfile : Profile
             .ForMember(dest => dest.OrganisationMembers, opt => opt.MapFrom(src => src.Users.SelectMany(r => r.Roles.Select(or => or.Role.OrganisationRole)).Count()))
             .ForMember(dest => dest.CompanyMembers, opt => opt.MapFrom(src => src.Users.SelectMany(r => r.Roles.Select(or => or.Role.CompanyRole)).Count()))
             .ForMember(dest => dest.DepartmentMembers, opt => opt.MapFrom(src => src.Users.SelectMany(r => r.Roles.Select(or => or.Role.DepartmentRole)).Count()))
-            .ForMember(dest => dest.TeamsMembers, opt => opt.MapFrom(src => src.Users.SelectMany(r => r.Roles.Select(or => or.Role.TeamRole)).Count()));
+            .ForMember(dest => dest.TeamMembers, opt => opt.MapFrom(src => src.Users.SelectMany(r => r.Roles.Select(or => or.Role.TeamRole)).Count()));
     }
 }
