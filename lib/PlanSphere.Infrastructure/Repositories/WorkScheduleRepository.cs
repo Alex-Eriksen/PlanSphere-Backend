@@ -57,6 +57,8 @@ public class WorkScheduleRepository(IPlanSphereDatabaseContext dbContext, ILogge
     public IQueryable<WorkSchedule> GetQueryable()
     {
         return _dbContext.WorkSchedules
+            .Include(x => x.UserSettings)
+            .Include(x => x.WorkScheduleShifts)
             .AsNoTracking()
             .AsQueryable();
     }
