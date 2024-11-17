@@ -7,6 +7,4 @@ public enum OrganisationSortBy
     CompanyMembers,
     DepartmentMembers,
     TeamMembers,
-    Users,
-    Roles
 }
