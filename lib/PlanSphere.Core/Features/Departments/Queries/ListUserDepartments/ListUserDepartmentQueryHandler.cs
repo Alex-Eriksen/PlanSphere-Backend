@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Enums.SortByColumns;
 using PlanSphere.Core.Extensions;
@@ -66,7 +67,7 @@ public class ListUserDepartmentQueryHandler(
         query = SearchQuery(request, query);
         query = SortQuery(request, query);
 
-        var paginatedRespone = await _paginationService.PaginateAsync<Department, DepartmentDTO>(query, request);
+        var paginatedRespone = await _paginationService.PaginateAsync<Department, DepartmentDTO>(query, request,opt => opt.Items[MappingKeys.InheritAddress] = true);
 
         return paginatedRespone;
     }

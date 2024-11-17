@@ -7,4 +7,5 @@ public static class MappingKeys
     public const string ActionType = "actionType";
     public const string WorkTime = "workTime";
     public const string UserId = "userId";
+    public const string InheritAddress = "inheritAddress";
 }

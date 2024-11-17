@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.Teams.DTOs;
 using PlanSphere.Core.Interfaces.Repositories;
@@ -25,7 +26,7 @@ public class GetTeamQueryHandler(
         _logger.LogInformation("Fetching Team with id: [{Id}]", request.TeamId);
         var team = await _teamRepository.GetByIdAsync(request.TeamId, cancellationToken);
 
-        var mappedTeam = _mapper.Map<TeamDTO>(team);
+        var mappedTeam = _mapper.Map<TeamDTO>(team, opt => opt.Items[MappingKeys.InheritAddress] = false);
         return mappedTeam;
     }
 }
