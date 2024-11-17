@@ -30,4 +30,13 @@ public static class MappingHelpers
         }
         return identifier;
     }
+    
+    public static bool? GetBoolFromContext(ResolutionContext context, string key)
+    {
+        if (!context.TryGetItems(out var items) || !items.TryGetValue(key, out var obj) || !bool.TryParse(obj?.ToString(), out var result))
+        {
+            return null;
+        }
+        return result;
+    }
 }

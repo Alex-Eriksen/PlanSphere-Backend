@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Features.Departments.DTOs;
 using PlanSphere.Core.Interfaces.Repositories;
@@ -26,7 +27,7 @@ public class GetDepartmentQueryHandler(
         var department = await _departmentRepository.GetByIdAsync(request.departmentId, cancellationToken);
         logger.LogInformation("Fetched Department with id: [{Id}]", request.departmentId);
 
-        var mappedDepartment = _mapper.Map<DepartmentDTO>(department);
+        var mappedDepartment = _mapper.Map<DepartmentDTO>(department, opt => opt.Items[MappingKeys.InheritAddress] = false);
         return mappedDepartment;
     }
 }
