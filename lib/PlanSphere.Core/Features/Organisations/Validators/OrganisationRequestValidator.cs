@@ -6,7 +6,7 @@ using PlanSphere.Core.Features.Roles.Validators;
 
 namespace PlanSphere.Core.Features.Organisations.Validators;
 
-public class OrganisationRequestValidator : AbstractValidator<OrganisationRequest>
+public class OrganisationRequestValidator : AbstractValidator<OrganisationUpdateRequest>
 {
     public OrganisationRequestValidator()
     {
@@ -15,9 +15,6 @@ public class OrganisationRequestValidator : AbstractValidator<OrganisationReques
             .NotEmpty();
         
         RuleFor(x => x.Address)
-            .NotNull();
-        
-        RuleFor(x => x.Settings)
             .NotNull();
     }
 }

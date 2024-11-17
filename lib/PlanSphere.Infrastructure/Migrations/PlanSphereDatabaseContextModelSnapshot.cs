@@ -59,7 +59,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("PostalCode");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Company", b =>
@@ -127,7 +127,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CompanyBlockedJobTitle", b =>
@@ -142,7 +142,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("JobTitleId");
 
-                    b.ToTable("CompanyBlockedJobTitles");
+                    b.ToTable("CompanyBlockedJobTitles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CompanyBlockedRole", b =>
@@ -157,7 +157,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("CompanyBlockedRoles");
+                    b.ToTable("CompanyBlockedRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CompanyJobTitle", b =>
@@ -176,7 +176,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("JobTitleId")
                         .IsUnique();
 
-                    b.ToTable("CompanyJobTitles");
+                    b.ToTable("CompanyJobTitles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CompanyRole", b =>
@@ -195,7 +195,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("RoleId")
                         .IsUnique();
 
-                    b.ToTable("CompanyRoles");
+                    b.ToTable("CompanyRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CompanyRoleRight", b =>
@@ -223,7 +223,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("CompanyRoleRight");
+                    b.ToTable("CompanyRoleRight", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CompanySettings", b =>
@@ -248,7 +248,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("DefaultWorkScheduleId")
                         .IsUnique();
 
-                    b.ToTable("CompanySettings");
+                    b.ToTable("CompanySettings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Country", b =>
@@ -264,7 +264,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasKey("IsoCode");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Department", b =>
@@ -323,7 +323,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DepartmentBlockedJobTitle", b =>
@@ -338,7 +338,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("JobTitleId");
 
-                    b.ToTable("DepartmentBlockedJobTitles");
+                    b.ToTable("DepartmentBlockedJobTitles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DepartmentBlockedRole", b =>
@@ -353,7 +353,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("DepartmentBlockedRoles");
+                    b.ToTable("DepartmentBlockedRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DepartmentJobTitle", b =>
@@ -372,7 +372,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("JobTitleId")
                         .IsUnique();
 
-                    b.ToTable("DepartmentJobTitles");
+                    b.ToTable("DepartmentJobTitles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DepartmentRole", b =>
@@ -391,7 +391,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("RoleId")
                         .IsUnique();
 
-                    b.ToTable("DepartmentRoles");
+                    b.ToTable("DepartmentRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DepartmentRoleRight", b =>
@@ -419,7 +419,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("DepartmentRoleRight");
+                    b.ToTable("DepartmentRoleRight", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DepartmentSettings", b =>
@@ -444,7 +444,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("DefaultWorkScheduleId")
                         .IsUnique();
 
-                    b.ToTable("DepartmentSettings");
+                    b.ToTable("DepartmentSettings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.JobTitle", b =>
@@ -477,7 +477,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("JobTitles");
+                    b.ToTable("JobTitles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Organisation", b =>
@@ -527,7 +527,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Organisations");
+                    b.ToTable("Organisations", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OrganisationJobTitle", b =>
@@ -546,7 +546,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("JobTitleId")
                         .IsUnique();
 
-                    b.ToTable("OrganisationJobTitles");
+                    b.ToTable("OrganisationJobTitles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OrganisationRole", b =>
@@ -565,7 +565,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("RoleId")
                         .IsUnique();
 
-                    b.ToTable("OrganisationRoles");
+                    b.ToTable("OrganisationRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OrganisationRoleRight", b =>
@@ -593,7 +593,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("OrganisationRoleRight");
+                    b.ToTable("OrganisationRoleRight", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OrganisationSettings", b =>
@@ -615,7 +615,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("DefaultWorkScheduleId")
                         .IsUnique();
 
-                    b.ToTable("OrganisationSettings");
+                    b.ToTable("OrganisationSettings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
@@ -658,7 +658,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Right", b =>
@@ -681,7 +681,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Rights");
+                    b.ToTable("Rights", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
@@ -714,7 +714,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Team", b =>
@@ -770,7 +770,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TeamBlockedJobTitle", b =>
@@ -785,7 +785,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("JobTitleId");
 
-                    b.ToTable("TeamBlockedJobTitles");
+                    b.ToTable("TeamBlockedJobTitles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TeamBlockedRole", b =>
@@ -800,7 +800,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("TeamBlockedRoles");
+                    b.ToTable("TeamBlockedRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TeamJobTitle", b =>
@@ -819,7 +819,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("JobTitleId")
                         .IsUnique();
 
-                    b.ToTable("TeamJobTitles");
+                    b.ToTable("TeamJobTitles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TeamRole", b =>
@@ -838,7 +838,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("RoleId")
                         .IsUnique();
 
-                    b.ToTable("TeamRoles");
+                    b.ToTable("TeamRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TeamRoleRight", b =>
@@ -866,7 +866,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("TeamRoleRight");
+                    b.ToTable("TeamRoleRight", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TeamSettings", b =>
@@ -891,7 +891,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("DefaultWorkScheduleId")
                         .IsUnique();
 
-                    b.ToTable("TeamSettings");
+                    b.ToTable("TeamSettings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -965,7 +965,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserJobTitle", b =>
@@ -980,7 +980,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("JobTitleId");
 
-                    b.ToTable("UserJobTitle");
+                    b.ToTable("UserJobTitle", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
@@ -995,7 +995,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserSettings", b =>
@@ -1032,7 +1032,7 @@ namespace PlanSphere.Infrastructure.Migrations
                     b.HasIndex("WorkScheduleId")
                         .IsUnique();
 
-                    b.ToTable("UserSettings");
+                    b.ToTable("UserSettings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.WorkSchedule", b =>
@@ -1053,7 +1053,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("WorkSchedules");
+                    b.ToTable("WorkSchedules", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.WorkScheduleShift", b =>
@@ -1083,7 +1083,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("WorkScheduleId");
 
-                    b.ToTable("WorkScheduleShifts");
+                    b.ToTable("WorkScheduleShifts", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.WorkTime", b =>
@@ -1139,7 +1139,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WorkTimes");
+                    b.ToTable("WorkTimes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.WorkTimeLog", b =>
@@ -1194,7 +1194,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WorkTimeLogs");
+                    b.ToTable("WorkTimeLogs", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ZipCode", b =>
@@ -1213,7 +1213,7 @@ namespace PlanSphere.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("ZipCodes");
+                    b.ToTable("ZipCodes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Address", b =>

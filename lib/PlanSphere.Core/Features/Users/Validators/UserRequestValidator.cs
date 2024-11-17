@@ -18,8 +18,5 @@ public class UserRequestValidator : AbstractValidator<UserRequest>
         RuleFor(x => x.LastName)
             .NotNull()
             .NotEmpty();
-
-        RuleFor(x => x.Address)
-            .NotNull();
     }
 }

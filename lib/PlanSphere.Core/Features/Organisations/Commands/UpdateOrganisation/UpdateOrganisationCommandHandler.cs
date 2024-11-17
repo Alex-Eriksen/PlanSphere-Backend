@@ -25,7 +25,7 @@ public class UpdateOrganisationCommandHandler(
         var organisation = await _organisationRepository.GetByIdAsync(command.SourceLevelId, cancellationToken);
         _logger.LogInformation("Fetched organisation with id: [{SourceLevelId}]", command.SourceLevelId);
         
-        var mappedOrganisation = _mapper.Map(command.OrganisationRequest, organisation);
+        var mappedOrganisation = _mapper.Map(command.OrganisationUpdateRequest, organisation);
         
         _logger.LogInformation("Updating organisation with id: [{SourceLevelId}]", command.SourceLevelId);
         await _organisationRepository.UpdateAsync(command.SourceLevelId, mappedOrganisation, cancellationToken);

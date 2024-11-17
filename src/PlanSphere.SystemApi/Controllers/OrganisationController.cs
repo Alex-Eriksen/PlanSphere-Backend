@@ -64,7 +64,7 @@ public class OrganisationController(IMediator mediator, IOrganisationFilter orga
 
     [HttpPut("{sourceLevelId?}",Name = nameof(UpdateOrganisationAsync))]
     [TypeFilter(typeof(RoleActionFilter), Arguments = [Right.Edit, SourceLevel.Organisation])]
-    public async Task<IActionResult> UpdateOrganisationAsync([FromRoute] ulong? sourceLevelId, [FromBody] OrganisationRequest request)
+    public async Task<IActionResult> UpdateOrganisationAsync([FromRoute] ulong? sourceLevelId, [FromBody] OrganisationUpdateRequest request)
     {
         var command = new UpdateOrganisationCommand(request, sourceLevelId ?? Request.HttpContext.User.GetOrganisationId());
         await _mediator.Send(command);

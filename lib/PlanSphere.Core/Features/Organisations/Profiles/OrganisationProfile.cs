@@ -19,6 +19,11 @@ public class OrganisationProfile : Profile
             .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.Settings, opt => opt.MapFrom(src => src.Settings));
+        
+        CreateMap<OrganisationUpdateRequest, Organisation>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address));
 
         CreateMap<OrganisationSettingsRequest, OrganisationSettings>()
             .ForMember(dest => dest.DefaultRoleId, opt => opt.MapFrom(src => src.DefaultRoleId))
