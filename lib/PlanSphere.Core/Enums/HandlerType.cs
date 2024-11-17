@@ -3,5 +3,6 @@
 public enum HandlerType
 {
     SystemApi,
-    Global
+    Global,
+    TaskScheduler
 }

@@ -68,6 +68,14 @@ public static class ApplicationLogicExtensions
             configuration.AddRequestPostProcessor(type);
         }
     }
+    
+    public static IServiceCollection AddCronJobApplicationCore(this IServiceCollection services)
+    {
+        AddMediatR(services, [HandlerType.TaskScheduler, HandlerType.Global]);
+
+        return services;
+    }
+
 
     private static void AddApiPreProcessors(this MediatRServiceConfiguration configuration, IList<HandlerType> handlerTypes)
     {
