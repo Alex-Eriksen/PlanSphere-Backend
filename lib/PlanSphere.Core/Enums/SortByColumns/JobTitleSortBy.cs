@@ -2,6 +2,6 @@
 
 public enum JobTitleSortBy
 {
-    Active,
+    SourceLevel,
     Name
 }

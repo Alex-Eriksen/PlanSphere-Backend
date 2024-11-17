@@ -77,7 +77,7 @@ public class ListJobTitlesQueryHandler(
         return request.SortBy switch
         {
             JobTitleSortBy.Name => query.OrderByExpression(jt => jt.Name, request.SortDescending),
-            JobTitleSortBy.Active => SortByIsInheritanceActive(request, query),
+            JobTitleSortBy.SourceLevel => SortByIsInheritanceActive(request, query),
             _ => throw new ArgumentOutOfRangeException(nameof(JobTitleSortBy), request.SortBy, null)
         };
     }
