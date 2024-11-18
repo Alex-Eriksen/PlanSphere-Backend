@@ -26,8 +26,8 @@ public class CheckInAndOutJob(
     {
         var now = DateTime.UtcNow;
         var nowTimeOnly = TimeOnly.FromDateTime(now);
-        var windowStart = nowTimeOnly.AddMinutes(-5);
-        var windowEnd = nowTimeOnly.AddMinutes(5);
+        var windowStart = nowTimeOnly.AddMinutes(-1);
+        var windowEnd = nowTimeOnly.AddMinutes(1);
         
         _logger.LogInformation("CheckInAndOutJob started at {Time}", now);
 
