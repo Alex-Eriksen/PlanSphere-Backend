@@ -5,8 +5,11 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
+using PlanSphere.Core.Constants;
 using PlanSphere.Core.Enums;
 using PlanSphere.Core.Interfaces.Repositories;
+using PlanSphere.Core.Interfaces.Services;
+using PlanSphere.Core.Utilities.Builder;
 
 namespace PlanSphere.Core.Features.Users.Commands.CreateUser;
 
@@ -15,13 +18,16 @@ public class CreateUserCommandHandler(
     IUserRepository userRepository,
     UserManager<ApplicationUser> userManager,
     IMapper mapper,
-    ILogger<CreateUserCommandHandler> logger
+    ILogger<CreateUserCommandHandler> logger,
+    IEmailService emailService
 ) : IRequestHandler<CreateUserCommand>
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
     private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     private readonly ILogger<CreateUserCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly IEmailService _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+
 
     public async Task Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
@@ -32,6 +38,29 @@ public class CreateUserCommandHandler(
         _logger.LogInformation("Created user identity");
         
         var user = await CreateUser(command, applicationUser.Id, cancellationToken);
+        
+        if (command.WithConfirmationEmail)
+        {
+            var emailVerificationToken = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
+            var encodedTokenEmailVerification = HttpUtility.UrlEncode(emailVerificationToken);
+            var encodedResetPasswordToken = HttpUtility.UrlEncode(resetPasswordToken);
+            
+            var verificationUrl = new EndpointBuilder(Environment.GetEnvironmentVariable(EnvironmentConstants.ApplicationUrl))
+                .AddEndpoint("/reset-password")
+                .AddQueryParameter(QueryParameterNameConstants.EmailVerificationToken, encodedTokenEmailVerification)
+                .AddQueryParameter(QueryParameterNameConstants.EmailVerificationIdentifier, user.Id)
+                .AddQueryParameter(QueryParameterNameConstants.ResetPasswordToken, encodedResetPasswordToken)
+                .Build();
+
+            _logger.LogInformation("Sending invitation email to {email}", applicationUser.Email);
+            await _emailService.SendEmailAsync(
+                applicationUser.Email, 
+                "PlanSphere - Invitation",
+                string.Format(EmailTemplates.Invitation, user.FullName, verificationUrl)
+            );
+            _logger.LogInformation("Sent invitation email to {email}", applicationUser.Email);
+        }
         _logger.LogInformation("Created a new user on organisation with id: [{organisationId}]", command.OrganisationId);
     }
 
@@ -63,12 +92,7 @@ public class CreateUserCommandHandler(
             _logger.LogInformation("Something went wrong while creating a identity user.");
             throw new InvalidOperationException("Something went wrong.");
         }
-
-        if (command.WithConfirmationEmail) // TODO: SEND EMAIL
-        {
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
-            var encodedToken = HttpUtility.UrlEncode(token);
-        }
+        
         return applicationUser;
     }
 
@@ -89,6 +113,15 @@ public class CreateUserCommandHandler(
                 JobTitleId = jobTitleId
             })
         );
+
+        newUser.Settings = new UserSettings()
+        {
+            WorkSchedule = new WorkSchedule()
+            {
+                IsDefaultWorkSchedule = false,
+            },
+            InheritWorkSchedule = false
+        };
         
         return await _userRepository.CreateAsync(newUser, cancellationToken);
     }

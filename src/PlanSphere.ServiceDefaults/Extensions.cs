@@ -2,6 +2,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -185,6 +186,7 @@ public static class Extensions
     {
         services.AddScoped<IPaginationService, PaginationService>();
         services.AddScoped<IRightsService, RightsService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         return services;
     }

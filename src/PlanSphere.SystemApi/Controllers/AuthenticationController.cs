@@ -8,6 +8,8 @@ using PlanSphere.Core.Extensions.HttpContextExtensions;
 using PlanSphere.Core.Features.Rights.Queries.GetSourceLevelRights;
 using PlanSphere.Core.Features.Users.Commands.LoginUser;
 using PlanSphere.Core.Features.Users.Commands.RefreshToken;
+using PlanSphere.Core.Features.Users.Commands.RequestPasswordReset;
+using PlanSphere.Core.Features.Users.Commands.ResetPassword;
 using PlanSphere.Core.Features.Users.Commands.RevokeRefreshToken;
 using PlanSphere.Core.Features.Users.Queries.GetLoggedInUser;
 using PlanSphere.SystemApi.Controllers.Base;
@@ -73,6 +75,20 @@ public class AuthenticationController(IMediator mediator, IHttpContextAccessor h
         var query = new GetSourceLevelRightsQuery(Request.HttpContext.User.GetUserId(), sourceLevel, sourceLevelId);
         var response = await _mediator.Send(query);
         return Ok(response);
+    }
+
+    [HttpPost(Name = nameof(ResetPasswordAsync))]
+    public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordCommand command)
+    {
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    [HttpPost(Name = nameof(RequestPasswordResetAsync))]
+    public async Task<IActionResult> RequestPasswordResetAsync([FromBody] RequestPasswordResetCommand command)
+    {
+        await _mediator.Send(command);
+        return NoContent();
     }
     
     private void SetTokenCookie(string token)
