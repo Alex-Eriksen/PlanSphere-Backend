@@ -57,7 +57,13 @@ public class CheckInAndOutJob(
 
                 if (shift.EndTime >= windowStart && shift.EndTime <= windowEnd)
                 {
-                    await CheckOutAsync(userId, cancellationToken);
+                    if (!workSchedule.UserSettings.AutoCheckOutDisabled)
+                    {
+                        await CheckOutAsync(userId, cancellationToken);
+                        return;
+                    }
+                    workSchedule.UserSettings.AutoCheckOutDisabled = false;
+                    await _workScheduleRepository.UpdateAsync(workSchedule.Id, workSchedule, cancellationToken);
                 }
             }
         }
