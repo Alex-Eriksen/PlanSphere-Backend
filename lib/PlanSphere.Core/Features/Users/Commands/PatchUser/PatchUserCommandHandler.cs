@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PlanSphere.Core.Attributes;
 using PlanSphere.Core.Enums;
+using PlanSphere.Core.Features.Addresses.Requests;
 using PlanSphere.Core.Features.Users.Requests;
 using PlanSphere.Core.Interfaces.Repositories;
 
@@ -29,6 +31,32 @@ public class PatchUserCommandHandler(
         var mappedUser = _mapper.Map<UserPatchRequest>(user);
         request.Request.ApplyTo(mappedUser);
         user = _mapper.Map(mappedUser, user);
+        
+        if (mappedUser.RoleIds != null)
+        {
+            user.Roles.RemoveAll(x => !mappedUser.RoleIds.Contains(x.RoleId));
+            foreach (var roleId in mappedUser.RoleIds)
+            {
+                var roleAssignment = user.Roles.SingleOrDefault(x => x.RoleId == roleId);
+                if (roleAssignment != null) continue;
+                
+                roleAssignment = new UserRole() { RoleId = roleId, UserId = request.UserId };
+                user.Roles.Add(roleAssignment);
+            }
+        }
+
+        if (mappedUser.JobTitleIds != null)
+        {
+            user.JobTitles.RemoveAll(x => !mappedUser.JobTitleIds.Contains(x.JobTitleId));
+            foreach (var jobTitleId in mappedUser.JobTitleIds)
+            {
+                var jobTitleAssignment = user.JobTitles.SingleOrDefault(x => x.JobTitleId == jobTitleId);
+                if (jobTitleAssignment != null) continue;
+                
+                jobTitleAssignment = new UserJobTitle { JobTitleId = jobTitleId, UserId = request.UserId };
+                user.JobTitles.Add(jobTitleAssignment);
+            }
+        }
 
         if (user.Settings.InheritWorkSchedule == false)
         {
