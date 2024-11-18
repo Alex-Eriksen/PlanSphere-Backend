@@ -3,6 +3,7 @@
 public static class AspireComponents
 {
     public const string SystemApi = "ps-system-api";
+    public const string TaskScheduler = "ps-service-taskscheduler";
 }
 
 public static class AspireEnvironmentVariables

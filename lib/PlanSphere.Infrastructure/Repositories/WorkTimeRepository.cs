@@ -64,9 +64,9 @@ public class WorkTimeRepository(IPlanSphereDatabaseContext context, ILogger<Work
     public async Task<List<WorkTime>> GetWorkTimesWithinMonthByUserIdAsync(ulong userId, int year, int month, CancellationToken cancellationToken)
     {
         return await _context.WorkTimes
-            .Where(x => x.UserId == userId &&
+            .Where(x => x.UserId == userId && ((
                         x.StartDateTime.Month == month &&
-                        x.StartDateTime.Year == year)
+                        x.StartDateTime.Year == year) || (x.StartDateTime.Month == DateTime.Today.Month && x.StartDateTime.Year == DateTime.Today.Year)))
             .ToListAsync(cancellationToken);
     }
 

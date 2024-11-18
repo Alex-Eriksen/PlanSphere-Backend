@@ -10,6 +10,7 @@ using PlanSphere.Core.Interfaces.Repositories;
 namespace PlanSphere.Core.Features.WorkTimes.Commands.CheckInWorkTime;
 
 [HandlerType(HandlerType.SystemApi)]
+[HandlerType(HandlerType.TaskScheduler)]
 public class CheckInWorkTimeCommandHandler(
     IWorkTimeRepository workTimeRepository,
     IUserRepository userRepository,

@@ -8,6 +8,7 @@ using PlanSphere.Core.Interfaces.Repositories;
 namespace PlanSphere.Core.Features.WorkTimes.Commands.CheckOutWorkTime;
 
 [HandlerType(HandlerType.SystemApi)]
+[HandlerType(HandlerType.TaskScheduler)]
 public class CheckOutWorkTimeCommandHandler(
     IWorkTimeRepository workTimeRepository,
     IUserRepository userRepository,
