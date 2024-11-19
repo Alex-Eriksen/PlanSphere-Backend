@@ -8,6 +8,7 @@ using PlanSphere.Core.Features.WorkTimes.Commands.CheckOutWorkTime;
 using PlanSphere.Core.Features.WorkTimes.Commands.CreateWorkTime;
 using PlanSphere.Core.Features.WorkTimes.Commands.DeleteWorkTime;
 using PlanSphere.Core.Features.WorkTimes.Commands.UpdateWorkTime;
+using PlanSphere.Core.Features.WorkTimes.Queries.GetTotalWorkTime;
 using PlanSphere.Core.Features.WorkTimes.Queries.GetWorkTimes;
 using PlanSphere.Core.Features.WorkTimes.Requests;
 using PlanSphere.Core.Interfaces.ActionFilters.LateFilters;
@@ -76,5 +77,14 @@ public class WorkTimeController(IMediator mediator, IRoleFilter roleFilter) : Ap
         var command = new DeleteWorkTimeCommand(workTimeId, userId);
         await _mediator.Send(command);
         return NoContent();
+    }
+
+    [HttpGet(Name = nameof(GetTotalWorkTimeWithinPeriodAsync))]
+    public async Task<IActionResult> GetTotalWorkTimeWithinPeriodAsync([FromQuery] GetTotalWorkTimeQuery query)
+    {
+        var userId = Request.HttpContext.User.GetUserId();
+        query.UserId = userId;
+        var response = await _mediator.Send(query);
+        return Content(response);
     }
 }
