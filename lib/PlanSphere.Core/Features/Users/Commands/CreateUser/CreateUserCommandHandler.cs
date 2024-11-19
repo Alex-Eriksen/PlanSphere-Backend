@@ -74,7 +74,7 @@ public class CreateUserCommandHandler(
             _logger.LogInformation("Sending invitation email to {email}", applicationUser.Email);
             await _emailService.SendEmailAsync(
                 applicationUser.Email, 
-                "PlanSphere - Invitation",
+                EmailTemplates.InvitationSubject,
                 string.Format(EmailTemplates.Invitation, user.FullName, verificationUrl)
             );
             _logger.LogInformation("Sent invitation email to {email}", applicationUser.Email);

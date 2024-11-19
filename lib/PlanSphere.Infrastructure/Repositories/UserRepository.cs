@@ -165,6 +165,18 @@ public class UserRepository(IPlanSphereDatabaseContext dbContext,  IdentityDatab
             .AsQueryable();
     }
 
+    public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Email == email, cancellationToken);
+        if (user == null)
+        {
+            _logger.LogInformation("Couldn't find user with email {email}", email);
+            throw new KeyNotFoundException($"Couldn't find user with email {email}");
+        }
+
+        return user;
+    }
+
     public async Task<UserRole> AssignRoleAsync(ulong userId, ulong roleId, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users

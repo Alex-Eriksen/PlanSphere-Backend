@@ -29,12 +29,7 @@ public class RequestPasswordResetCommandHandler(
     public async Task Handle(RequestPasswordResetCommand request, CancellationToken cancellationToken)
     {
         _logger.BeginScope("Request password reset");
-        var user = await _userRepository.GetQueryable().SingleOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
-        if (user == null)
-        {
-            _logger.LogInformation("Couldn't find user with email {email}", request.Email);
-            throw new KeyNotFoundException($"Couldn't find user with email {request.Email}");
-        }
+        var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
         
         var identityUser = await _userManager.Users.AsQueryable().SingleOrDefaultAsync(x => x.Id == user.IdentityUserId, cancellationToken);
         if (identityUser == null)
@@ -57,7 +52,7 @@ public class RequestPasswordResetCommandHandler(
         
         await _emailService.SendEmailAsync(
             identityUser.Email, 
-            "PlanSphere - Reset Password",
+            EmailTemplates.ResetPasswordSubject,
             string.Format(EmailTemplates.ResetPassword, user.FullName, resetPasswordUrl)
         );
     }

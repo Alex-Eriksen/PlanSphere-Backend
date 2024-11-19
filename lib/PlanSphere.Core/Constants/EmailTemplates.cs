@@ -2,6 +2,7 @@
 
 public static class EmailTemplates
 {
+  public const string ResetPasswordSubject = "PlanSphere - Nulstil kodeord";
     public const string ResetPassword = """
                                         <!DOCTYPE html>
                                         <html lang="da">
@@ -74,7 +75,8 @@ public static class EmailTemplates
                                         </body>
                                         </html>
                                         """;
-  
+
+    public const string InvitationSubject = "PlanSphere - Invitation";
     public const string Invitation = """
                                      <!DOCTYPE html>
                                      <html lang="da">
