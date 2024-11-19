@@ -58,7 +58,7 @@ public class WorkTimeRepository(IPlanSphereDatabaseContext context, ILogger<Work
 
     public IQueryable<WorkTime> GetQueryable()
     {
-        throw new NotImplementedException();
+        return _context.WorkTimes.AsNoTracking().AsQueryable();
     }
 
     public async Task<List<WorkTime>> GetWorkTimesWithinMonthByUserIdAsync(ulong userId, int year, int month, CancellationToken cancellationToken)
