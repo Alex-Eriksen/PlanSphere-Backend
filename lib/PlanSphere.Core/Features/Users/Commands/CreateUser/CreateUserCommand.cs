@@ -5,7 +5,7 @@ using PlanSphere.Core.Interfaces;
 
 namespace PlanSphere.Core.Features.Users.Commands.CreateUser;
 
-public record CreateUserCommand(UserRequest Request, bool WithConfirmationEmail = false) : IRequest, ISourceLevelRequest
+public record CreateUserCommand(UserRequest Request, bool WithConfirmationEmail = true) : IRequest, ISourceLevelRequest
 {
     public ulong UserId { get; set; }
     public ulong OrganisationId { get; set; }
